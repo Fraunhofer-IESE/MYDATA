@@ -1,0 +1,33 @@
+theme: jekyll-theme-cayman
+
+title: MYDATA
+description: MYDATA - Informational self-determination through data filtering and masking
+use_breadcrumbs: true
+
+plugins:
+  - jemoji
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+navigation:
+  - name: "Home"
+    link: ""
+    icon: "/MYDATA/assets/images/house-solid.svg"
+  - name: "Einleitung"
+    link: "Einleitung"
+    icon: "/MYDATA/assets/images/bolt.svg"
+  - name: "Anforderungen"
+    link: "Anforderungen"
+    icon: "/MYDATA/assets/images/list-check.svg"
+  - name: "Realisierung"
+    link: "Realisierung"
+    icon: "/MYDATA/assets/images/gears.svg"
+  - name: "Bewertung"
+    link: "Bewertung"
+    icon: "/MYDATA/assets/images/user-doctor.svg"
+  - name: "Systemeinführung"
+    link: "Systemeinf%C3%BChrung"
+    icon: "/MYDATA/assets/images/play.svg"
+  - name: "Lesestoff"
+    link: "Lesestoff"
+    icon: "/MYDATA/assets/images/document.svg"
