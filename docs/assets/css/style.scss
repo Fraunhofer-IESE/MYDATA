@@ -1,0 +1,59 @@
+---
+---
+
+$header-bg-color: #252b35;
+$header-bg-color-secondary: #667c9b;
+
+$section-headings-color: #70AD47;
+
+@import "{{ site.theme }}";
+
+#content {
+	max-width: 96rem;
+}
+
+.breadcrumbs ul {
+	list-style: none;
+	padding: 0;
+}
+
+.breadcrumbs li {
+	display: inline;
+}
+
+.breadcrumbs li+li:before {
+	padding: 0.5rem;
+	color: #606c71;
+	content: "/\00a0";
+}
+
+.main-content h1 {
+	font-weight: bold !important;
+}
+
+.main-content h2 {
+	font-weight: bold !important; 
+}
+
+.main-content h3 {
+	margin-bottom: 0rem !important;
+}
+
+.main-content h4 {
+	margin-top: 1rem !important; 
+	margin-bottom: 0rem !important; 
+	font-style: italic !important;
+}
+
+.collapsed {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+.expanded {
+    height: auto;
+    transition: height 0.3s ease;
+}
+
+

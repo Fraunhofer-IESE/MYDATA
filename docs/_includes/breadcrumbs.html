@@ -1,0 +1,16 @@
+<nav class="breadcrumbs">
+    <ul>
+      <!--  <li>
+            <a href="{{ site.baseurl }}/"><img src="/MYDATA/assets/images/house-solid.svg"> Home</a>
+        </li>-->
+		<li>&#8618; &Uuml;bersicht</li>
+        {% assign crumbs = page.url | remove:'/index.html' | split: '/' %}
+        {% for crumb in crumbs offset: 2 %}
+            {% if forloop.last %}
+                <li> {{ page.title }} </li>
+            {% else %}
+                <li> <a href="{{ site.baseurl }}/{% assign crumb_limit = forloop.index | plus: 1 %}{% for crumb in crumbs limit: crumb_limit %}{{ crumb | append: '/' }}{% endfor %}">{{ crumb | replace:'-',' ' | remove:'.html' | url_decode }}</a> </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</nav>
