@@ -1,6 +1,7 @@
 ﻿# Developer Documentation
 
 ![Policy Enforcement](./assets/images/section_header_ind2uce.png)
+
 More and more business models require the exchange and processing of business-critical data. 
 The legislator considers personal data to be particularly worthy of protection. 
 MYDATA Control Technologies offers both business partners and citizens more transparency and self-determination in the use of their data.
