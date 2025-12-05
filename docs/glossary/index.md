@@ -13,7 +13,7 @@ An action labels a certain type of [information](#information--data-flow) or con
 Abstract actions manifest in concrete [events](#event) (e.g., "'delete-file' readme.txt at 12.03.2018 3:32pm"). For more details, please refer to our [language documentation](../language/#event-condition-action).
 
 ### Affiliation
-MY DATA Control Technologies supports multiple tenants (typically companies). The basic separation of tenants is implemented on the level of affiliations. So, if two tenant have MY DATA Control Technologies accounts, each of them will be treated as separate affiliations and not see any data of the other tenant.
+MYDATA Control Technologies supports multiple tenants (typically companies). The basic separation of tenants is implemented on the level of affiliations. So, if two tenant have MYDATA Control Technologies accounts, each of them will be treated as separate affiliations and not see any data of the other tenant.
 
 ### Anonymization
 An anonymization removes personally identifiable information from a data set in an irreversible way. Anonymization is one special type of [modification](#modification) (cf. [Wikipedia](https://en.wikipedia.org/wiki/Data_anonymization)).
@@ -40,7 +40,7 @@ Cardinal aspects inside the conditions of [mechanisms](#mechanism) (as part of a
 A boolean expression that is part of a [mechanism](#mechanism) within a [policy](#policy) (cf. our [language documentation](../language/#if_elseif)). The fulfillment is the baseline for the enforcement of an [Authorization Decision](#decision).
 
 ### Component
-Components are [PEPs](#policy-enforcement-point-pep), [PXPs](#policy-execution-point-pxp), or [PIPs](#policy-information-point-pip) that can be registered in a [solution](#solution) of MY DATA Control Technologies.
+Components are [PEPs](#policy-enforcement-point-pep), [PXPs](#policy-execution-point-pxp), or [PIPs](#policy-information-point-pip) that can be registered in a [solution](#solution) of MYDATA Control Technologies.
 
 ## D
 
@@ -94,7 +94,7 @@ Functions can simple boolean functions (like and, or, not), arithmetic functions
 
   
 ### Information / Data flow
-Data flow talks about the instances and flows of a certain data item inside a system and within systems. For MY DATA Control Technologies, data flow tracking is particularly relevant, as security requirements (implemented by [policies](#policy)) are typically not defined on data (e.g., Invoices), rather than on concrete instances (Invoice_CustomerA_July.pdf). As one particular data item might be stored in different instances (e.g., files, screens), this flow between instances need to be tracked in order to achieve a comprehensive protection of the data.
+Data flow talks about the instances and flows of a certain data item inside a system and within systems. For MYDATA Control Technologies, data flow tracking is particularly relevant, as security requirements (implemented by [policies](#policy)) are typically not defined on data (e.g., Invoices), rather than on concrete instances (Invoice_CustomerA_July.pdf). As one particular data item might be stored in different instances (e.g., files, screens), this flow between instances need to be tracked in order to achieve a comprehensive protection of the data.
 
 ### Inhibition
 If an [event](#event) is inhibited, the PEP prevents the further execution of the event (e.g., access is denied, data flow is stopped).  An inhibition is decided by the decision service based on the active policies and communicated to the PEP within an authorization decision.
@@ -131,8 +131,8 @@ A mechanism is one [ECA rule ](#event-condition-action) inside a [policy](#polic
 ### Modification
 An [event](#event) is basically a named key-value (event attributes) list. 
 For example the event "open-file" might contain the name of the user opening the file, and the file itself. 
-Classical [access](#access) control only allows binary decisions on the event - i.e., the event can be allowed or inhibited. 
-MY DATA Control Technologies additionally allows the values of the event to be modified. This means that event attributes can be replaced, deleted, or altered. 
+Classical [access](#access-control) control only allows binary decisions on the event - i.e., the event can be allowed or inhibited. 
+MYDATA Control Technologies additionally allows the values of the event to be modified. This means that event attributes can be replaced, deleted, or altered. 
 For example, all personal related information must be removed from the file before access is granted (in this case the file is not changed itself, but only the reading data stream).
 
 ### Modifier
@@ -152,7 +152,7 @@ If an [event](#event) is monitored (and not intercepted), the [PEP](#policy-enfo
 
   
 ### oAuth
-oAuth 2.0 is a protocol we use for authentication of [REST requests](#rest) to our [management service](#mservice) and [decision service](#decision-service). Learn more on [the oAuth project site](https://oauth.net/2/) and our developer documentation of the [management service](../rest-api/pmp/) and [decision service](../rest-api/pdp/).
+oAuth 2.0 is a protocol we use for authentication of [REST requests](#rest) to our [management service](#management-service) and [decision service](#decision-service). Learn more on [the oAuth project site](https://oauth.net/2/) and our developer documentation of the [management service](../rest-api/pmp/) and [decision service](../rest-api/pdp/).
 
 
 ### Operator
@@ -169,16 +169,16 @@ The usage of our [decision service](#decision-service) is limited. You can choos
 A policy is a set of [mechanisms](#mechanism) (rules) that technically implement security requirement(s). They are used to configure our [decision service](#decision-service) at run-time and are the baseline for the enforcement by [PEPs](#policy-enforcement-point-pep) and [PXPs](#policy-execution-point-pxp). Policies are atomic. This means that a policy can be deployed (all contained mechanisms are active) or revoked (all contained mechanisms are inactive). Our policy format is XML and based on our [policy language](../language).
 
 ### Policy Editor
-A policy editor is the user interface for the specification of a [policy](#policy). MY DATA Control Technologies provides an XML-based policy editor for developers. It supports specification by auto-completion, hints and a beginner mode for novice developers. More information can be found [here](../ui/#policies-policy-editor).
+A policy editor is the user interface for the specification of a [policy](#policy). MYDATA Control Technologies provides an XML-based policy editor for developers. It supports specification by auto-completion, hints and a beginner mode for novice developers. More information can be found [here](../ui/#policies-policy-editor).
 
 ### Policy Enforcement Point (PEP)
-The PEP is a [component](#component) which [monitors](#monitoring) or intercepts [events](#event) (e.g., a access or usage request to a resource), makes decision requests to the [decision service](#decision-service) for obtaining [decisions](#decision) and enforces the received decision. In terms of MY DATA Control Technologies, a PEP can allow, inhibit or modify events. PEPs can be dynamically registered and used using our SDK.
+The PEP is a [component](#component) which [monitors](#monitoring) or intercepts [events](#event) (e.g., a access or usage request to a resource), makes decision requests to the [decision service](#decision-service) for obtaining [decisions](#decision) and enforces the received decision. In terms of MYDATA Control Technologies, a PEP can allow, inhibit or modify events. PEPs can be dynamically registered and used using our SDK.
 
 ### Policy Execution Point (PXP) 
 The PXP is a [component](#component) that can execute actions based on policy evaluations.. For example, a PXP can be used to send e-mail notifications, write log entries or delete data. In the XACML reference architecture, the PXP is part of the PEP. However, as the type of enforcement and the abstraction layer might significantly differ, we decided to make this explicit. PXPs can be dynamically registered and used using our SDK.
 
 ### Policy Information Point (PIP) 
-The PIP is a [component](#component) that acts as a source of attribute values. This means that the purpose of a PIP is to provide any kind of information that is needed for the policy evaluation - but is not already contained in the [event](#event) itself. For example, PIPs can be used to connect MY DATA Control Technologies to a directory service in order to check user roles, or to resolve information about the current weather. PIPs can be dynamically registered and used using our SDK.
+The PIP is a [component](#component) that acts as a source of attribute values. This means that the purpose of a PIP is to provide any kind of information that is needed for the policy evaluation - but is not already contained in the [event](#event) itself. For example, PIPs can be used to connect MYDATA Control Technologies to a directory service in order to check user roles, or to resolve information about the current weather. PIPs can be dynamically registered and used using our SDK.
 
 
 ## Q
@@ -198,19 +198,19 @@ A [PEP](#policy-enforcement-point-pep) implementing the [reactive programming](h
 Representational State Transfer ([cf. Wikipedia](https://de.wikipedia.org/wiki/Representational_State_Transfer))
 
 ### Roles
-Our [management service](#mservice) supports three kinds of [user](#user) [roles](#roles) that regulate their permissions.
+Our [management service](#management-service) supports three kinds of [user](#user) [roles](#roles) that regulate their permissions.
 
-**Solution Developer:** A Solution Developer only has access to the [solutions](#solution) he has been assigned to by an administrator. He has access to the dashboard, components and policies of assigned solutions.
+* Solution Developer: A Solution Developer only has access to the [solutions](#solution) he has been assigned to by an administrator. He has access to the dashboard, components and policies of assigned solutions.
 
-**Affiliation Administrator:** An Affiliation Adminstrator has access to all [solutions](#solution) of his [affiliation](#affiliation). He thus has access to the dashboard, components and policies of all solutions of his affiliation. Additionally, he can create and assign users for his affiliation. 
+* Affiliation Administrator: An Affiliation Adminstrator has access to all [solutions](#solution) of his [affiliation](#affiliation). He thus has access to the dashboard, components and policies of all solutions of his affiliation. Additionally, he can create and assign users for his affiliation. 
 This role fully subsumes the Solution Developer.
 
-**MY DATA Control Technologies Administrator:** A MY DATA Control Technologies Administrator has all read and write access to all [affiliations](#affiliation), [solutions](#solution) and users. 
-If hosted on premise, the MY DATA Control Technologies Administrator is the central administrator of the overall MY DATA Control Technologies system. 
+* MYDATA Control Technologies Administrator: A MYDATA Control Technologies Administrator has all read and write access to all [affiliations](#affiliation), [solutions](#solution) and users. 
+If hosted on premise, the MYDATA Control Technologies Administrator is the central administrator of the overall MYDATA Control Technologies system. 
 This role fully subsumes the Affiliation Administrator and Solution Developer.
 
 ### Software Development Kit (SDK)
-Our SDK is a set of tools and libraries that allow you to integrate and use MY DATA Control Technologies in your software. Primarily, it includes two Java Libraries - one for plain Java, one for [Spring](https://spring.io/). 
+Our SDK is a set of tools and libraries that allow you to integrate and use MYDATA Control Technologies in your software. Primarily, it includes two Java Libraries - one for plain Java, one for [Spring](https://spring.io/). 
 The SDK allows you to implement [PEPs](#policy-enforcement-point-pep) (including the modifiers), [PIPs](#policy-information-point-pip), and [PXPs](#policy-execution-point-pxp) and takes care about the [component](#component) registration with our service.
 
 
@@ -219,7 +219,7 @@ The SDK allows you to implement [PEPs](#policy-enforcement-point-pep) (including
 
   
 ### Solution
-A solution is an application or service of an [affiliation](#affiliation) that is protected by MY DATA Control Technologies. You register components and specify policies exclusively for one solution. Component and policy identifiers contain a solution identifier.
+A solution is an application or service of an [affiliation](#affiliation) that is protected by MYDATA Control Technologies. You register components and specify policies exclusively for one solution. Component and policy identifiers contain a solution identifier.
 
 
 ## T
@@ -239,9 +239,9 @@ Policy evaluations may be triggered by two reasons. The first one is the decisio
 
   
 ### Usage Control
-In addition to [Access Control](#access), usage control regulates what must (not) happen to data after access has been granted.
+In addition to [Access Control](#access-control), usage control regulates what must (not) happen to data after access has been granted.
 
 ### User
-A human person using our [management service](#mservice) (has one of the defined [roles](#roles)).
+A human person using our [management service](#management-service) (has one of the defined [roles](#roles)).
    
 

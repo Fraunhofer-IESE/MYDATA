@@ -11,13 +11,14 @@ Example packages: org.springframework.boot.spring-boot-test
 * MYDATA Control Technologies 4.0 requires at least Gson 2.8.6 (package com.google.code.gson.gson).
 
 ### Step by Step Migration
-1. Update the version property in the `properties` section of your `pom.xml` file.
+- Update the version property in the `properties` section of your `pom.xml` file.
 
 ```xml
 <mydata.version>4.0.0</mydata.version>
 ```
 
-2. Update the package versions and names in your `pom.xml` from ind2uce to mydata:
+- Update the package versions and names in your `pom.xml` from ind2uce to mydata:
+
 ```xml
 <dependency>
 	<groupId>de.fraunhofer.iese.mydata</groupId>
@@ -31,11 +32,11 @@ Example packages: org.springframework.boot.spring-boot-test
 </dependency>
 ```
 
-3. `Alive check url` is not longer necessary and developers should not use it any longer and remove it throughout the code and properties.
+- `Alive check url` is not longer necessary and developers should not use it any longer and remove it throughout the code and properties.
 
-4. Change the PMP url by removing the `/ws` at the end, so that just the server name and port remains.
+- Change the PMP url by removing the `/ws` at the end, so that just the server name and port remains.
 
-5. Replace all old imports (package names changed from ind2uce to mydata). Commonly used imports are now:
+- Replace all old imports (package names changed from ind2uce to mydata). Commonly used imports are now:
 
 ```java
 import de.fraunhofer.iese.mydata.policy.event.Event;
@@ -44,7 +45,7 @@ import de.fraunhofer.iese.mydata.policy.exception.InhibitException;
 import de.fraunhofer.iese.mydata.util.MyDataUtil;
 ```
 
-6. When replacing the old imports, consider replacing the PEP calls too. With MYDATA Control Technologies 4.0 there are a few helper (like [MyDataUtil](../api-sdk/de/fraunhofer/iese/mydata/util/MyDataUtil) that enable an easier handling of PEPs (see also [Using a custom PEP](../sdk/howto_library.html#_enforce_data_using_a_custom_reactive_pep)):
+- When replacing the old imports, consider replacing the PEP calls too. With MYDATA Control Technologies 4.0 there are a few helper (like [MyDataUtil](../api-sdk/de/fraunhofer/iese/mydata/util/MyDataUtil) that enable an easier handling of PEPs (see also [Using a custom PEP](../sdk/howto_library.html#_enforce_data_using_a_custom_reactive_pep)):
 
 ```java
 MyPep myPep # ...;
@@ -67,7 +68,7 @@ try {
 System.out.println(enforcedUser.getName());
 ```
 
-7. In your PEP definition, remove old annotations like `@PEPServiceDescription` or `@ProvidedModifiers`. Replace them with `@Modifiers` in case you want to scan all your packages for available modifiers. `@Modifiers(packageNames # {"de.fraunhofer.iese.mydata.pep.modifiers"})` will limit the search scope and provides a better performance. Relevant imports in PEPs are:
+- In your PEP definition, remove old annotations like `@PEPServiceDescription` or `@ProvidedModifiers`. Replace them with `@Modifiers` in case you want to scan all your packages for available modifiers. `@Modifiers(packageNames # {"de.fraunhofer.iese.mydata.pep.modifiers"})` will limit the search scope and provides a better performance. Relevant imports in PEPs are:
 
 ```java
 import de.fraunhofer.iese.mydata.policy.event.Event;
@@ -76,16 +77,15 @@ import de.fraunhofer.iese.mydata.reactive.common.EventSpecification;
 import de.fraunhofer.iese.mydata.reactive.common.Modifiers;
 ```
 
-8. Also in your PEP definition, remove the no longer valid `scope` parameter from the `@EventSpecification`
+- Also in your PEP definition, remove the no longer valid `scope` parameter from the `@EventSpecification`
 
-9. Where ever you instantiate and use the `Event` class, remove the usage of the `scope` from the constructor.
+- Where ever you instantiate and use the `Event` class, remove the usage of the `scope` from the constructor.
 
-10. MYDATA Control Technologies 4.0 replaced the `scope` by `solutionId`. For consistency reasons, you can rename existing variable names.
+- MYDATA Control Technologies 4.0 replaced the `scope` by `solutionId`. For consistency reasons, you can rename existing variable names.
 
-
-> [!TIP]
+> ℹ️
 > The `solutionId`, `componentId` and `clientId` needs to be written in lowercase.
 
-11. Replace the initialization of the MYDATA Control Technologies environment according to your needs. In MYDATA Control Technologies 4.0, there are several modes available that are initialized differently. Please read the manual pages to learn all about it: [Working with the library](../sdk/howto_library.html#_working_with_the_library)
+- Replace the initialization of the MYDATA Control Technologies environment according to your needs. In MYDATA Control Technologies 4.0, there are several modes available that are initialized differently. Please read the manual pages to learn all about it: [Working with the library](../sdk/howto_library.html#_working_with_the_library)
 
-12. For non Spring Boot applications, the registration of a custom PEP is different. Learn more about it in the manual: link:../sdk/howto_library.html#_enforce_data_using_a_custom_reactive_pep[Register a custom PEP]
+- For non Spring Boot applications, the registration of a custom PEP is different. Learn more about it in the manual: link:../sdk/howto_library.html#_enforce_data_using_a_custom_reactive_pep[Register a custom PEP]
