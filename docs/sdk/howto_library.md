@@ -68,7 +68,7 @@ One may ask what benefits come in when choosing this operational mode:
 > Just make sure, that they are available and registered at runtime.
 > When you want to scale your PIP/PXPs, you will have to provide a load balancer and register its address to the Cloud-PMP (instead of the address of a concrete instance).
 
-## The `IMyDataEnvironment` Interface
+## The IMyDataEnvironment Interface
 
 `IMyDataEnvironment` encapsulates the MY DATA Control Technologies components and supports the previously introduced operation modes.
 It is a central part of the MY DATA Control Technologies Library and enables developers to implement PEPs, PIPs and PXPs.
@@ -79,7 +79,7 @@ You can find the corresponding API-Documentation here:
 
 The following sections describe how to use it.
 
-## About `sdk` and `sdk.spring` Maven Artifacts
+## About sdk and sdk.spring Maven Artifacts
 
 MY DATA Control Technologies Library can be used with or without Spring.
 If you use Spring, you will benefit from numerous features and simplified functions.
@@ -353,10 +353,10 @@ To learn more about our policy language, have a look at: [MY DATA Control Techno
 
 To enforce the policies you can use a PEP. A PEP roughly works as follows:
 
-. You call the PEP with the data to enforce.
-. PEP asks PDP for an `AuthorizationDecision` that contains information on how to proceed with the data according to the currently deployed policies.
-. PEP applies the `AuthorizationDecision` (the contained instructions) to the data.
-. PEP returns modified data or throws an Exception (e.g., in case of inhibition decision).
+- You call the PEP with the data to enforce.
+- PEP asks PDP for an `AuthorizationDecision` that contains information on how to proceed with the data according to the currently deployed policies.
+- PEP applies the `AuthorizationDecision` (the contained instructions) to the data.
+- PEP returns modified data or throws an Exception (e.g., in case of inhibition decision).
 
 To learn more about MY DATA Control Technologies PEPs, click [here](howto_pep.html).
 
@@ -389,7 +389,7 @@ try {
 MY DATA Control Technologies Library supports custom reactive (i.e., "home-made") PEPs.
 You just need to declare its interface with the according annotations:
 
-.Declare a custom reactive PEP
+**Declare a custom reactive PEP**
 ```java
 @Modifiers // add all available modifiers
 public interface MyPep {
@@ -401,7 +401,7 @@ public interface MyPep {
 > **ℹ️ NOTE**
 > Be aware of the fact that every parameter needs to be annotated with `@EventParameter`.
 
-.Registration and Instantiation of a custom reactive PEP
+**Registration and Instantiation of a custom reactive PEP**
 ```java
 IMyDataEnvironment myDataEnvironment = MyDataEnvironmentManager.getDefaultEnvironment();
 MyPep myPep;

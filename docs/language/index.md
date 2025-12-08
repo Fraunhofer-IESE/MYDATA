@@ -1422,11 +1422,12 @@ These **&lt;timer&gt;** are NOT part of an actual policy, but are configured sep
 A &lt;timer&gt; can have the following attributes:
 
 **Timer attributes**
-|Attribute      |Type       |Required |Meaning |
+
+|Attribute|Type|Required|Meaning|
 | -- | -- | -- | -- |
-|id				|URN		|required |The unique ID of the timer. Syntax: urn:timer:&lt;solution&gt;:&lt;id&gt; |
-|cron           |cron       |required |Describes the time interval to fire an event in [cron syntax](http://www.quartz-scheduler.org/api/2.3.0/org/quartz/CronExpression.html). |
-|description    |String     |optional |Description of the timer. |
+|id				|URN		|required |The unique ID of the timer. Syntax: urn:timer:&lt;solution&gt;:&lt;id&gt;|
+|cron           |cron       |required |Describes the time interval to fire an event in [cron syntax](http://www.quartz-scheduler.org/api/2.3.0/org/quartz/CronExpression.html).|
+|description    |String     |optional |Description of the timer.|
 
 > ℹ️ Note
 > Support for specifying both a day-of-week and a day-of-month value is not complete (you’ll need to use the '?' character in one of these fields).
@@ -1436,9 +1437,10 @@ Like normal events, it has an event identifier (as parameter) and a list of [par
 The &lt;event&gt; has the following attribute:
 
 **Event attributes**
-|Attribute    |Type      |Required |Meaning |
+
+|Attribute|Type|Required|Meaning|
 | -- | -- | -- | -- |
-|action       |String    |required |Defines the event id. |
+|action       |String    |required |Defines the event id.|
 
 The following example shows a timer that triggers the event "regular-check" every day at 1:01.
 
