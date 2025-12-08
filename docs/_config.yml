@@ -20,7 +20,7 @@ navigation:
     link: "language"
     icon: ""
   - name: "Central Services"
-    link: "https://management.dev.mydata-control.de/swagger-ui/index.html"
+    link: "/#central-services"
     icon: ""
   - name: "Resources"
     link: "/#resources"
