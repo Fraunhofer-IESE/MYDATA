@@ -10,7 +10,7 @@ Access control is the selective restriction of access to resource (cf. [Wikipedi
 
 ### Action
 An action labels a certain type of [information](#information--data-flow) or control flow in a system (e.g., "open-file", "delete-file", or "create-screenshot"). 
-Abstract actions manifest in concrete [events](#event) (e.g., "'delete-file' readme.txt at 12.03.2018 3:32pm"). For more details, please refer to our [language documentation](../language/#event-condition-action).
+Abstract actions manifest in concrete [events](#event) (e.g., "'delete-file' readme.txt at 12.03.2018 3:32pm"). For more details, please refer to our [language documentation](../language/#the-event-condition-action-schema).
 
 ### Affiliation
 MYDATA Control Technologies supports multiple tenants (typically companies). The basic separation of tenants is implemented on the level of affiliations. So, if two tenant have MYDATA Control Technologies accounts, each of them will be treated as separate affiliations and not see any data of the other tenant.
