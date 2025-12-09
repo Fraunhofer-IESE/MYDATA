@@ -1,4 +1,10 @@
-theme: jekyll-theme-cayman
+#theme: jekyll-theme-cayman
+remote_theme: just-the-docs/just-the-docs
+
+baseurl: "/MYDATA"
+url: "https://fraunhofer-iese.github.io"
+search_enabled: true
+color_scheme: light   # oder dark
 
 title: MYDATA
 description: Informational self-determination through data filtering and masking
