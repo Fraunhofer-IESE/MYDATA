@@ -139,7 +139,7 @@ All existing modifiers in these packages will be added.
 
 The DocumentationAPI interfaces can be used in conjunction with the MY DATA Control Technologies Library.
 For more information, click
-[here](++howto_library.html#_enforce_data_using_a_custom_reactive_pep++).
+[here](howto_library.html#_enforce_data_using_a_custom_reactive_pep).
 
 ### ReactivePEP Registration
 
