@@ -27,26 +27,28 @@
       {% endif %}
     </header>
 
-    <main id="content" class="main-content" role="main">
-	  <nav>
-	   
-		{% for item in site.navigation %}
-		  <img src="{{ item.icon }}"/> 
-		  <a href="/MYDATA/{{ item.link }}">
-		    {% if page.url contains item.link and item.name != "Home" %}
-		      <strong>{{ item.name }}</strong>
-		    {% elsif page.url == "/" and item.name == "Home" %}
-			  <strong>{{ item.name }}</strong>
-			{% else %}
-		      {{ item.name }}
-		    {% endif %}
-		  </a> 
-		  {% unless forloop.last %} 
-		    |
-		  {% endunless %}
-		{% endfor %}
-		
-	  </nav>
+    <main id="content" class="main-content with-sidebar" role="main">
+	  <aside class="sidebar">
+		  <nav>
+		   
+			{% for item in site.navigation %}
+			  <img src="{{ item.icon }}"/> 
+			  <a href="/MYDATA/{{ item.link }}">
+				{% if page.url contains item.link and item.name != "Home" %}
+				  <strong>{{ item.name }}</strong>
+				{% elsif page.url == "/" and item.name == "Home" %}
+				  <strong>{{ item.name }}</strong>
+				{% else %}
+				  {{ item.name }}
+				{% endif %}
+			  </a> 
+			  {% unless forloop.last %} 
+				|
+			  {% endunless %}
+			{% endfor %}
+			
+		  </nav>
+	  </aside>
       {% if page.url != "/" and site.use_breadcrumbs %}
         {% include breadcrumbs.html %}
       {% endif %}

@@ -8,6 +8,23 @@ $section-headings-color: #1f82c0;
 
 @import "{{ site.theme }}";
 
+.main-content.with-sidebar {
+  display: flex;
+  gap: 2rem;
+}
+
+.sidebar {
+  min-width: 220px;
+  max-width: 260px;
+  position: sticky;
+  top: 1.5rem;
+  align-self: flex-start;
+}
+
+.side-nav ul { list-style: none; padding-left: 0; }
+.side-nav a { text-decoration: none; display: block; padding: .3rem 0; }
+.side-nav a.active { font-weight: 700; }
+
 #content {
 	max-width: 96rem;
 }
