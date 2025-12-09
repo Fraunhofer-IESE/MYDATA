@@ -20,6 +20,73 @@ The modular and component-based structure of MYDATA Control Technologies allows 
 
 In the following, you will learn how to integrate and use MYDATA Control Technologies.
 
+<button type="button" id="toggleButton" style="background-color: #44546A; border: none; color: white; padding: 6px 12px; text-align: center; text-decoration: none; display: inline-block; font-size: 1rem;">Sitemap / Inhaltsverzeichnis anzeigen</button>
+<div id="toc">
+	<ul id='contentList' class='collapsed'>
+	  <li>Home</li>
+	  <li><a href="./sdk">Policy Enforcement</a>
+		<ul>
+		  <li><a href="./sdk/howto_library">The MYDATA Library</a></li>
+			<ul>
+			  <li><a href="./sdk/howto_pep">Developing your own Policy Enforcement Point</a></li>
+			  <li><a href="./sdk/howto_pip">Developing your own Policy Information Point</a></li>
+			  <li><a href="./sdk/howto_pxp">Developing your own Policy Execution Point</a></li>
+			</ul>
+		  </li>
+		</ul>
+	  </li>
+	  <li><a href="./language/">Policy Language</a>
+		<ul>
+		  <li><a href="./language/#introduction">Introduction</a></li>
+		  <li><a href="./language/#the-event-condition-action-schema">The Event-Condition-Action Schema</a></li>
+		  <li><a href="./language/#policy-structure">Policy Structure</a></li>
+		  <li><a href="./language/#data-types">Data Types</a></li>
+		  <li><a href="./language/#operators">Operators</a></li>
+		  <li><a href="./language/#working-with-variables">Working with Variables</a></li>
+		  <li><a href="./language/#working-with-the-event-history">Working with the Event History</a></li>
+		  <li><a href="./language/#working-with-cron-jobs">Working with Cron Jobs</a></li>
+		</ul>
+	  </li>
+	  <li><a href="#central-services">Central Services</a>
+		<ul>
+		  <li><a href="https://management.dev.mydata-control.de/swagger-ui.html">API Documentation</a></li>
+		  <li><a href="./ui">UI Documentation</a></li>
+		</ul>
+	  </li>
+	  <li><a href="#resources">Resources</a>
+		<ul>
+		  <li><a href="./release-notes">Release Notes</a></li>
+		  <li><a href="./migrationGuide">Migration Guides</a></li>
+		  <li><a href="./glossary">Glossary</a></li>
+		</ul>
+	  </li>
+	  <li><a href="#legal">Legal Notes</a>
+		<ul>
+		  <li><a href="https://www.mydata-control.de/privacy_policy.html">MYDATA Data Protection Policy</a></li>
+		  <li><a href="https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement">GitHub Data Protection Policy</a></li>
+		  <li><a href="https://www.iese.fraunhofer.de/de/impressum.html">Imprint</a></li>
+		</ul>
+	  </li>
+	</ul>
+</div>
+
+<script type="text/javascript">
+
+	document.getElementById("toggleButton").addEventListener("click", function() {
+		var contentList = document.getElementById("contentList");
+		if (contentList.classList.contains("collapsed")) {
+			contentList.classList.remove("collapsed");
+			contentList.classList.add("expanded");
+			this.textContent = "Sitemap / Inhaltsverzeichnis ausblenden";
+		} else {
+			contentList.classList.remove("expanded");
+			contentList.classList.add("collapsed");
+			this.textContent = "Sitemap / Inhaltsverzeichnis anzeigen";
+		}
+	});
+
+</script>
+
 ## Policy Enforcement 
 ![Policy Enforcement](./assets/images/section_header_enforcement.png)
 
@@ -82,7 +149,11 @@ For these cases, we offer central and highly scalable services for policy evalua
 
 In order to use our central services, you can communicate with our services via REST interfaces. 
 
-[**Click here for documentation and usage via Swagger.**](https://management.dev.mydata-control.de/swagger-ui.html) 
+
+[**Click here for documentation and usage of our API via Swagger.**](https://management.dev.mydata-control.de/swagger-ui.html) 
+
+[**Click here for documentation and usage of our UI.**](./ui) 
+
 
 ## Resources
 ![Resources](./assets/images/section_header_resources.png)
@@ -94,5 +165,5 @@ In order to use our central services, you can communicate with our services via 
 
 ## Legal
 - [MYDATA Data Protection Policy](https://www.mydata-control.de/privacy_policy.html)
-- [GitHubData Protection Policy](https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement)
+- [GitHub Data Protection Policy](https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement)
 - [Imprint](https://www.iese.fraunhofer.de/de/impressum.html)
