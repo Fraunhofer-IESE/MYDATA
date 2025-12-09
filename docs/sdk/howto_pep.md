@@ -108,7 +108,7 @@ If the `name` attribute is not specified, then it takes the name of the paramete
 ## Specification & Registration
 
 During initialization, the PEP needs to know which Decision Enforcer, interface descriptor and modifiers are used.
-Using that information, the PEP has to be registered with the Policy Management Point (ideally via the [IMyDataEnvironment](++howto_library.html#component-registration++) abstraction).
+Using that information, the PEP has to be registered with the Policy Management Point (ideally via the [IMyDataEnvironment](howto_library.html#component-registration) abstraction).
 All information regarding modifiers, interfaces and object structures (passed to the PDP) are passed to the PMP.
 This information is used for policy specification.
 Using java reflection, all this information is automatically registered.

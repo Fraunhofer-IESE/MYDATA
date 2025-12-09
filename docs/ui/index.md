@@ -42,7 +42,7 @@ It provides an overview of several information, such as the status of [component
 The dashboard is solution-specific. Thus, all information are relating to the currently selected solution.
 The charts are interactive. If you hover or click on the charts, you will get more information or been redirected to the corresponding sites.
 
-![Dashboard](./images/Dashboard.png)
+![Dashboard](./images/dashboard.png)
 
 ## Components
 On the component page, you get an overview on all PEPs, PXPs and PIPs that are registered for the currently selected solution.
@@ -133,7 +133,7 @@ In order to remove a tag again, you click on the tag name of the tag to be delet
 > **ℹ️ TIP**
 > The menus support "filter as you type". Use the arrow keys to select a menu item and press Enter to confirm. ESC closes the menu.
 
-The policy editor supports drag’n’drop. You can use it by dragging a tag at the ![dragndrop](dragndrop.png) icon in front of the tag name.
+The policy editor supports drag’n’drop. You can use it by dragging a tag at the ![dragndrop](./images/dragndrop.png) icon in front of the tag name.
 Little grey dots indicate where you can drop the tag (according to the type).
 
 ![Policy Editor - Drag’n’Drop](./images/editor-5.png)

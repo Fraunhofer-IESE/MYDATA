@@ -152,7 +152,7 @@ If an [event](#event) is monitored (and not intercepted), the [PEP](#policy-enfo
 
   
 ### oAuth
-oAuth 2.0 is a protocol we use for authentication of [REST requests](#rest) to our [management service](#management-service) and [decision service](#decision-service). Learn more on [the oAuth project site](https://oauth.net/2/) and our developer documentation of the [management service](../rest-api/pmp/) and [decision service](../rest-api/pdp/).
+oAuth 2.0 is a protocol we use for authentication of [REST requests](#rest) to our [management service](#management-service) and [decision service](#decision-service). Learn more on [the oAuth project site](https://oauth.net/2/) and our developer documentation of the [management service](https://management.dev.mydata-control.de/swagger-ui/index.html).
 
 
 ### Operator

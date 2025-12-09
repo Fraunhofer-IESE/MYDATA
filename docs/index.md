@@ -158,7 +158,7 @@ In order to use our central services, you can communicate with our services via 
 ## Resources
 ![Resources](./assets/images/section_header_resources.png)
 
-* JavaDocs are available for our [Core](./api-core), [SDK](./api-sdk) and [Spring SDK](./api-sdk-spring).
+<!-- * JavaDocs are available for our [Core](./api-core), [SDK](./api-sdk) and [Spring SDK](./api-sdk-spring). -->
 * Release notes are available [here](./release-notes/).
 * Migration Guides are available [here](./migrationGuide).
 * Glossary is available [here](./glossary).
