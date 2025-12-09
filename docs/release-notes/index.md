@@ -1,53 +1,51 @@
 ﻿# Release Notes
 
-Diese Release Notes fassen die Entwicklung von **IND²UCE / MYDATA Control Technologies** auf **Major-Version-Ebene** zusammen.  
+These release notes summarize the development of **IND²UCE / MYDATA Control Technologies** at the **major version level**.
 
-Für Migration Guides klicken Sie [hier](migrationGuides).
+For migration guides, click [here](migrationGuides).
 
 
 ## 5.0
-**Leitidee:** MYDATA wird Open Source.
+**Guiding idea:** MYDATA becomes open source.
 
-## 4.x — MYDATA Control Technologies v4 (seit 2019)
+## 4.x — MYDATA Control Technologies v4 (since 2019)
 
-**Leitidee:** Informationelle Selbstbestimmung in jeder Java-Anwendung (Cloud, lokal, hybrid) mit deutlich vereinfachter Integration. MYDATA 4 bringt die Vorteile des Cloud-Dienstes auch in lokale/offline Szenarien und überarbeitet SDK & Services grundlegend. 
+**Guiding idea:** Informational self‑determination in any Java application (cloud, local, hybrid) with significantly simplified integration. MYDATA 4 brings the advantages of the cloud service to local/offline scenarios as well and fundamentally revises the SDK & services.
 
-- Mehrere Betriebsmodi: Deployment über API, Filesystem oder Cloud-Management; Evaluation lokal oder via Cloud-Decision-Service; optionales lokales Caching. 
-- Vollständig überarbeitetes & vereinfachtes SDK / Interfaces** für leichtere Integration. 
-- Komplette und konsistente REST API** inkl. Swagger-Zugriff. 
-- Technische Modernisierung Dependency-Updates, Refactoring, Data-Model-Cleanup. 
-- 4.1–4.3: neues Management-UI, Dockerization aller Services, Quota-/Lizenzrestriktionen entfernt, Security/Hardening & Updates bis Java-17-Kompatibilität. 
-
-
-
-## 3.x — MYDATA v3 / Cloud-Ära (2017–2019)
-
-**Leitidee:** Produktreife und Skalierung durch einen mandantenfähigen Cloud-Dienst plus SDK. MYDATA v3 wurde als hochskalierbarer AWS-Service konzipiert, um hunderttausende Policy-Entscheidungen pro Sekundenbereich zu tragen. 
-
-- Zentraler, mandantenfähiger Dienst zur Erstellung, Verwaltung und Auswertung von Policies. 
-- Umfassende Protokollierung/Auditability von Ereignissen und Entscheidungen (Verbesserung der Nachvollziehbarkeit und Policy-Optimierung). 
-- Ereignis-Historie & zustandsbasierte Policies (seit 3.2): vergangene Zugriffe können in Entscheidungen einfließen. 
-- Policy-Sprache komplett überarbeitet lesbarer und leichter zu nutzen. 
-- Namenswechsel IND²UCE wird zu MYDATA Control Technologies (3.2.69) um die Trennung zwischen Forschung (IND²UCE) und Entwicklung (MYDATA) klarer zu machen. 
+- Multiple operation modes: deployment via API, filesystem, or cloud management; evaluation locally or via cloud decision service; optional local caching.
+- Completely revised & simplified SDK / interfaces for easier integration.
+- Complete and consistent REST API incl. Swagger access.
+- Technical modernization: dependency updates, refactoring, data‑model cleanup.
+- 4.1–4.3: new management UI, dockerization of all services, quota/license restrictions removed, security/hardening & updates up to Java‑17 compatibility.
 
 
+## 3.x — MYDATA v3 / Cloud era (2017–2019)
 
-## 2.x — IND²UCE v2 / Verteilte Datennutzungskontrolle (2014–2016)
+**Guiding idea:** Product maturity and scaling through a multi‑tenant cloud service plus SDK. MYDATA v3 was designed as a highly scalable AWS service to handle hundreds of thousands of policy decisions per second.
 
-**Leitidee:** Von Einzel-Prototypen zu systemübergreifender Datennutzungskontrolle in dynamischen Verbünden.  
-Komponenten konnten nun dynamisch in Ökosysteme eintreten / austreten; Fokus auf Austausch & Durchsetzung von Nutzungsbedingungen über Systemgrenzen hinweg. 
-
-- Inter-organisational Usage Control: Policies werden zwischen Partnern/Systemen verhandelt und übertragen. 
-- Dynamische Zusammenarbeit verteilter IND²UCE-Komponenten über verschiedene Systemebenen hinweg. 
-- Protokolle & Formate für Aushandlung/Übertragung von Nutzungsberechtigungen sowie modellbasierte Policy-Generierung für unterschiedliche Zielsysteme. 
-- Semantische Erweiterung der Policy-Sprache, um abstrakte Bedingungen unterschiedlich durchsetzbar zu machen. 
+- Central, multi‑tenant service for creating, managing, and evaluating policies.
+- Comprehensive logging/auditability of events and decisions (improves traceability and policy optimization).
+- Event history & state‑based policies (since 3.2): past accesses can influence decisions.
+- Policy language completely revised to be more readable and easier to use.
+- Rename: IND²UCE becomes MYDATA Control Technologies (3.2.69) to clarify the separation between research (IND²UCE) and development (MYDATA).
 
 
-## 1.x — IND²UCE v1 / Grundlagenphase (2009–2013)
+## 2.x — IND²UCE v2 / Distributed data usage control (2014–2016)
 
-**Leitidee:** Fundament für Datennutzungskontrolle legen („Daten teilen, Kontrolle behalten“). Entwicklung der formalen Policy-Beschreibung und eines Durchsetzungs-Frameworks. 
+**Guiding idea:** From individual prototypes to cross‑system data usage control in dynamic federations.  
+Components could now dynamically join/leave ecosystems; focus on exchanging & enforcing usage conditions across system boundaries.
 
-- Erarbeitung von Anwendungsfällen für Datennutzungskontrolle. 
-- Formale, maschinenlesbare Policy-Sprache basierend auf XACML und Obligation Specification Language (OSL). 
-- Aufbau des IND²UCE-Rahmenwerks mit Komponenten zur Verwaltung, Auswertung und Durchsetzung von Policies; Referenzimplementierungen & Prototypen. 
-- Breite **Demonstratoren/Prototypen in unterschiedlichen Zielsystemen zur praxisnahen Evaluierung. 
+- Inter‑organizational usage control: policies are negotiated and transferred between partners/systems.
+- Dynamic collaboration of distributed IND²UCE components across different system layers.
+- Protocols & formats for negotiating/transferring usage rights, plus model‑based policy generation for different target systems.
+- Semantic extension of the policy language to make abstract conditions enforceable in different ways.
+
+
+## 1.x — IND²UCE v1 / Foundation phase (2009–2013)
+
+**Guiding idea:** Laying the foundation for data usage control (“share data, keep control”). Development of formal policy descriptions and an enforcement framework.
+
+- Development of use cases for data usage control.
+- Formal, machine‑readable policy language based on XACML and Obligation Specification Language (OSL).
+- Building the IND²UCE framework with components for managing, evaluating, and enforcing policies; reference implementations & prototypes.
+- Broad set of demonstrators/prototypes in different target systems for practical evaluation.

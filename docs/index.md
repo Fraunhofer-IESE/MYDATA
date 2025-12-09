@@ -32,7 +32,7 @@ In the following, you will learn how to integrate and use MYDATA Control Technol
 		  <li><a href="./sdk/howto_pxp">Developing your own Policy Execution Point</a></li>
 		</ul>
 	  </li>
-	  <li><a href="./language/">Policy Language</a>
+	  <li><a href="./language">Policy Language</a>
 		<ul>
 		  <li><a href="./language/#introduction">Introduction</a></li>
 		  <li><a href="./language/#the-event-condition-action-schema">The Event-Condition-Action Schema</a></li>
@@ -44,7 +44,7 @@ In the following, you will learn how to integrate and use MYDATA Control Technol
 		  <li><a href="./language/#working-with-cron-jobs">Working with Cron Jobs</a></li>
 		</ul>
 	  </li>
-	  <li><a href="#central-services">Central Services</a>
+	  <li><a href="./services">Central Services</a>
 		<ul>
 		  <li><a href="https://management.dev.mydata-control.de/swagger-ui.html">API Documentation</a></li>
 		  <li><a href="./ui">UI Documentation</a></li>
@@ -74,82 +74,14 @@ In the following, you will learn how to integrate and use MYDATA Control Technol
 </script>
 
 ## Policy Enforcement 
-![Policy Enforcement](./assets/images/section_header_enforcement.png)
 
-MYDATA Control Technologies intercepts events or data flows and enforces a security decision based on policies.
-This process is highly customizable by different kinds of plugins to provide full flexibility for all use cases.
-
-**Event Monitoring, Filtering and Masking:**
-MYDATA Control Technologies monitors, filters or masks data usages and requests based on the active rule set. 
-This is done by so-called "Policy Enforcement Points", which can modify (Json serialized) data on the fly.
-Policy Enforcement Points are highly flexible and customizable.
-Example modifications could be:
-
-* Removing all customer addresses 
-* Anonymizing person names
-* Coarsing GPS locations
-* Adding copyright notice to a text
-
-**Execution of Actions:**
-MYDATA Control Technologies executes (compensatory or additional) actions based on the active rule set. 
-This execution is done by so-called "Policy Execution Points", which you can register in our system.
-Policy Execution Points might for example
-
-* send E-Mail notifications
-* create log entries
-* trigger a business process
-
-**Connecting to External Information Sources:**
-MYDATA Control Technologies integrates all kinds of information sources, e.g., location data, directory information.
-This execution is done by so-called "Policy Information Points", which you can register in our system.
-Policy Information Points can, for example be used to
-
-* check a user role via LDAP
-* check the user’s context (e.g., "traveling" or "in the office")
-* check if the weather is nice in Berlin
-
-[**Click here to learn how to use our Library.**](./sdk/howto_library.html) 
-
+MYDATA Control Technologies offers control points for the enforcement of usage policies, which can be easily integrated into target systems. These can filter and mask information at data interfaces. In addition, MYDATA Control Technologies offers the possibility to perform actions using additional components, such as notification by e-mail. The functionality of the control points and action executions can be extended by means of plugins.
 
 ## Policy Language
-![Policy Language](./assets/images/section_header_language.png)
 
-The MYDATA Control Technologies policy language is designed to express restrictions on data usage. 
-It is an XML-based language, providing the following features:
-
-* boolean logic
-* arithmetics 
-* temporal information based on an event history
-* policy evaluation based on push (event-triggered) or pull (timer-triggered)
-* connection to external systems for information retrieval (via PIP plugins)
-* enforcement by data modification using JsonPath (via PEP modifier plugins)
-* enforcement by execution of actions (via PXP plugins)
-
-[**Click here to learn more about our policy language.**](./language) 
+New policies (rules) for data usage can be written at runtime. Among other things, time and frequency-based uses ("Data may only be used 5 times within a day"), situation-based uses ("Sensitive data may not be viewed on business trips") and masked uses ("For the PSD2 service provider, the middle 12 digits of the IBAN are replaced by an X") can be specified.
 
 ## Central Services
-![Central Services](./assets/images/section_header_management.png)
 
-Depending on the use case, purely local policy evaluation reaches its limits. 
-For these cases, we offer central and highly scalable services for policy evaluation and management that you can easily integrate into your IT infrastructure.
+MYDATA Control Technologies combines the administration of data sovereignty requirements and technical components in a central administration interface.
 
-In order to use our central services, you can communicate with our services via REST interfaces. 
-
-
-[**Click here for documentation and usage of our API via Swagger.**](https://management.dev.mydata-control.de/swagger-ui.html) 
-
-[**Click here for documentation and usage of our UI.**](./ui) 
-
-
-## Resources
-![Resources](./assets/images/section_header_resources.png)
-
-<!-- * JavaDocs are available for our [Core](./api-core), [SDK](./api-sdk) and [Spring SDK](./api-sdk-spring). -->
-* Release notes are available [here](./release-notes/).
-* Migration Guides are available [here](./migrationGuide).
-* Glossary is available [here](./glossary).
-
-## Legal
-- [MYDATA Data Protection Policy](https://www.mydata-control.de/privacy_policy.html)
-- [GitHub Data Protection Policy](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement)
-- [Imprint](https://www.iese.fraunhofer.de/en/imprint.html)

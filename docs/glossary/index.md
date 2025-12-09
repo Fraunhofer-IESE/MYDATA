@@ -86,7 +86,7 @@ Filtering is one special type of [modification](#modification), where particular
 
 ### Function
 Functions represent mappings from input to output variables and are referenced by [operators](#operator) in our policies.
-Functions can simple boolean functions (like and, or, not), arithmetic functions (like plus, minus) and others (like count, valueChanged). Learn more [here](../language/#_operators).
+Functions can simple boolean functions (like and, or, not), arithmetic functions (like plus, minus) and others (like count, valueChanged). Learn more [here](../language/#operators).
 
 
 ## I
@@ -122,7 +122,7 @@ Masking is one special type of [modification](#modification) (cf. [Wikipedia](ht
 ### Management Service
 Our management service provides a web-based user interface for the management of Plugins ([PEPs](#policy-enforcement-point-pep), [PXPs](#policy-execution-point-pxp), [PIPs](#policy-information-point-pip)), [policies](#policy), [users](#user), [solutions](#solution) and [affiliations](#affiliation) (depending on your [role](#roles)). 
 
-Click [here](../ui) for the full documentation.
+Click [here](../services) for the full documentation.
 
 ### Mechanism
 A mechanism is one [ECA rule ](#event-condition-action) inside a [policy](#policy).
@@ -169,7 +169,7 @@ The usage of our [decision service](#decision-service) is limited. You can choos
 A policy is a set of [mechanisms](#mechanism) (rules) that technically implement security requirement(s). They are used to configure our [decision service](#decision-service) at run-time and are the baseline for the enforcement by [PEPs](#policy-enforcement-point-pep) and [PXPs](#policy-execution-point-pxp). Policies are atomic. This means that a policy can be deployed (all contained mechanisms are active) or revoked (all contained mechanisms are inactive). Our policy format is XML and based on our [policy language](../language).
 
 ### Policy Editor
-A policy editor is the user interface for the specification of a [policy](#policy). MYDATA Control Technologies provides an XML-based policy editor for developers. It supports specification by auto-completion, hints and a beginner mode for novice developers. More information can be found [here](../ui/#policies-policy-editor).
+A policy editor is the user interface for the specification of a [policy](#policy). MYDATA Control Technologies provides an XML-based policy editor for developers. It supports specification by auto-completion, hints and a beginner mode for novice developers. More information can be found [here](../services/ui#policies-policy-editor).
 
 ### Policy Enforcement Point (PEP)
 The PEP is a [component](#component) which [monitors](#monitoring) or intercepts [events](#event) (e.g., a access or usage request to a resource), makes decision requests to the [decision service](#decision-service) for obtaining [decisions](#decision) and enforces the received decision. In terms of MYDATA Control Technologies, a PEP can allow, inhibit or modify events. PEPs can be dynamically registered and used using our SDK.

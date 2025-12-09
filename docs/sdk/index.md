@@ -32,7 +32,10 @@ Policy Information Points can, for example be used to
 * check the user’s context (e.g., "traveling" or "in the office")
 * check if the weather is nice in Berlin
 
-To learn more about our SDK, click [here](howto_library.html) 
-To learn more about Policy Enforcement Points, click [here](howto_pep.html) 
-To learn more about Policy Information Points, click [here](howto_pip.html) 
-To learn more about Policy Execution Points, click [here](howto_pxp.html) 
+To learn more about our SDK, click [here](howto_library.html). 
+
+To learn more about Policy Enforcement Points, click [here](howto_pep.html).
+
+To learn more about Policy Information Points, click [here](howto_pip.html). 
+
+To learn more about Policy Execution Points, click [here](howto_pxp.html).
