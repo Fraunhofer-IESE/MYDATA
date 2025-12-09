@@ -2,7 +2,7 @@ theme: jekyll-theme-cayman
 
 title: MYDATA
 description: Informational self-determination through data filtering and masking
-use_breadcrumbs: true
+use_breadcrumbs: false
 
 plugins:
   - jemoji
