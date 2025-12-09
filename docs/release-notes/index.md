@@ -1,4 +1,4 @@
-﻿# Release Notes — 
+﻿# Release Notes
 
 Diese Release Notes fassen die Entwicklung von **IND²UCE / MYDATA Control Technologies** auf **Major-Version-Ebene** zusammen.  
 

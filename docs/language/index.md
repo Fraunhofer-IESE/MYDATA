@@ -277,6 +277,7 @@ The **&lt;inhibit&gt;** tag is part of a negative authorization decision. It inf
 A reason can be added to both elements:
 
 **Allow and inhibit attributes**
+
 |Attribute    |Type      |Required  	  |Meaning |
 | -- | -- | -- | -- |
 |reason       |String    |optional        |The description or rationale for the decision.|
@@ -308,6 +309,7 @@ The **&lt;modify&gt;** element is used to specify event modifications that the P
 It has the following attributes:
 
 **Allow and inhibit attributes**
+
 |Attribute      |Type       |Required   |Meaning | 
 | -- | -- | -- | -- |
 |eventParameter |String     |required   |The name of the event parameter that should be modified.
@@ -385,6 +387,7 @@ The following constants are available:
 Constants (except &lt;constant:true&gt; and &lt;constant:false&gt;) have the following attributes:
 
 **Constant attributes**
+
 |Attribute    |Type                                                 |Required |Meaning|
 | -- | -- |
 |value        |depends on constant type (string, number, boolean)   |required      |The value of the constant.|
@@ -490,6 +493,7 @@ The following parameter-elements are available:
 Parameters always have a name and a value.
 
 **Parameter attributes**
+
 |Attribute    |Type      |Required |Meaning |
 | -- | -- | -- | -- |
 |name         |String    |required      |The name of the parameter.|
@@ -647,6 +651,7 @@ The elements **&lt;and&gt;, &lt;or&gt;, &lt;not&gt;, &lt;xor&gt;** and **&lt;imp
 The following attribute can be added:
 
 **Basic Boolean Attributes**
+
 |Attribute    |Type      |Default Value |Required |Meaning|
 | -- | -- | -- | -- | -- |
 |mode        |String (LAZY, EAGER)     |LAZY          |optional     | It is possible to choose the mode lazy or eager. Lazy evaluation means that an evaluation is stopped as soon as the result cannot change anymore. For example, as soon as the first child of an &lt;and&gt; is false, the other children are not evaluated. If you want to force the evalution of all children (e.g., to eventually execute a PXP), you have to set the mode to EAGER. |
@@ -721,6 +726,7 @@ If the regex pattern matches to the child-elements value the &lt;regex&gt; eleme
 The **&lt;regex&gt;** element has the following attributes:
 
 **Regex Attributes**
+
 |Attribute    |Type      |Default Value |Required |Meaning|
 | -- | -- | -- | -- | -- |
 |regex        |String    |-             |required      |The String defines the regex that is applied for matching the values of child elements. [Java notation is used](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html).|
@@ -784,6 +790,7 @@ Thus, you can check if the event occurred before, after or at a specific date.
 The **&lt;date&gt;** compares a specified date with the current date (of the event evaluation). 
 
 **Date Attributes**
+
 |Attribute    |Type      |Default Value |Required |Meaning
 | -- | -- | -- | -- | -- |
 |is           |String    |-             |required      |The String defines the time expressions: Before, After, Exactly|
@@ -792,6 +799,7 @@ The **&lt;date&gt;** compares a specified date with the current date (of the eve
 The **&lt;time&gt;** compares a specified time with the current time (of the event evaluation). 
 
 **Time Attributes**
+
 |Attribute    |Type      |Default Value |Required |Meaning
 | -- | -- | -- | -- | -- |
 |is           |String    |-             |required      |The String defines the time expressions: Before, After, Exactly|
@@ -800,6 +808,7 @@ The **&lt;time&gt;** compares a specified time with the current time (of the eve
 The **&lt;day&gt;** compares a specified day with the current day (of the event evaluation). 
 
 **Day Attributes**
+
 |Attribute    |Type      |Default Value |Required |Meaning
 | -- | -- | -- | -- | -- |
 |value        |String    |-             |required      |Or-linked, comma separated list of days that match: Tuesday,Friday,Sunday|
@@ -829,6 +838,7 @@ Execute Actions are actions that security policies can trigger in the system.
 They are specified using the **&lt;execute&gt;** tag. Execute actions return a Boolean value indicating the execution success.
 
 **Execute Attributes**
+
 |Attribute    |Type      |Required |Meaning
 |action        |String   |required    | The name of action to be executed in an PXP.
 
@@ -879,6 +889,7 @@ A &lt;contains&gt; element has a "mode" attribute that declares how many child e
 It must contain a list as first child and any number of arbitrary elements as further children.
 
 **Contains Attributes**
+
 |Attribute    |Type      										|Default Value |Required 	|Meaning |
 | -- | -- | -- | -- | -- |
 |mode         |enum (ALL, EXACTLY_ONE, AT_LEAST_ONE, NONE)      |ALL           |optional       |The mode declares how many child element must match.|
@@ -921,6 +932,7 @@ To check whether an event has certain parameters the **&lt;eventHasParameter&gt;
 Like the &lt;regex&gt; and the &lt;contains&gt; element the &lt;eventHasParameter&gt; has the following mode attribute:
 
 **eventHasParameter Attributes**
+
 |Attribute    |Type      |Default Value |Required |Meaning|
 | -- | -- | -- | -- | -- |
 |mode         |enum (ALL, EXACTLY_ONE, AT_LEAST_ONE, NONE)     |ALL           |no       |The mode declares how many child element must match.|
@@ -1052,6 +1064,7 @@ Based on the [data types](#data-types), the following variableDeclarations are a
 VariableDeclarations are basically key-value pairs. The name is used to refer to the variable and is defined as an attribute:
 
 **variableDeclaration attributes**
+
 |Attribute    |Type      |Required 		|Meaning
 |name         |String  	 |required      |The name of the variableDeclaration used to refer to it. Must be unique per policy.
 
@@ -1076,6 +1089,7 @@ To reference a variable value inside a [condition](#conditions) or [parameter](#
 Every element has the reference attribute:
 
 **Variable attributes**
+
 |Attribute    |Type      |Required |Meaning
 |reference    |String    |required |The reference name to a [variableDeclaration](#working-with-variables).
 
@@ -1168,6 +1182,7 @@ Just like &lt;count&gt;, it has exactly two children:
 However, there are the following additional attributes:
 
 **continuousOccurrence attributes**
+
 |Attribute      |Type         |Required |Meaning
 |interval       |String       |required      |The interval declares the time interval in which an event has to occur to fulfill the condition, for example "1 year". It has follow the following syntax: (([0-9]+y)?([0-9]+w)?([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?) (e.g., 1y), where y = years, w = weeks, d = days, h = hours, m = minutes, s = seconds. 
 |minOccurrences |number       |optional       |Declares the minimum number of occurrences until the condition is fulfilled.
@@ -1211,6 +1226,7 @@ The following valueChanged elements are available:
 **&lt;valueChanged&gt;** has the following optional attribute:
 
 **valueChanged attributes**
+
 |Attribute    |Type      |Required |Meaning
 |to        |Boolean      |optional    | Defines if the value of the child element changed to true or false.
 |id        |String (UUID)      |required    | Defines a UUID for the valueChanged block within the current policy. Automatically generated by our editor.
@@ -1255,6 +1271,7 @@ It can be used inside a &lt;count&gt; or &lt;continuousOccurrence&gt; tag.
 The element has the following attributes:
 
 **eventOccurrence attributes**
+
 |Attribute      |Type      |Required  		  |Meaning
 |event          |String    |required          |Declares the event. The event id follows this pattern: urn:action:&lt;scope&gt;:&lt;identifier&gt;
 |mode           |String    |optional          |Possible values are "FIRST" or "LAST", to get the first or last eventOccurrence.
