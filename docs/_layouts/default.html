@@ -30,26 +30,23 @@
     <main id="content" class="main-content" role="main">
 	  <div class="layout">
 	  <aside class="sidebar">
-		  {% include sidebar.html %}
-		  <!--<nav>
-		   
-			{% for item in site.navigation %}
-			  <img src="{{ item.icon }}"/> 
-			  <a href="/MYDATA/{{ item.link }}">
-				{% if page.url contains item.link and item.name != "Home" %}
-				  <strong>{{ item.name }}</strong>
-				{% elsif page.url == "/" and item.name == "Home" %}
-				  <strong>{{ item.name }}</strong>
-				{% else %}
-				  {{ item.name }}
-				{% endif %}
-			  </a> 
-			  {% unless forloop.last %} 
-				|
-			  {% endunless %}
-			{% endfor %}
-			
-		  </nav>-->
+	    <nav class="side-nav">
+		  {% for item in site.navigation %}
+			<a class="{% if page.url contains item.link or (page.url == '/' and item.name == 'Home') %}active{% endif %}"
+			   href="{{ '/MYDATA/' | append: item.link | relative_url }}">
+			  {% if item.icon %}<img src="{{ item.icon | relative_url }}" alt=""/>{% endif %}
+			  {% if page.url contains item.link and item.name != "Home" %}
+				<strong>{{ item.name }}</strong>
+			  {% elsif page.url == "/" and item.name == "Home" %}
+				<strong>{{ item.name }}</strong>
+			  {% else %}
+				{{ item.name }}
+			  {% endif %}
+			</a>
+		  {% endfor %}
+		</nav>
+
+		
 	  </aside>
       {% if page.url != "/" and site.use_breadcrumbs %}
         {% include breadcrumbs.html %}
