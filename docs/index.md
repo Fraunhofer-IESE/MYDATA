@@ -50,20 +50,9 @@ In the following, you will learn how to integrate and use MYDATA Control Technol
 		  <li><a href="./ui">UI Documentation</a></li>
 		</ul>
 	  </li>
-	  <li><a href="#resources">Resources</a>
-		<ul>
-		  <li><a href="./release-notes">Release Notes</a></li>
-		  <li><a href="./migrationGuide">Migration Guides</a></li>
-		  <li><a href="./glossary">Glossary</a></li>
-		</ul>
-	  </li>
-	  <li><a href="#legal">Legal Notes</a>
-		<ul>
-		  <li><a href="https://www.mydata-control.de/privacy_policy.html">MYDATA Data Protection Policy</a></li>
-		  <li><a href="https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement">GitHub Data Protection Policy</a></li>
-		  <li><a href="https://www.iese.fraunhofer.de/de/impressum.html">Imprint</a></li>
-		</ul>
-	  </li>
+	  <li><a href="./release-notes">Release Notes</a></li>
+	  <li><a href="./release-notes/migrationGuides">Migration Guides</a></li>
+	  <li><a href="./glossary">Glossary</a></li>
 	</ul>
 </div>
 

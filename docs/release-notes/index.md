@@ -2,6 +2,9 @@
 
 Diese Release Notes fassen die Entwicklung von **IND²UCE / MYDATA Control Technologies** auf **Major-Version-Ebene** zusammen.  
 
+Für Migration Guides klicken Sie [hier](migrationGuide).
+
+
 ## 5.0
 **Leitidee:** MYDATA wird Open Source.
 
