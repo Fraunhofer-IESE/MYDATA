@@ -27,7 +27,8 @@
       {% endif %}
     </header>
 
-    <main id="content" class="main-content with-sidebar" role="main">
+    <main id="content" class="main-content" role="main">
+	  <div class="layout">
 	  <aside class="sidebar">
 		  <nav>
 		   
@@ -53,9 +54,10 @@
         {% include breadcrumbs.html %}
       {% endif %}
 
-
-
-      {{ content }}
+      <section class="content">
+        {{ content }}
+	  </section>
+	  </div>
 
       <footer class="site-footer">
         {% if site.github.is_project_page %}

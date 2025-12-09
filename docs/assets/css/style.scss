@@ -8,17 +8,20 @@ $section-headings-color: #1f82c0;
 
 @import "{{ site.theme }}";
 
-.main-content.with-sidebar {
+.layout{
   display: flex;
   gap: 2rem;
 }
 
-.sidebar {
-  min-width: 220px;
-  max-width: 260px;
-  position: sticky;
-  top: 1.5rem;
-  align-self: flex-start;
+/* Sidebar */
+.sidebar{
+  flex: 0 0 240px;     /* fixe Breite */
+}
+
+/* Content soll den Cayman-Look behalten */
+.content{
+  flex: 1 1 auto;
+  min-width: 0;        /* wichtig gegen Overflow */
 }
 
 .side-nav ul { list-style: none; padding-left: 0; }
