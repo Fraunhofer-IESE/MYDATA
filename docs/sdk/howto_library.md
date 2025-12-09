@@ -2,9 +2,9 @@
 
 ## Overview
 
-MY DATA Control Technologies Library brings MY DATA Control Technologies to your Java application.
+MYDATA Control Technologies Library brings MYDATA Control Technologies to your Java application.
 Regardless of whether you want to use it locally inside a single application, on-premise or with our cloud services.
-MY DATA Control Technologies supports four operational modes and provides you a strong API to easily integrate MY DATA Control Technologies in your system.
+MYDATA Control Technologies supports four operational modes and provides you a strong API to easily integrate MYDATA Control Technologies in your system.
 
 ## Operational Modes
 
@@ -70,8 +70,8 @@ One may ask what benefits come in when choosing this operational mode:
 
 ## The IMyDataEnvironment Interface
 
-`IMyDataEnvironment` encapsulates the MY DATA Control Technologies components and supports the previously introduced operation modes.
-It is a central part of the MY DATA Control Technologies Library and enables developers to implement PEPs, PIPs and PXPs.
+`IMyDataEnvironment` encapsulates the MYDATA Control Technologies components and supports the previously introduced operation modes.
+It is a central part of the MYDATA Control Technologies Library and enables developers to implement PEPs, PIPs and PXPs.
 To do so, it provides access to the PMP and some really practical methods to ease the use.
 
 You can find the corresponding API-Documentation here:
@@ -81,7 +81,7 @@ The following sections describe how to use it.
 
 ## About sdk and sdk.spring Maven Artifacts
 
-MY DATA Control Technologies Library can be used with or without Spring.
+MYDATA Control Technologies Library can be used with or without Spring.
 If you use Spring, you will benefit from numerous features and simplified functions.
 For example:
 
@@ -130,11 +130,11 @@ The `connectors.rest` dependency has to be added if your application uses the cl
 </dependency>
 ```
 
-This artifact contains the connectors required to communicate with MY DATA Control Technologies components via HTTP.
+This artifact contains the connectors required to communicate with MYDATA Control Technologies components via HTTP.
 
 ### Configuration with Spring
 
-To use the MY DATA Control Technologies Library in combination with Spring, simply add this dependency (additional to the items from the previous section) to your `pom.xml`:
+To use the MYDATA Control Technologies Library in combination with Spring, simply add this dependency (additional to the items from the previous section) to your `pom.xml`:
 
 ```xml
 <dependency>
@@ -151,12 +151,12 @@ To use the MY DATA Control Technologies Library in combination with Spring, simp
 
 ### Using the Library without Spring
 
-If you decided to use the MY DATA Control Technologies Library without Spring, you have to configure and initialize the
+If you decided to use the MYDATA Control Technologies Library without Spring, you have to configure and initialize the
 `IMyDataEnvironment` by yourself:
 
 #### Manual Instantiation of the `IMyDataEnvironment`
 
-Let’s assume that you want to use the MY DATA Control Technologies Library in [**local mode**](#operationalmodes):
+Let’s assume that you want to use the MYDATA Control Technologies Library in [**local mode**](#operationalmodes):
 
 **Initialization of the IMyDataEnvironment in local mode**
 ```java
@@ -171,13 +171,13 @@ IMyDataEnvironment myDataEnvironment = MyDataEnvironmentManager
     );
 ```
 
-That’s it, you successfully initialized the MY DATA Control Technologies Library.
+That’s it, you successfully initialized the MYDATA Control Technologies Library.
 
 > **ℹ️ NOTE**
 > Please note that we supply `null` as a parameter to the initialize method as the Event History is currently only available in combination with Spring.
 > For further information on how to enable this feature with our `sdk.spring`, please have a look at: [Event History](#event-history).
 
-In order to initialize the MY DATA Control Technologies Library with another operational mode, just choose the appropriate initialize method and provide the required parameters.
+In order to initialize the MYDATA Control Technologies Library with another operational mode, just choose the appropriate initialize method and provide the required parameters.
 A more detailed documentation about the available initializer methods and the required arguments can be found in the corresponding
 [Javadoc](../api-sdk/de/fraunhofer/iese/mydata/internal/IMyDataEnvironmentInitializer.html).
 
@@ -251,7 +251,7 @@ IMyDataEnvironment myDataEnvironment = MyDataEnvironmentManager.getDefaultEnviro
 
 #### Implementing Components (e.g. PIPs and PXPs)
 
-In this section will be shown, how to implement MY DATA Control Technologies components (PIPs and PXPs).
+In this section will be shown, how to implement MYDATA Control Technologies components (PIPs and PXPs).
 
 ##### Policy Information Point (PIP)
 
@@ -347,7 +347,7 @@ try {
 }
 ```
 
-To learn more about our policy language, have a look at: [MY DATA Control Technologies Policy Language](https://developer.mydata-control.de/language/)
+To learn more about our policy language, have a look at: [MYDATA Control Technologies Policy Language](https://developer.mydata-control.de/language/)
 
 #### Enforce Data with a Policy Enforcement Point (PEP)
 
@@ -358,7 +358,7 @@ To enforce the policies you can use a PEP. A PEP roughly works as follows:
 - PEP applies the `AuthorizationDecision` (the contained instructions) to the data.
 - PEP returns modified data or throws an Exception (e.g., in case of inhibition decision).
 
-To learn more about MY DATA Control Technologies PEPs, click [here](howto_pep.html).
+To learn more about MYDATA Control Technologies PEPs, click [here](howto_pep.html).
 
 ##### Enforce Data using a generic PEP
 
@@ -386,7 +386,7 @@ try {
 
 ##### Enforce Data using a custom reactive PEP
 
-MY DATA Control Technologies Library supports custom reactive (i.e., "home-made") PEPs.
+MYDATA Control Technologies Library supports custom reactive (i.e., "home-made") PEPs.
 You just need to declare its interface with the according annotations:
 
 **Declare a custom reactive PEP**
@@ -476,7 +476,7 @@ Just keep an eye on appropriate error handling.
 
 ### Using the Library with Spring
 
-In order to use MY DATA Control Technologies Library with Spring, you need to include the appropriate [maven dependency](#about-sdk-and-sdkspring-maven-artifacts).
+In order to use MYDATA Control Technologies Library with Spring, you need to include the appropriate [maven dependency](#about-sdk-and-sdkspring-maven-artifacts).
 
 #### Configuration of the Library (application.yml)
 
@@ -503,8 +503,8 @@ You can configure the settings such as the operational mode via the `.yml` confi
 |mydata.sync.cloud-sync.max-age|local-with-cloud-sync||Duration accoring to ISO8601, e.g.: PT30M|How long policies and timers received from Cloud-PMP are valid.|
 |mydata.external-server-url|cloud||http://my-application.exmaple|Determines how the application is accessible from the outside (used for URL generation when auto-configuring PIP/PXP)|
 |mydata.component.path|cloud|||Used to determine the prefix of PIP/PXP-REST-Controllers|
-|mydata.datasource.*|||analogous to spring.datasource.*|Configuration for MY DATA Control Technologies Library Persistence (used for the Event History feature)|
-|mydata.jpa.*|||analogous to spring.jpa.*|Configuration for MY DATA Control Technologies Library Persistence (used for the Event History feature)|
+|mydata.datasource.*|||analogous to spring.datasource.*|Configuration for MYDATA Control Technologies Library Persistence (used for the Event History feature)|
+|mydata.jpa.*|||analogous to spring.jpa.*|Configuration for MYDATA Control Technologies Library Persistence (used for the Event History feature)|
 
 
 Let’s assume that you want to use the Library in local mode and use the Spring Data JPA feature.
@@ -550,7 +550,7 @@ mydata:
     num-threads: 4 # how many threads should the PDP use?
 ```
 
-MY DATA Control Technologies Library uses a separate database that will not interfere with your application.
+MYDATA Control Technologies Library uses a separate database that will not interfere with your application.
 
 More examples:
 
@@ -698,7 +698,7 @@ mydata:
 
 #### Autoconfiguration and Initialization of the Library with Spring Boot
 
-The initialization of the MY DATA Control Technologies Library is quite easy with Spring Boot as it happens automatically, based on the settings from the configuration file:
+The initialization of the MYDATA Control Technologies Library is quite easy with Spring Boot as it happens automatically, based on the settings from the configuration file:
 
 .Spring Boot Application
 ```java

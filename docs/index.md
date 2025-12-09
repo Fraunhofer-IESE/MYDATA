@@ -20,19 +20,16 @@ The modular and component-based structure of MYDATA Control Technologies allows 
 
 In the following, you will learn how to integrate and use MYDATA Control Technologies.
 
-<button type="button" id="toggleButton" style="background-color: #44546A; border: none; color: white; padding: 6px 12px; text-align: center; text-decoration: none; display: inline-block; font-size: 1rem;">Sitemap / Inhaltsverzeichnis anzeigen</button>
+<button type="button" id="toggleButton" style="background-color: #1f82c0; border: none; color: white; padding: 6px 12px; text-align: center; text-decoration: none; display: inline-block; font-size: 1rem;">Sitemap / Inhaltsverzeichnis anzeigen</button>
 <div id="toc">
 	<ul id='contentList' class='collapsed'>
 	  <li>Home</li>
 	  <li><a href="./sdk">Policy Enforcement</a>
 		<ul>
-		  <li><a href="./sdk/howto_library">The MYDATA Library</a>
-			<ul>
-			  <li><a href="./sdk/howto_pep">Developing your own Policy Enforcement Point</a></li>
-			  <li><a href="./sdk/howto_pip">Developing your own Policy Information Point</a></li>
-			  <li><a href="./sdk/howto_pxp">Developing your own Policy Execution Point</a></li>
-			</ul>
-		  </li>
+		  <li><a href="./sdk/howto_library">The MYDATA Library</a></li>
+		  <li><a href="./sdk/howto_pep">Developing your own Policy Enforcement Point</a></li>
+		  <li><a href="./sdk/howto_pip">Developing your own Policy Information Point</a></li>
+		  <li><a href="./sdk/howto_pxp">Developing your own Policy Execution Point</a></li>
 		</ul>
 	  </li>
 	  <li><a href="./language/">Policy Language</a>
@@ -165,5 +162,5 @@ In order to use our central services, you can communicate with our services via 
 
 ## Legal
 - [MYDATA Data Protection Policy](https://www.mydata-control.de/privacy_policy.html)
-- [GitHub Data Protection Policy](https://docs.github.com/de/site-policy/privacy-policies/github-privacy-statement)
-- [Imprint](https://www.iese.fraunhofer.de/de/impressum.html)
+- [GitHub Data Protection Policy](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement)
+- [Imprint](https://www.iese.fraunhofer.de/en/imprint.html)

@@ -145,13 +145,10 @@ For more information, click
 
 Here is an example for `RxPEP` generation and registration:
 
-
-[source,java]
 ```java
 IMyDataEnvironment myDataEnvironment = MyDataEnvironmentManager.getDefaultEnvironment();
 RxPEPDocumentationAPI rxPepAPI = myDataEnvironment.constructAndRegisterCustomPep("reactivePEP", RxPEPDocumentationAPI.class);
 ```
-
 
 The methods specified above will generate an implementation for the specified `DocumentationAPI` interface and register with the PMP.
 

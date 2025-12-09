@@ -234,7 +234,7 @@ These two elements can have the following child elements:
 * &lt;[inhibit](#then_else)&gt;: The event will be inhibited
 * &lt;[execute](#execution-of-external-events)&gt;: Additional actions are executed, independent of the event allowance 
 
-> 📜Policy Specification Rules
+> **📜Policy Specification Rules**
 > * The &lt;then&gt; and the &lt;else&gt; elements must have at either
 > ** exactly one [binary decision](#then_else) (&lt;allow&gt;, &lt;inhibit&gt;), or
 > ** at least one [event modification](#complex-decisions-with-event-modifications) (&lt;modify&gt;), and
@@ -345,7 +345,7 @@ JSONPath uses special notation to represent nodes and their connections to adjac
 Plese refer to https://github.com/json-path/JsonPath for a full documentation on JsonPath.
 
 > **❗Policy Evaluation Rules**
-> When you are using JsonPath, **type safety cannot be guaranteed**.
+> * When you are using JsonPath, **type safety cannot be guaranteed**.
 
 This means for example that you can overwrite a Number with a String or List.
 While this is not a problem for Json / JsonPath, it can (and most likely will) cause problems when deserializting the Json back to an Object at the PEP side. 
@@ -410,7 +410,7 @@ Constants (except &lt;constant:true&gt; and &lt;constant:false&gt;) have the fol
 ```
 
 > **📜 Policy Specification Rules**
-> Boolean constants do not have a value. They are explicitly available as &lt;constant:true&gt; and &lt;constant:false&gt;.
+> * Boolean constants do not have a value. They are explicitly available as &lt;constant:true&gt; and &lt;constant:false&gt;.
 
 ### Variables
 See chapter [Working with Variables](#working-with-variables).
@@ -502,7 +502,7 @@ Parameters always have a name and a value.
 Parameters can have one child of the same type (e.g., a string parameter can have a string child).
 
 > **📜 Policy Specification Rules**
-> A parameter must have either a value attribute or a child
+> * A parameter must have either a value attribute or a child
 
 > **❗Policy Evaluation Rules**
 > * If a parameter has child, the value of the child is used
@@ -560,8 +560,8 @@ The elements have the following attributes:
 |default        |same as the pip type (string, number, boolean)   |required       |The value that is returned if the PIP is not reachable.|
 |ttl            |time interval notation    |optional         |The "time to live" value sets the time interval that the response value of the PIP is cached. The ttl follows the following syntax: (([0-9]+y)?([0-9]+w)?([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?) (e.g., 1y), where y = years, w = weeks, d = days, h = hours, m = minutes, s = seconds. For example if the pip value should be cached for 1 week, 4 days and 2 hours it would look like "1w4d2h".|
 
-**Policy Evaluation Rules**
-> 📜
+
+> **📜 Policy Evaluation Rules**
 > * During the "time to live" caching time interval, the pip-elements only returns the cached value. When the time to live has elapsed, the cache is refreshed by the current value retrieved by the PIP for the next interval.
 > * If the "time to live" caching time interval is not set, then the PIP is requested on each PIP element evaluation.
 
@@ -920,10 +920,10 @@ It must contain a list as first child and any number of arbitrary elements as fu
 
 > **❗Policy Evaluation Rules**
 > * The **&lt;contains&gt;** element has four evaluation modes:
-> ** ALL: The first value must match all of the following element values.
-> ** EXACTLY_ONE: The first value must match exactly one of the following element values, but not more than one.
-> ** AT_LEAST_ONE: The first value must at least match one of the following element values.
-> ** NONE: The first value must not match any of the following element values.
+>   * ALL: The first value must match all of the following element values.
+>   * EXACTLY_ONE: The first value must match exactly one of the following element values, but not more than one.
+>   * AT_LEAST_ONE: The first value must at least match one of the following element values.
+>   * NONE: The first value must not match any of the following element values.
 
 
 ### Checking whether an event has a specific parameter
@@ -963,12 +963,10 @@ Because &lt;eventHasParameter&gt; refers to a name of an event parameter, it can
 
 > **❗Policy Evaluation Rules**
 > * The **&lt;eventHasParameter&gt;** element has four evaluation modes:
-> ** ALL: All child element values have to be an event parameter.
-> ** EXACTLY_ONE: Exactly one child element value has to be an event parameter, but not more than one.
-> ** AT_LEAST_ONE: At least one child element value has to be an event parameter.
-> ** NONE: No child element value has to be a event parameter.
-
-
+>   * ALL: All child element values have to be an event parameter.
+>   * EXACTLY_ONE: Exactly one child element value has to be an event parameter, but not more than one.
+>   * AT_LEAST_ONE: At least one child element value has to be an event parameter.
+>   * NONE: No child element value has to be a event parameter.
 
 ### String Operators
 
@@ -1008,7 +1006,7 @@ It is possible to add any number and kinds of children.
 
 
 > **❗Policy Evaluation Rules**
-> For lists and objects, the toString() method is called, which might result in unwanted effects.
+> * For lists and objects, the toString() method is called, which might result in unwanted effects.
 
 
 ### Object Operators
@@ -1074,7 +1072,7 @@ The following example shows a declaration of a boolean variable **RoleLoggedUser
 The benefit of this construct is, that the PIP is only called once per policy and not everytime it is referenced.
 
 > **❗Policy Evaluation Rules**
-> A variable declaration is only evaluated **once** per policy and event.
+> * A variable declaration is only evaluated **once** per policy and event.
 > This is especially important if you are using [PIPs](#external-information-sources-pips) or [PXPs](#execution-of-external-events) that can change their value on repeated evaluation. 
 > This means for example: If a policy contains 5 mechanisms referencing a variable based on a PIP, this PIP is only queried once and the result is used by all mechanisms.
 
@@ -1305,7 +1303,7 @@ For example, you might look for certain events yesterday, or in the last 45 minu
 Time spans can be defined using fixed (predefined) time spans as an attribute, or using custom time spans as children. 
 
 > **❗Policy Evaluation Rules**
-> Fixed time spans override custom time spans.
+> * Fixed time spans override custom time spans.
 
 ### Fixed Time Spans
 The easiest way to work with time spans is to use predefined or fixed time spans as an attribute of **&lt;when&gt;**.
