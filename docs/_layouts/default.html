@@ -30,7 +30,8 @@
     <main id="content" class="main-content" role="main">
 	  <div class="layout">
 	  <aside class="sidebar">
-		  <nav>
+		  {% include sidebar.html %}
+		  <!--<nav>
 		   
 			{% for item in site.navigation %}
 			  <img src="{{ item.icon }}"/> 
@@ -48,7 +49,7 @@
 			  {% endunless %}
 			{% endfor %}
 			
-		  </nav>
+		  </nav>-->
 	  </aside>
       {% if page.url != "/" and site.use_breadcrumbs %}
         {% include breadcrumbs.html %}
