@@ -26,7 +26,7 @@ In the following, you will learn how to integrate and use MYDATA Control Technol
 	  <li>Home</li>
 	  <li><a href="./sdk">Policy Enforcement</a>
 		<ul>
-		  <li><a href="./sdk/howto_library">The MYDATA Library</a></li>
+		  <li><a href="./sdk/howto_library">The MYDATA Library</a>
 			<ul>
 			  <li><a href="./sdk/howto_pep">Developing your own Policy Enforcement Point</a></li>
 			  <li><a href="./sdk/howto_pip">Developing your own Policy Information Point</a></li>
