@@ -33,14 +33,17 @@
 		  <nav class="side-nav">
 			{% for item in site.navigation %}
 
-			  {%- assign is_home = item.name == "Home" or item.link == "" -%}
-			  {%- assign is_active = false -%}
+			  {% assign is_home = false %}
+			  {% if item.name == "Home" or item.link == "" %}
+				{% assign is_home = true %}
+			  {% endif %}
 
-			  {%- if is_home and page.url == "/" -%}
-				{%- assign is_active = true -%}
-			  {%- elsif not is_home and page.url contains item.link -%}
-				{%- assign is_active = true -%}
-			  {%- endif -%}
+			  {% assign is_active = false %}
+			  {% if is_home and page.url == "/" %}
+				{% assign is_active = true %}
+			  {% elsif is_home == false and page.url contains item.link %}
+				{% assign is_active = true %}
+			  {% endif %}
 
 			  <a class="{% if is_active %}active{% endif %}"
 				 href="{{ '/' | append: item.link | relative_url }}">
@@ -59,6 +62,7 @@
 			{% endfor %}
 		  </nav>
 		</aside>
+
 
 	  
       {% if page.url != "/" and site.use_breadcrumbs %}
