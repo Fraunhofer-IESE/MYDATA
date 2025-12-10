@@ -16,7 +16,7 @@
     <a id="skip-to-content" href="#content">Skip to the content.</a>
 
     <header class="page-header" role="banner">
-      <h1 class="project-name"><img style="height:120px; width:auto;" src="/MYDATA/assets/images/MYDATA_white.png" alt="MYDATA"></h1>
+      <h1 class="project-name"><img class="project-logo" src="/MYDATA/assets/images/MYDATA_white.png" alt="MYDATA"></h1>
       <h2 class="project-tagline">{{ page.description | default: site.description | default: site.github.project_tagline }}</h2>
       {% if site.github.is_project_page %}
         <a href="{{ site.github.repository_url }}" class="btn">Auf GitHub anzeigen</a>
@@ -30,7 +30,7 @@
     <main id="content" class="main-content" role="main">
 	  <div class="layout">
 		<aside class="sidebar">
-		  <details class="side-nav-toggle">
+		  <details class="side-nav-toggle" open>
 			<summary>Menü</summary>
 
 			<nav class="side-nav">

@@ -8,7 +8,6 @@ $section-headings-color: #1f82c0;
 
 @import "{{ site.theme }}";
 
-/* Desktop bleibt wie gehabt */
 .layout{
   display: flex;
   gap: 2rem;
@@ -29,6 +28,14 @@ $section-headings-color: #1f82c0;
   padding: .3rem 0;
 }
 .side-nav a.active{ font-weight: 700; }
+
+.project-logo {
+  height: 120px;
+  width: auto;
+  max-width: 100%;     /* nie breiter als der Container */
+  display: block;
+}
+
 
 /* --- Mobile --- */
 .side-nav-toggle summary{
@@ -65,7 +72,13 @@ $section-headings-color: #1f82c0;
   .side-nav a{
     padding: .45rem .1rem;
   }
+  
+  .project-logo {
+    height: 64px; 
+  }
 }
+
+
 
 #content {
 	max-width: 96rem;
