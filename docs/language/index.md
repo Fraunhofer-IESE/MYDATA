@@ -11,22 +11,133 @@ Enforcement decisions can be specified by means of **event inhibition, data modi
 
 <button type="button" id="toggleButton" style="background-color: #1f82c0; border: none; color: white; padding: 6px 12px; text-align: center; text-decoration: none; display: inline-block; font-size: 1rem;">Show table of contents</button>
 <div id="toc" class='collapsed'>
-	
-* Policy: &lt;[policy](#policy)&gt;, &lt;[mechanism](#mechanisms)&gt;, &lt;[variableDeclaration](#working-with-variables)&gt;
-* Conditions: &lt;[if](#conditions)&gt;, &lt;[elseif](#conditions)&gt;
-* Decisions: &lt;[then](#then_else)&gt;, &lt;[else](#then_else)&gt;, &lt;[allow](#then_else)&gt;, &lt;[allow](#then_else)&gt;, &lt;[modify](#complex-decisions-with-event-modifications)&gt;, &lt;[execute](#execution-of-external-events)&gt;
-* Variables: &lt;[variable:boolean](#working-with-variables)&gt;, &lt;[variable:number](#working-with-variables)&gt;, &lt;[variable:string](#working-with-variables)&gt;, &lt;[variable:object](#working-with-variables)&gt;, &lt;[variable:list](#working-with-variables)&gt;    
-* Parameters: &lt;[parameter:boolean](#parameters)&gt;, &lt;[parameter:number](#parameters)&gt;, &lt;[parameter:string](#parameters)&gt;, &lt;[parameter:object](#parameters)&gt;, &lt;[parameter:list](#parameters)&gt;    
-* Event References: &lt;[event:boolean](#event-references)&gt;, &lt;[event:number](#event-references)&gt;, &lt;[event:string](#event-references)&gt;, &lt;[event:object](#event-references)&gt;, &lt;[event:list](#event-references)&gt;, &lt;[eventHasParameter](#checking-whether-an-event-has-a-specific-parameter)&gt;    
-* Constants: &lt;[constant:boolean](#constants)&gt;, &lt;[constant:number](#constants)&gt;, &lt;[constant:string](#constants)&gt;, &lt;[constant:object](#constants)&gt;, &lt;[constant:list](#constants)&gt;    
-* PIPs: &lt;[pip:boolean](#external-information-sources-pips)&gt;, &lt;[pip:number](#external-information-sources-pips)&gt;, &lt;[pip:string](#external-information-sources-pips)&gt;, &lt;[pip:object](#external-information-sources-pips)&gt;, &lt;[pip:list](#external-information-sources-pips)&gt;    
-* Arithmetic Functions: &lt;[plus](#arithmetic-functions)&gt;, &lt;[minus](#arithmetic-functions)&gt;, &lt;[multiply](#arithmetic-functions)&gt;, &lt;[divide](#arithmetic-functions)&gt;, &lt;[size](#arithmetic-functions)&gt;
-* Boolean Functions: &lt;[and](#basic-boolean-functions)&gt;, &lt;[or](#basic-boolean-functions)&gt;, &lt;[xor](#basic-boolean-functions)&gt;, &lt;[not](#basic-boolean-functions)&gt;, &lt;[implies](#basic-boolean-functions)&gt;, &lt;[contains](#checking-if-a-list-contains-certain-elements)&gt;, &lt;[regex](#regular-expressions)&gt;
-* Comparison Functions: &lt;[less](#comparison-functions)&gt;, &lt;[lessEqual](#comparison-functions)&gt;, &lt;[equals](#comparison-functions)&gt;, &lt;[greaterEqual](#comparison-functions)&gt;, &lt;[greater](#comparison-functions)&gt;
-* Date Functions: &lt;[date](#date-functions)&gt;, &lt;[day](#date-functions)&gt;, &lt;[time](#date-functions)&gt;
-* Event History: &lt;[count](#counting-of-events)&gt;, &lt;[valueChanged](#evaluation-of-changes-over-time)&gt;, &lt;[continuousOccurrence](#evaluation-of-periodic-events)&gt;, &lt;[eventOccurrence](#referring-to-an-event-in-the-event-history)&gt;, &lt;[when](#dynamic-time-spans)&gt;
-* Concatenation: &lt;[concat](#string-concatenation-concat)&gt;
-* Cron Jobs / Time Triggered Events: &lt;[timer](#working-with-cron-jobs)&gt;, &lt;[event](#working-with-cron-jobs)&gt;
+<ul>
+  <li>
+	Policy:
+	<a href="#policy">policy</a>,
+	<a href="#mechanisms">mechanism</a>,
+	<a href="#working-with-variables">variableDeclaration</a>
+  </li>
+
+  <li>
+	Conditions:
+	<a href="#conditions">if</a>,
+	<a href="#conditions">elseif</a>
+  </li>
+
+  <li>
+	Decisions:
+	<a href="#then_else">then</a>,
+	<a href="#then_else">else</a>,
+	<a href="#then_else">allow</a>,
+	<a href="#then_else">allow</a>,
+	<a href="#complex-decisions-with-event-modifications">modify</a>,
+	<a href="#execution-of-external-events">execute</a>
+  </li>
+
+  <li>
+	Variables:
+	<a href="#working-with-variables">variable:boolean</a>,
+	<a href="#working-with-variables">variable:number</a>,
+	<a href="#working-with-variables">variable:string</a>,
+	<a href="#working-with-variables">variable:object</a>,
+	<a href="#working-with-variables">variable:list</a>
+  </li>
+
+  <li>
+	Parameters:
+	<a href="#parameters">parameter:boolean</a>,
+	<a href="#parameters">parameter:number</a>,
+	<a href="#parameters">parameter:string</a>,
+	<a href="#parameters">parameter:object</a>,
+	<a href="#parameters">parameter:list</a>
+  </li>
+
+  <li>
+	Event References:
+	<a href="#event-references">event:boolean</a>,
+	<a href="#event-references">event:number</a>,
+	<a href="#event-references">event:string</a>,
+	<a href="#event-references">event:object</a>,
+	<a href="#event-references">event:list</a>,
+	<a href="#checking-whether-an-event-has-a-specific-parameter">eventHasParameter</a>
+  </li>
+
+  <li>
+	Constants:
+	<a href="#constants">constant:boolean</a>,
+	<a href="#constants">constant:number</a>,
+	<a href="#constants">constant:string</a>,
+	<a href="#constants">constant:object</a>,
+	<a href="#constants">constant:list</a>
+  </li>
+
+  <li>
+	PIPs:
+	<a href="#external-information-sources-pips">pip:boolean</a>,
+	<a href="#external-information-sources-pips">pip:number</a>,
+	<a href="#external-information-sources-pips">pip:string</a>,
+	<a href="#external-information-sources-pips">pip:object</a>,
+	<a href="#external-information-sources-pips">pip:list</a>
+  </li>
+
+  <li>
+	Arithmetic Functions:
+	<a href="#arithmetic-functions">plus</a>,
+	<a href="#arithmetic-functions">minus</a>,
+	<a href="#arithmetic-functions">multiply</a>,
+	<a href="#arithmetic-functions">divide</a>,
+	<a href="#arithmetic-functions">size</a>
+  </li>
+
+  <li>
+	Boolean Functions:
+	<a href="#basic-boolean-functions">and</a>,
+	<a href="#basic-boolean-functions">or</a>,
+	<a href="#basic-boolean-functions">xor</a>,
+	<a href="#basic-boolean-functions">not</a>,
+	<a href="#basic-boolean-functions">implies</a>,
+	<a href="#checking-if-a-list-contains-certain-elements">contains</a>,
+	<a href="#regular-expressions">regex</a>
+  </li>
+
+  <li>
+	Comparison Functions:
+	<a href="#comparison-functions">less</a>,
+	<a href="#comparison-functions">lessEqual</a>,
+	<a href="#comparison-functions">equals</a>,
+	<a href="#comparison-functions">greaterEqual</a>,
+	<a href="#comparison-functions">greater</a>
+  </li>
+
+  <li>
+	Date Functions:
+	<a href="#date-functions">date</a>,
+	<a href="#date-functions">day</a>,
+	<a href="#date-functions">time</a>
+  </li>
+
+  <li>
+	Event History:
+	<a href="#counting-of-events">count</a>,
+	<a href="#evaluation-of-changes-over-time">valueChanged</a>,
+	<a href="#evaluation-of-periodic-events">continuousOccurrence</a>,
+	<a href="#referring-to-an-event-in-the-event-history">eventOccurrence</a>,
+	<a href="#dynamic-time-spans">when</a>
+  </li>
+
+  <li>
+	Concatenation:
+	<a href="#string-concatenation-concat">concat</a>
+  </li>
+
+  <li>
+	Cron Jobs / Time Triggered Events:
+	<a href="#working-with-cron-jobs">timer</a>,
+	<a href="#working-with-cron-jobs">event</a>
+  </li>
+</ul>
+
 </div>
 
 <script type="text/javascript">
