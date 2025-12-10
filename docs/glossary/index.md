@@ -1,4 +1,4 @@
-﻿# Glossary
+﻿# ![](./assets/images/spell-check.svg) Glossary
 
 ## A
 

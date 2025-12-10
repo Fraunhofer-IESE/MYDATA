@@ -1,4 +1,4 @@
-# Policy Enforcement 
+# ![](./assets/images/toolbox.svg) Policy Enforcement 
 
 MYDATA Control Technologies intercepts events or data flows and enforces a security decision based on policies.
 This process is highly customizable by different kinds of plugins to provide full flexibility for all use cases.

@@ -1,4 +1,4 @@
-﻿# Migration Guides
+﻿# ![](./assets/images/code-commit.svg) Migration Guides
 
 ## Migration from MYDATA Control Technologies 3.x to 4.0
 

@@ -1,4 +1,4 @@
-# Management Service UI
+# ![](./assets/images/layer-group.svg) Management Service UI
 
 ## Overview
 

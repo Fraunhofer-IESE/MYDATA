@@ -1,4 +1,4 @@
-# Developing your own Policy Execution Point
+# ![](./assets/images/toolbox.svg) Developing your own Policy Execution Point
 
 # Overview
 

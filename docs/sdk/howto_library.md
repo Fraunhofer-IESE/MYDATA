@@ -1,4 +1,4 @@
-# The MYDATA Library
+# ![](./assets/images/toolbox.svg) The MYDATA Library
 
 ## Overview
 

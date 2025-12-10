@@ -51,7 +51,7 @@
 				<a class="{% if is_active %}active{% endif %}"
 				   href="{{ '/' | append: item.link | relative_url }}">
 				  {% if item.icon %}
-					<img src="{{ item.icon | relative_url }}" alt=""/>
+					<img style="height:1em" src="{{ item.icon | relative_url }}" alt=""/>
 				  {% endif %}
 				  {% if is_active %}<strong>{{ item.name }}</strong>{% else %}{{ item.name }}{% endif %}
 				</a>

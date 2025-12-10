@@ -1,4 +1,4 @@
-# SSL Client Authentication For MYDATA-Component-Authentication
+# ![](./assets/images/toolbox.svg) SSL Client Authentication For MYDATA-Component-Authentication
 
 The HTTPS-communication between mydata-components is secured by two way-SSL. In common SSL, the client verifies the server's identity by a server-certificate. In contrary to this, using two-way-SSL means, that also the client has to let the server verify his identity. TO create the certificate, OpenSSL and the Java-keytool from Java-1.7 or higher has to be installed properly and to be in your Path.
 

@@ -1,4 +1,4 @@
-# Policy Language
+# ![](./assets/images/language.svg) Policy Language
 
 ## Introduction
 

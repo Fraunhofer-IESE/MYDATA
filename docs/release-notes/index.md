@@ -1,4 +1,4 @@
-﻿# Release Notes
+﻿# ![](./assets/images/code-commit.svg) Release Notes
 
 These release notes summarize the development of **IND²UCE / MYDATA Control Technologies** at the **major version level**.
 
