@@ -1,4 +1,4 @@
-﻿# Developer Documentation
+﻿# ![](./assets/images/home.svg) Developer Documentation
 
 More and more business models require the exchange and processing of business-critical data. 
 The legislator considers personal data to be particularly worthy of protection. 
