@@ -1,7 +1,17 @@
 # Policy Language
 
-## Short Links
+## Introduction
 
+This documentation is about the specification of **privacy policies with the MYDATA Control Technologies policy language** regulating security-relevant system events.
+The MYDATA Control Technologies policy language is designed to express restrictions on data usage. 
+It is an XML-based language, based on **boolean logic, arithmetics, temporal information based on an event history**.
+Furthermore, it allows for evaluations based on push (event-triggered) or pull (timer-triggered).
+Connection to external systems for information retrieval is fully supported.
+Enforcement decisions can be specified by means of **event inhibition, data modification using JsonPath (via PEP modifier plugins) and via the execution of actions (via PXP plugins)**.
+
+<button type="button" id="toggleButton" style="background-color: #1f82c0; border: none; color: white; padding: 6px 12px; text-align: center; text-decoration: none; display: inline-block; font-size: 1rem;">Show table of contents</button>
+<div id="toc" class='collapsed'>
+	
 * Policy: &lt;[policy](#policy)&gt;, &lt;[mechanism](#mechanisms)&gt;, &lt;[variableDeclaration](#working-with-variables)&gt;
 * Conditions: &lt;[if](#conditions)&gt;, &lt;[elseif](#conditions)&gt;
 * Decisions: &lt;[then](#then_else)&gt;, &lt;[else](#then_else)&gt;, &lt;[allow](#then_else)&gt;, &lt;[allow](#then_else)&gt;, &lt;[modify](#complex-decisions-with-event-modifications)&gt;, &lt;[execute](#execution-of-external-events)&gt;
@@ -17,15 +27,24 @@
 * Event History: &lt;[count](#counting-of-events)&gt;, &lt;[valueChanged](#evaluation-of-changes-over-time)&gt;, &lt;[continuousOccurrence](#evaluation-of-periodic-events)&gt;, &lt;[eventOccurrence](#referring-to-an-event-in-the-event-history)&gt;, &lt;[when](#dynamic-time-spans)&gt;
 * Concatenation: &lt;[concat](#string-concatenation-concat)&gt;
 * Cron Jobs / Time Triggered Events: &lt;[timer](#working-with-cron-jobs)&gt;, &lt;[event](#working-with-cron-jobs)&gt;
+</div>
 
-## Introduction
+<script type="text/javascript">
 
-This documentation is about the specification of **privacy policies with the MYDATA Control Technologies policy language** regulating security-relevant system events.
-The MYDATA Control Technologies policy language is designed to express restrictions on data usage. 
-It is an XML-based language, based on **boolean logic, arithmetics, temporal information based on an event history**.
-Furthermore, it allows for evaluations based on push (event-triggered) or pull (timer-triggered).
-Connection to external systems for information retrieval is fully supported.
-Enforcement decisions can be specified by means of **event inhibition, data modification using JsonPath (via PEP modifier plugins) and via the execution of actions (via PXP plugins)**.
+	document.getElementById("toggleButton").addEventListener("click", function() {
+		var toc = document.getElementById("toc");
+		if (toc.classList.contains("collapsed")) {
+			toc.classList.remove("collapsed");
+			toc.classList.add("expanded");
+			this.textContent = "Hide table of contents";
+		} else {
+			toc.classList.remove("expanded");
+			toc.classList.add("collapsed");
+			this.textContent = "Show table of contents";
+		}
+	});
+
+</script>
 
 ## The Event-Condition-Action Schema
 

@@ -32,8 +32,9 @@ $section-headings-color: #1f82c0;
 .project-logo {
   height: 120px;
   width: auto;
-  max-width: 100%;     /* nie breiter als der Container */
+  max-width: 100%;
   display: block;
+  margin: 0 auto;
 }
 
 
