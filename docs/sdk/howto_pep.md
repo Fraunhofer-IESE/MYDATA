@@ -1,4 +1,4 @@
-# ![](./assets/images/toolbox.svg) Developing your own Policy Enforcement Point
+# ![](../assets/images/toolbox.svg) Developing your own Policy Enforcement Point
 
 ## Overview
 

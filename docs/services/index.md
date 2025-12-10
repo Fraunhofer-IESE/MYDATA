@@ -1,4 +1,4 @@
-# ![](./assets/images/layer-group.svg) Central Services
+# ![](../assets/images/layer-group.svg) Central Services
 
 Depending on the use case, purely local policy evaluation reaches its limits. 
 For these cases, we offer central and highly scalable services for policy evaluation and management that you can easily integrate into your IT infrastructure.
