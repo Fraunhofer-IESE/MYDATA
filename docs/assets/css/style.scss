@@ -37,6 +37,21 @@ $section-headings-color: #1f82c0;
   margin: 0 auto;
 }
 
+/* --- Desktop --- */
+@media (min-width: 769px) {
+  .layout {
+    align-items: flex-start;   /* <- verhindert Stretch */
+  }
+
+  .sidebar {
+    align-self: flex-start;
+    height: fit-content;       /* <- Sidebar nur so hoch wie Inhalt */
+    position: sticky;
+    top: 1.5rem;
+  }
+}
+
+
 
 /* --- Mobile --- */
 .side-nav-toggle summary{
