@@ -30,38 +30,37 @@
     <main id="content" class="main-content" role="main">
 	  <div class="layout">
 		<aside class="sidebar">
-		  <nav class="side-nav">
-			{% for item in site.navigation %}
+		  <details class="side-nav-toggle">
+			<summary>Menü</summary>
 
-			  {% assign is_home = false %}
-			  {% if item.name == "Home" or item.link == "" %}
-				{% assign is_home = true %}
-			  {% endif %}
+			<nav class="side-nav">
+			  {% for item in site.navigation %}
 
-			  {% assign is_active = false %}
-			  {% if is_home and page.url == "/" %}
-				{% assign is_active = true %}
-			  {% elsif is_home == false and page.url contains item.link %}
-				{% assign is_active = true %}
-			  {% endif %}
-
-			  <a class="{% if is_active %}active{% endif %}"
-				 href="{{ '/' | append: item.link | relative_url }}">
-
-				{% if item.icon %}
-				  <img src="{{ item.icon | relative_url }}" alt=""/>
+				{% assign is_home = false %}
+				{% if item.name == "Home" or item.link == "" %}
+				  {% assign is_home = true %}
 				{% endif %}
 
-				{% if is_active %}
-				  <strong>{{ item.name }}</strong>
-				{% else %}
-				  {{ item.name }}
+				{% assign is_active = false %}
+				{% if is_home and page.url == "/" %}
+				  {% assign is_active = true %}
+				{% elsif is_home == false and page.url contains item.link %}
+				  {% assign is_active = true %}
 				{% endif %}
-			  </a>
 
-			{% endfor %}
-		  </nav>
+				<a class="{% if is_active %}active{% endif %}"
+				   href="{{ '/' | append: item.link | relative_url }}">
+				  {% if item.icon %}
+					<img src="{{ item.icon | relative_url }}" alt=""/>
+				  {% endif %}
+				  {% if is_active %}<strong>{{ item.name }}</strong>{% else %}{{ item.name }}{% endif %}
+				</a>
+
+			  {% endfor %}
+			</nav>
+		  </details>
 		</aside>
+
 
 
 	  

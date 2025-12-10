@@ -8,25 +8,64 @@ $section-headings-color: #1f82c0;
 
 @import "{{ site.theme }}";
 
+/* Desktop bleibt wie gehabt */
 .layout{
   display: flex;
   gap: 2rem;
 }
 
-/* Sidebar */
 .sidebar{
-  flex: 0 0 240px;     /* fixe Breite */
+  flex: 0 0 240px;
 }
 
-/* Content soll den Cayman-Look behalten */
 .content{
   flex: 1 1 auto;
-  min-width: 0;        /* wichtig gegen Overflow */
+  min-width: 0;
 }
 
-.side-nav ul { list-style: none; padding-left: 0; }
-.side-nav a { text-decoration: none; display: block; padding: .3rem 0; }
-.side-nav a.active { font-weight: 700; }
+.side-nav a{
+  text-decoration: none;
+  display: block;
+  padding: .3rem 0;
+}
+.side-nav a.active{ font-weight: 700; }
+
+/* --- Mobile --- */
+.side-nav-toggle summary{
+  display: none;          /* summary nur auf mobile zeigen */
+  cursor: pointer;
+  font-weight: 600;
+  padding: .5rem .75rem;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: .4rem;
+  background: rgba(0,0,0,0.03);
+}
+
+@media (max-width: 768px){
+  .layout{
+    flex-direction: column;   /* Sidebar oben, Content drunter */
+    gap: 1rem;
+  }
+
+  .sidebar{
+    flex: none;
+    width: 100%;
+  }
+
+  .side-nav-toggle summary{
+    display: block;
+  }
+
+  /* Platz / Optik fürs Menü auf Mobile */
+  .side-nav{
+    margin-top: .5rem;
+    padding-left: .25rem;
+  }
+
+  .side-nav a{
+    padding: .45rem .1rem;
+  }
+}
 
 #content {
 	max-width: 96rem;
