@@ -1284,7 +1284,7 @@ In the following, you see an example counting the number of times the event "get
         <count>
           <eventOccurrence event='urn:action:banking-demo:get-money'>
             <parameter:number name="customerID" value="5"/>
-          <eventOccurrence>
+          </eventOccurrence>
           <when>
             <start time='1.1.* 00:00'/>
           </when>
@@ -1328,7 +1328,7 @@ The following example shows a policy that inhibits an event if the user was not 
 	      <continuousOccurrence interval='1d' minOccurrences='1'>
 	        <eventOccurrence event='urn:action:banking-demo:notify-user'/>
 	        <when>
-	        	<start time='1.1.* 00:00"/>
+	        	<start time="1.1.* 00:00"/>
 	        </when>
 	      </continuousOccurrence>
         </not>

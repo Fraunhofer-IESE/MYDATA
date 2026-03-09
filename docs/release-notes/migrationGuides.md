@@ -48,17 +48,17 @@ import de.fraunhofer.iese.mydata.util.MyDataUtil;
 - When replacing the old imports, consider replacing the PEP calls too. With MYDATA Control Technologies 4.0 there are a few helper (like [MyDataUtil](../api-sdk/de/fraunhofer/iese/mydata/util/MyDataUtil) that enable an easier handling of PEPs (see also [Using a custom PEP](../sdk/howto_library.html#_enforce_data_using_a_custom_reactive_pep)):
 
 ```java
-MyPep myPep # ...;
-User u # new User("John Doe");
+MyPep myPep = ...;
+User u = new User("John Doe");
 final User enforcedUser;
 try {
-  final Event event # MyDataUtil.checkedBlockingGet(myPep.enforceUser(user));
-  enforcedUser # (User) enforcedEvent.getValueForName("user");
+  final Event enforcedEvent = MyDataUtil.checkedBlockingGet(myPep.enforceUser(user));
+  enforcedUser = (User) enforcedEvent.getValueForName("user");
 } catch (IOException e) {
   throw new AccessPermissionDeniedException("There is a problem with the communication channel to the PDP. This will result in inhibition.", e);
 } catch (InhibitException e) {
-  final String msg # e.getMessage();
-  throw new AccessPermissionDeniedException("PDP decided to inhibit the access" + (msg !# null ? ": " + msg : "."), e);
+  final String msg = e.getMessage();
+  throw new AccessPermissionDeniedException("PDP decided to inhibit the access" + (msg != null ? ": " + msg : "."), e);
 } catch (EvaluationUndecidableException e) {
   throw new AccessPermissionDeniedException("PDP reported that the evaluation is undecidable. This will result in inhibition.", e);
 } catch (RuntimeException e) { // catch any other RuntimeExceptions

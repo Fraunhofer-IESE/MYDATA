@@ -32,15 +32,15 @@ Depending on whether you are using Spring (Boot) or not, you have two options.
 ```java
 public class SendMailPXP {
 
-   @ActionDescription(description # "Send a mail with the defined content to the address.")
+   @ActionDescription(description = "Send a mail with the defined content to the address.")
    public boolean sendMail(
-       @ActionParameterDescription(name # "body") String body, @ActionParameterDescription(name # "subject") String subject, @ActionParameterDescription(name # "receiver_address") String rcpt_to)
+       @ActionParameterDescription(name = "body") String body, @ActionParameterDescription(name = "subject") String subject, @ActionParameterDescription(name = "receiver_address") String rcpt_to)
 	{
-     Mail mailer # new Mail(...);
+     Mail mailer = new Mail(...);
      mailer.setBody(body);
      mailer.setSubject("[MYDATA] " + subject);
-     mailer.setFrom("ind2uce@exla.de");
-     String[] toArr # {rcpt_to};
+     mailer.setFrom("notification@mydata.example");
+     String[] toArr = {rcpt_to};
      mailer.setTo(toArr);
 
      return new SendMail(mailer).call(); // returns true to signal success
@@ -52,8 +52,8 @@ public class SendMailPXP {
 
 
 ```java
-IMyDataEnvironment myDataEnvironment # MyDataEnvironmentManager.getDefaultEnvironment();
-ComponentId componentId # myDataEnvironment.registerLocalPxp("sendmail", new SendMailPXP());
+IMyDataEnvironment myDataEnvironment = MyDataEnvironmentManager.getDefaultEnvironment();
+ComponentId componentId = myDataEnvironment.registerLocalPxp("sendmail", new SendMailPXP());
 ```
 
 ## Developing a Spring PXP
@@ -82,18 +82,18 @@ Registering an action at the PMP can be done with following information:
 Here is an example for a PXP Action Method in a `PxpService`:
 
 ```java
-@PxpService(componentName # "sendmail")
+@PxpService(componentName = "sendmail")
 public class SendMailPXP {
 
-   @ActionDescription(description # "Send a mail with the defined content to the address.")
+   @ActionDescription(description = "Send a mail with the defined content to the address.")
    public boolean sendMail(
-       @ActionParameterDescription(name # "body") String body, @ActionParameterDescription(name # "subject") String subject, @ActionParameterDescription(name # "receiver_address") String rcpt_to)
+       @ActionParameterDescription(name = "body") String body, @ActionParameterDescription(name = "subject") String subject, @ActionParameterDescription(name = "receiver_address") String rcpt_to)
 	{
-     Mail mailer # new Mail(...);
+     Mail mailer = new Mail(...);
      mailer.setBody(body);
      mailer.setSubject("[MYDATA] " + subject);
-     mailer.setFrom("ind2uce@exla.de");
-     String[] toArr # {rcpt_to};
+     mailer.setFrom("notification@mydata.example");
+     String[] toArr = {rcpt_to};
      mailer.setTo(toArr);
 
      return new SendMail(mailer).call();
@@ -114,11 +114,11 @@ This health information is exposed as a JSON response of the MY DATA Control Tec
 Here is an example for a PXP health status method in a `PxpService`:
 
 ```java
-@PxpService(componentName # "sendmail")
+@PxpService(componentName = "sendmail")
 public class SendMailPXP {
 
-   @ActionDescription(description # "Send a mail with the defined content to the addressee.")
-   public boolean sendMail(/* ... */)
+   @ActionDescription(description = "Send a mail with the defined content to the addressee.")
+   public boolean sendMail(/* ... */) {
         // See implementation above
    }
 

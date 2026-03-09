@@ -233,7 +233,7 @@ IMyDataEnvironment myDataEnvironment = MyDataEnvironmentManager
             new ClientId("urn:client:my-solution:my-client"),
             "my-client-secret",
             URI.create("https://management.mydata-control.de")
-        ),
+        )
     );
 ```
 
