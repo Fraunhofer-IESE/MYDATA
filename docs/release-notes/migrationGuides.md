@@ -68,7 +68,7 @@ try {
 System.out.println(enforcedUser.getName());
 ```
 
-- In your PEP definition, remove old annotations like `@PEPServiceDescription` or `@ProvidedModifiers`. Replace them with `@Modifiers` in case you want to scan all your packages for available modifiers. `@Modifiers(packageNames # {"de.fraunhofer.iese.mydata.pep.modifiers"})` will limit the search scope and provides a better performance. Relevant imports in PEPs are:
+- In your PEP definition, remove old annotations like `@PEPServiceDescription` or `@ProvidedModifiers`. Replace them with `@Modifiers` in case you want to scan all your packages for available modifiers. `@Modifiers(packageNames = {"de.fraunhofer.iese.mydata.pep.modifiers"})` will limit the search scope and provides a better performance. Relevant imports in PEPs are:
 
 ```java
 import de.fraunhofer.iese.mydata.policy.event.Event;
@@ -88,4 +88,4 @@ import de.fraunhofer.iese.mydata.reactive.common.Modifiers;
 
 - Replace the initialization of the MYDATA Control Technologies environment according to your needs. In MYDATA Control Technologies 4.0, there are several modes available that are initialized differently. Please read the manual pages to learn all about it: [Working with the library](../sdk/howto_library.html#_working_with_the_library)
 
-- For non Spring Boot applications, the registration of a custom PEP is different. Learn more about it in the manual: link:../sdk/howto_library.html#_enforce_data_using_a_custom_reactive_pep[Register a custom PEP]
+- For non Spring Boot applications, the registration of a custom PEP is different. Learn more about it in the manual: [Register a custom PEP](../sdk/howto_library.html#_enforce_data_using_a_custom_reactive_pep)

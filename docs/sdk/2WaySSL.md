@@ -20,7 +20,7 @@ Inside our application, we want a little bit more. Of course it's not enough tha
 The following command creates a key-pair, we will use as CA.
 
 ```shell
-openssl  req  -new -x509  -keyout  iese-ca-key.pem -out  iese-ca-root.pem -subj "/CN#fraunhofer-iese.de/OU#IESE/O#Fraunhofer-Institut/L#Kaiserslautern/ST#Rheinland-Pfalz/C#DE"
+openssl  req  -new -x509  -keyout  iese-ca-key.pem -out  iese-ca-root.pem -subj "/CN=fraunhofer-iese.de/OU=IESE/O=Fraunhofer-Institut/L=Kaiserslautern/ST=Rheinland-Pfalz/C=DE"
 ```
 
 ### Creating A Truststore
@@ -37,7 +37,7 @@ Once the trusstore is created, it can be used as a trusstore all over the applic
 
 We start with creating the key-pair for the client. We use the keytool, so the private key and the public key is directly stored in keystore.
 ```shell
-keytool -keystore clientkeystore.jks -genkey -dname "CN#ind2uce.client, OU#IESE, O#Fraunhofer-Institut, L#Kaiserslautern, ST#Rheinland-Pfalz, C#DE"  -noprompt -alias client -keyalg RSA
+keytool -keystore clientkeystore.jks -genkey -dname "CN=ind2uce.client, OU=IESE, O=Fraunhofer-Institut, L=Kaiserslautern, ST=Rheinland-Pfalz, C=DE"  -noprompt -alias client -keyalg RSA
 ```
 ### The Certification-Request
 
@@ -66,7 +66,7 @@ This procedure should be done for every component. For a client, the trusstore a
 
 Creating the server-keystore is similar to creating the client-keystore. As a truststore the same file can be used, as it just contains the CA's public key. The following commands finally create a server-keystore:
 ```shell
-keytool -keystore serverkeystore.jks -genkey  -dname "CN#ind2uce.server, OU#IESE, O#Fraunhofer-Institut, L#Kaiserslautern, ST#Rheinland-Pfalz, C#DE" -alias server -keyalg RSA
+keytool -keystore serverkeystore.jks -genkey  -dname "CN=ind2uce.server, OU=IESE, O=Fraunhofer-Institut, L=Kaiserslautern, ST=Rheinland-Pfalz, C=DE" -alias server -keyalg RSA
 
 #Create a Server-Signing-Request:
 keytool -keystore serverkeystore.jks -certreq -alias server -keyalg rsa -file server.csr
