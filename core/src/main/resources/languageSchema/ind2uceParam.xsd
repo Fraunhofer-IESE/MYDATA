@@ -1,0 +1,201 @@
+<!--
+=================================LICENSE_START=================================
+MYDATA Control Technologies
+
+Copyright (C) 2016 - present Fraunhofer-Gesellschaft zur Foerderung der
+angewandten Forschung e.V. acting on behalf of its Fraunhofer Institute
+for Experimental Software Engineering (IESE)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+=================================LICENSE_END===================================
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.iese.fraunhofer.de/ind2uce/3.0.25/param"
+	xmlns:tns="http://www.iese.fraunhofer.de/ind2uce/3.0.25/param"
+	xmlns:constant="http://www.iese.fraunhofer.de/ind2uce/3.0.25/constant"
+	xmlns:function="http://www.iese.fraunhofer.de/ind2uce/3.0.25/function"
+	xmlns:pip="http://www.iese.fraunhofer.de/ind2uce/3.0.25/pip"
+	elementFormDefault="qualified">
+
+	<import namespace="http://www.iese.fraunhofer.de/ind2uce/3.0.25/constant"
+		schemaLocation="ind2uceConstant.xsd" />
+	<import namespace="http://www.iese.fraunhofer.de/ind2uce/3.0.25/pip"
+		schemaLocation="ind2ucePIP.xsd" />
+	<import namespace="http://www.iese.fraunhofer.de/ind2uce/3.0.25/function"
+		schemaLocation="ind2uceFunction.xsd" />
+
+	<!-- <complexType name="ParamType"> -->
+
+	<complexType name="ParamMatchType">
+		<attribute name="name" type="string" use="required" />
+		<attribute name="expression" type="string" use="optional" />
+	</complexType>
+
+	<complexType name="ParamStringType">
+		<complexContent>
+			<extension base="tns:ParamMatchType">
+				<choice minOccurs="0" maxOccurs="1">
+					<group ref="tns:ParamTypeGroup" />
+					<group ref="pip:pipGroup" />
+					<group ref="function:FunctionGroup" />
+				</choice>
+				<attribute name="value" type="string" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ParamIntType">
+		<complexContent>
+			<extension base="tns:ParamMatchType">
+				<choice minOccurs="0" maxOccurs="1">
+					<element ref="tns:int" />
+					<element ref="function:size" />
+					<element ref="pip:int" />
+				</choice>
+				<attribute name="value" type="int" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ParamBoolType">
+		<complexContent>
+			<extension base="tns:ParamMatchType">
+				<choice minOccurs="0" maxOccurs="1">
+					<element ref="tns:boolean" />
+					<element ref="function:contains" />
+					<element ref="function:equals" />
+					<element ref="function:exists" />
+					<element ref="function:less" />
+					<element ref="function:lessEqual" />
+					<element ref="function:greater" />
+					<element ref="function:greaterEqual" />
+					<element ref="function:regex" />
+					<element ref="pip:boolean" />
+				</choice>
+				<attribute name="value" type="boolean" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ParamLongType">
+		<complexContent>
+			<extension base="tns:ParamMatchType">
+				<choice minOccurs="0" maxOccurs="1">
+					<element ref="tns:int" />
+					<element ref="tns:long" />
+					<element ref="function:size" />
+					<element ref="pip:int" />
+					<element ref="pip:long" />
+				</choice>
+				<attribute name="value" type="long" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ParamFloatType">
+		<complexContent>
+			<extension base="tns:ParamMatchType">
+				<choice minOccurs="0" maxOccurs="1">
+					<element ref="tns:int" />
+					<element ref="tns:float" />
+					<element ref="function:size" />
+					<element ref="pip:int" />
+					<element ref="pip:float" />
+				</choice>
+				<attribute name="value" type="float" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="ParamDoubleType">
+		<complexContent>
+			<extension base="tns:ParamMatchType">
+				<choice minOccurs="0" maxOccurs="1">
+					<element ref="tns:int" />
+					<element ref="tns:long" />
+					<element ref="tns:float" />
+					<element ref="tns:double" />
+					<element ref="function:size" />
+					<element ref="pip:int" />
+					<element ref="pip:long" />
+					<element ref="pip:float" />
+					<element ref="pip:double" />
+				</choice>
+				<attribute name="value" type="double" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ParamObjectType">
+		<complexContent>
+			<extension base="tns:ParamMatchType">
+				<choice minOccurs="0" maxOccurs="1">
+					<element ref="tns:object" />
+					<element ref="pip:object" />
+				</choice>
+				<attribute name="value" type="string" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ParamEventType">
+		<complexContent>
+			<extension base="tns:ParamMatchType">
+				<sequence minOccurs="0" maxOccurs="unbounded">
+					<element ref="function:engine" />
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ParamListType">
+		<complexContent>
+			<extension base="tns:ParamMatchType">
+				<choice minOccurs="0" maxOccurs="1">
+					<element ref="tns:list" />
+					<element ref="pip:list" />
+				</choice>
+				<attribute name="value" use="optional">
+					<simpleType>
+						<restriction base="string">
+							<!-- comma seperated array, e.g., [1,2.0,'adf'] String in '', floating 
+								point with x.y -->
+							<pattern value="\[([0-9](\.([0-9])+){0,1}|&quot;[A-Za-z0-9()+,-.=@;$_!*]*&quot;)(\s*,\s*([0-9](\.([0-9])+){0,1}|&quot;[A-Za-z0-9()+,-.=@;$_!*]*&quot;)+)*\]|\[\]"></pattern>
+						</restriction>
+					</simpleType>
+				</attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<element name="string" type="tns:ParamStringType" />
+	<element name="int" type="tns:ParamIntType" />
+	<element name="boolean" type="tns:ParamBoolType" />
+	<element name="long" type="tns:ParamLongType" />
+	<element name="float" type="tns:ParamFloatType" />
+	<element name="double" type="tns:ParamDoubleType" />
+	<element name="event" type="tns:ParamEventType" />
+	<element name="object" type="tns:ParamObjectType" />
+	<element name="list" type="tns:ParamListType" />
+
+	<group name="ParamTypeGroup">
+		<choice>
+			<element ref="tns:string" />
+			<element ref="tns:int" />
+			<element ref="tns:boolean" />
+			<element ref="tns:long" />
+			<element ref="tns:float" />
+			<element ref="tns:double" />
+			<element ref="tns:object" />
+			<element ref="tns:list" />
+		</choice>
+	</group>
+
+</schema>
+
+

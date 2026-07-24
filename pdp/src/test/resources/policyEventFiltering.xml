@@ -1,0 +1,36 @@
+<policy id='urn:policy:test:preventive-eventFiltering' description=''
+        xmlns="http://www.mydata-control.de/4.0/mydataLanguage"
+        xmlns:event="http://www.mydata-control.de/4.0/event"
+        xmlns:constant="http://www.mydata-control.de/4.0/constant">
+    <mechanism id='eventFiltering' event="urn:action:test:showEmployee">
+        <if>
+            <and>
+                <equals>
+                    <event:number eventParameter='id' default="0" />
+                    <constant:number value='123'/>
+                </equals>
+                <equals>
+                    <event:string eventParameter='role' default="" />
+                    <constant:string value='ConstructionSiteManager'/>
+                </equals>
+                <equals>
+                    <event:number eventParameter='timestamp' default="0" />
+                    <constant:number value='123456789012345'/>
+                </equals>
+                <equals>
+                    <event:number eventParameter='temperature' default="0" />
+                    <constant:number value='37.5'/>
+                </equals>
+                <equals>
+                    <event:number eventParameter='magicNumber' default="0" />
+                    <constant:number value='342342354654766778678.3454354353'/>
+                </equals>
+
+                <event:boolean eventParameter='isBigBoss' default='false'/>
+            </and>
+            <then>
+                <inhibit/>
+            </then>
+        </if>
+    </mechanism>
+</policy>

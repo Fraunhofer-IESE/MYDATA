@@ -1,0 +1,18 @@
+<policy xmlns:constant="http://www.mydata-control.de/4.0/constant" id='urn:policy:test:preventive-conditionFalse'
+        description=''
+        xmlns="http://www.mydata-control.de/4.0/mydataLanguage">
+  <mechanism event='urn:action:test:showEmployee' id='conditionFalse'>
+    <if>
+      <equals>
+        <continuousOccurrence interval='1h'>
+          <eventOccurrence event='urn:action:test:32'/>
+          <when fixedTime='yesterday'/>
+        </continuousOccurrence>
+        <constant:false/>
+      </equals>
+      <then>
+        <allow/>
+      </then>
+    </if>
+  </mechanism>
+</policy>

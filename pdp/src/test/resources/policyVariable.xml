@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policy
+        xmlns="http://www.mydata-control.de/4.0/mydataLanguage"
+        xmlns:event="http://www.mydata-control.de/4.0/event"
+        xmlns:constant="http://www.mydata-control.de/4.0/constant"
+        xmlns:parameter="http://www.mydata-control.de/4.0/parameter"
+        xmlns:variable="http://www.mydata-control.de/4.0/variable"
+        xmlns:variableDeclaration="http://www.mydata-control.de/4.0/variableDeclaration"
+        id="urn:policy:a:b" description="Policy for Fleet PoC Use Case 1">
+
+    <variableDeclaration:string name="content_of_superstring">
+        <event:string eventParameter="superString" default="1" />
+    </variableDeclaration:string>
+
+    <mechanism id="decideOnStorageOfPositionUpdates"
+               description="Decides whether to store a position update coming from a vehicle."
+               event="urn:action:a:cr-writeData">
+
+        <if>
+            <equals>
+                <variable:string reference="content_of_superstring"/>
+                <constant:string value="laueft."/>
+            </equals>
+            <then>
+                <inhibit/>
+            </then>
+        </if>
+    </mechanism>
+</policy>

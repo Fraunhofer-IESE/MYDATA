@@ -1,0 +1,15 @@
+<policy id='urn:policy:test:preventive-operatorTestNot' description=''
+		xmlns="http://www.mydata-control.de/4.0/mydataLanguage"
+		xmlns:pip="http://www.mydata-control.de/4.0/pip"
+		xmlns:parameter="http://www.mydata-control.de/4.0/parameter">
+	<mechanism id='operatorTestNot' event='urn:action:test:showEmployee' >
+		<if>
+			<pip:boolean method='urn:info:test:isConstructionSiteManager' default='false'>
+				<parameter:string name='id' value='123' />
+			</pip:boolean>
+			<then>
+				<inhibit />
+			</then>
+		</if>
+	</mechanism>
+</policy>

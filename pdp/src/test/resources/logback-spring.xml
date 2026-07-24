@@ -1,0 +1,100 @@
+<configuration>
+
+
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{HH:mm:ss} [%-5level][%30.30logger{0}.%-15.15method] - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="RollingFile-Appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>rollingfile.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>logFile%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <maxFileSize>10MB</maxFileSize>
+      <maxHistory>7</maxHistory>
+      <totalSizeCap>1GB</totalSizeCap>
+    </rollingPolicy>
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+      <includeCallerData>false</includeCallerData>
+      <fieldNames>
+        <version>[ignore]</version>
+        <levelValue>[ignore]</levelValue>
+      </fieldNames>
+    </encoder>
+  </appender>
+
+  <appender name="Async-RollingFile-Appender" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="RollingFile-Appender" />
+  </appender>
+
+  <appender name="Async-Console-Appender" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="console" />
+  </appender>
+
+
+<springProfile name="test">
+    <logger name="org.springframework" level="ERROR" additivity="false">
+      <appender-ref ref="Async-Console-Appender" />
+    </logger>
+    <logger name="de.fraunhofer" level="INFO" additivity="false">
+      <appender-ref ref="Async-Console-Appender" />
+    </logger>
+    <root level="WARN">
+      <appender-ref ref="Async-Console-Appender" />
+    </root>
+  </springProfile>
+  
+
+<springProfile name="local">
+    <logger name="org.springframework" level="INFO" additivity="false">
+      <appender-ref ref="Async-Console-Appender" />
+    </logger>
+    <logger name="de.fraunhofer" level="INFO" additivity="false">
+      <appender-ref ref="Async-Console-Appender" />
+    </logger>
+    <root level="WARN">
+      <appender-ref ref="Async-Console-Appender" />
+    </root>
+  </springProfile>
+  
+  <springProfile name="default">
+    <logger name="org.springframework" level="INFO" additivity="false">
+      <appender-ref ref="Async-Console-Appender" />
+    </logger>
+    <logger name="de.fraunhofer" level="INFO" additivity="false">
+      <appender-ref ref="Async-Console-Appender" />
+    </logger>
+    <root level="WARN">
+      <appender-ref ref="Async-Console-Appender" />
+    </root>
+  </springProfile>
+
+  <springProfile name="development">
+    <logger name="org.springframework" level="INFO" additivity="false">
+      <appender-ref ref="Async-RollingFile-Appender" />
+      <appender-ref ref="Async-Console-Appender" />
+    </logger>
+    <logger name="de.fraunhofer" level="INFO" additivity="false">
+      <appender-ref ref="Async-RollingFile-Appender" />
+      <appender-ref ref="Async-Console-Appender" />
+    </logger>
+    <root level="WARN">
+      <appender-ref ref="Async-RollingFile-Appender" />
+      <appender-ref ref="Async-Console-Appender" />
+    </root>
+  </springProfile>
+
+  <springProfile name="demo,production">
+   <logger name="org.springframework" level="ERROR" additivity="false">
+      <appender-ref ref="Async-RollingFile-Appender" />
+    </logger>
+    <logger name="de.fraunhofer" level="INFO" additivity="false">
+      <appender-ref ref="Async-RollingFile-Appender" />
+    </logger>
+    <root level="WARN">
+      <appender-ref ref="Async-RollingFile-Appender" />
+    </root>
+  </springProfile>
+
+</configuration>

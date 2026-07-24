@@ -1,0 +1,25 @@
+<policy id='urn:policy:test:pipinpxp'
+        xmlns='http://www.mydata-control.de/4.0/mydataLanguage'
+        xmlns:parameter='http://www.mydata-control.de/4.0/parameter'
+        xmlns:pip='http://www.mydata-control.de/4.0/pip'
+        xmlns:constant='http://www.mydata-control.de/4.0/constant'
+>
+  <mechanism event='urn:action:test:showEmployee'>
+    <if>
+      <constant:true/>
+      <then>
+        <allow/>
+        <execute action='urn:action:test:log'>
+          <parameter:string name='message'>
+            <concat>
+              <pip:number method='urn:info:test:multiplyInteger' default='-1'>
+                <parameter:number name='value1' value='6'/>
+                <parameter:number name='value2' value='7'/>
+              </pip:number>
+            </concat>
+          </parameter:string>
+        </execute>
+      </then>
+    </if>
+  </mechanism>
+</policy>

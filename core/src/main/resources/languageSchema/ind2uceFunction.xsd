@@ -1,0 +1,182 @@
+<!--
+=================================LICENSE_START=================================
+MYDATA Control Technologies
+
+Copyright (C) 2016 - present Fraunhofer-Gesellschaft zur Foerderung der
+angewandten Forschung e.V. acting on behalf of its Fraunhofer Institute
+for Experimental Software Engineering (IESE)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+=================================LICENSE_END===================================
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.iese.fraunhofer.de/ind2uce/3.0.25/function"
+	xmlns:tns="http://www.iese.fraunhofer.de/ind2uce/3.0.25/function"
+
+	xmlns:constant="http://www.iese.fraunhofer.de/ind2uce/3.0.25/constant"
+	xmlns:param="http://www.iese.fraunhofer.de/ind2uce/3.0.25/param"
+	xmlns:pip="http://www.iese.fraunhofer.de/ind2uce/3.0.25/pip"
+
+	elementFormDefault="qualified">
+
+	<import namespace="http://www.iese.fraunhofer.de/ind2uce/3.0.25/constant"
+		schemaLocation="ind2uceConstant.xsd" />
+	<import namespace="http://www.iese.fraunhofer.de/ind2uce/3.0.25/param"
+		schemaLocation="ind2uceParam.xsd" />
+	<import namespace="http://www.iese.fraunhofer.de/ind2uce/3.0.25/pip"
+		schemaLocation="ind2ucePIP.xsd" />
+
+	<complexType name="ModifyEngineType">
+		<sequence>
+			<group ref="param:ParamTypeGroup" minOccurs="0" maxOccurs="unbounded" />
+		</sequence>
+		<attribute name="method" type="string" use="required" />
+	</complexType>
+
+
+	<complexType name="NumberListType">
+		<sequence>
+			<choice minOccurs="2" maxOccurs="unbounded">
+				<element ref="param:int" />
+				<element ref="param:long" />
+				<element ref="param:float" />
+				<element ref="param:double" />
+				<element ref="tns:size" />
+				<element ref="pip:int" />
+				<element ref="pip:long" />
+				<element ref="pip:float" />
+				<element ref="pip:double" />
+				<element ref="constant:int" />
+				<element ref="constant:long" />
+				<element ref="constant:float" />
+				<element ref="constant:double" />
+				<element ref="constant:list" />
+			</choice>
+		</sequence>
+	</complexType>
+
+	<complexType name="FunctionEqualsType">
+		<choice minOccurs="2" maxOccurs="unbounded">
+			<group ref="param:ParamTypeGroup" />
+			<group ref="tns:FunctionGroup" />
+			<group ref="pip:pipGroup" />
+			<group ref="constant:ConstantGroup" />
+		</choice>
+	</complexType>
+
+	<complexType name="FunctionExistsType">
+		<choice minOccurs="1" maxOccurs="unbounded">
+			<element ref="param:string" />
+			<element ref="tns:concat" />
+			<element ref="pip:string" />
+			<element ref="constant:string" />
+		</choice>
+		<attribute name="mode" type="tns:MultiFunctionModeType" use="optional"
+			default="ALL" />
+	</complexType>
+
+	<complexType name="FunctionRegexType">
+		<sequence>
+			<choice minOccurs="1" maxOccurs="unbounded">
+				<element ref="param:string" />
+				<element ref="tns:concat" />
+				<element ref="pip:string" />
+				<element ref="constant:string" />
+			</choice>
+		</sequence>
+		<attribute name="regex" type="string" use="required" />
+		<attribute name="mode" type="tns:MultiFunctionModeType" use="optional"
+			default="ALL" />
+	</complexType>
+
+	<complexType name="FunctionContainsType">
+		<sequence>
+			<choice minOccurs="1" maxOccurs="1">
+				<element ref="param:list" />
+				<element ref="constant:list" />
+				<element ref="pip:list" />
+			</choice>
+			<choice minOccurs="1">
+				<group ref="param:ParamTypeGroup" />
+				<group ref="tns:FunctionGroup" />
+				<group ref="pip:pipGroup" />
+				<group ref="constant:ConstantGroup" />
+
+			</choice>
+		</sequence>
+		<attribute name="mode" type="tns:MultiFunctionModeType" use="optional"
+			default="ALL" />
+	</complexType>
+
+	<complexType name="FunctionSizeType">
+		<choice>
+			<element ref="param:string" />
+			<element ref="tns:concat" />
+			<element ref="pip:string" />
+			<element ref="pip:list" />
+			<element ref="param:list" />
+		</choice>
+	</complexType>
+
+	<complexType name="FunctionConcatType">
+		<choice minOccurs="1" maxOccurs="unbounded">
+			<group ref="param:ParamTypeGroup" />
+			<group ref="tns:FunctionGroup" />
+			<group ref="pip:pipGroup" />
+			<group ref="constant:ConstantGroup" />
+		</choice>
+	</complexType>
+
+	<element name="less" type="tns:NumberListType" />
+	<element name="lessEqual" type="tns:NumberListType" />
+	<element name="greater" type="tns:NumberListType" />
+	<element name="greaterEqual" type="tns:NumberListType" />
+	<element name="equals" type="tns:FunctionEqualsType" />
+	<element name="exists" type="tns:FunctionExistsType" />
+	<element name="regex" type="tns:FunctionRegexType" />
+	<element name="contains" type="tns:FunctionContainsType" />
+	<element name="size" type="tns:FunctionSizeType" />
+	<element name="concat" type="tns:FunctionConcatType" />
+	<element name="engine" type="tns:ModifyEngineType" />
+
+	<simpleType name="MultiFunctionModeType">
+		<restriction base="string">
+			<enumeration value="ALL" />
+			<enumeration value="EXACTLY_ONE" />
+			<enumeration value="AT_LEAST_ONE" />
+			<enumeration value="NONE" />
+		</restriction>
+	</simpleType>
+
+	<group name="BooleanFunctionGroup">
+		<choice>
+			<element ref="tns:less" />
+			<element ref="tns:lessEqual" />
+			<element ref="tns:greater" />
+			<element ref="tns:greaterEqual" />
+			<element ref="tns:equals" />
+			<element ref="tns:exists" />
+			<element ref="tns:regex" />
+			<element ref="tns:contains" />
+		</choice>
+	</group>
+
+	<group name="FunctionGroup">
+		<choice>
+			<group ref="tns:BooleanFunctionGroup" />
+			<element ref="tns:size" />
+			<element ref="tns:concat" />
+		</choice>
+	</group>
+
+</schema>

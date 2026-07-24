@@ -1,0 +1,163 @@
+<!--
+=================================LICENSE_START=================================
+MYDATA Control Technologies
+
+Copyright (C) 2016 - present Fraunhofer-Gesellschaft zur Foerderung der
+angewandten Forschung e.V. acting on behalf of its Fraunhofer Institute
+for Experimental Software Engineering (IESE)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+=================================LICENSE_END===================================
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mydata-control.de/4.0/parameter"
+		xmlns:tns="http://www.mydata-control.de/4.0/parameter" xmlns:event="http://www.mydata-control.de/4.0/event"
+		xmlns:language="http://www.mydata-control.de/4.0/mydataLanguage"
+		xmlns:pip="http://www.mydata-control.de/4.0/pip" xmlns:variable="http://www.mydata-control.de/4.0/variable"
+		elementFormDefault="qualified">
+
+	<import namespace="http://www.mydata-control.de/4.0/constant"
+		schemaLocation="mydataConstant.xsd" />
+	<import namespace="http://www.mydata-control.de/4.0/pip"
+		schemaLocation="mydataPIP.xsd" />
+	<import namespace="http://www.mydata-control.de/4.0/mydataLanguage"
+		schemaLocation="mydataLanguage.xsd" />
+	<import namespace="http://www.mydata-control.de/4.0/event"
+		schemaLocation="mydataEvent.xsd" />
+	<import namespace="http://www.mydata-control.de/4.0/variable"
+		schemaLocation="mydataVariable.xsd" />
+
+
+	<!-- <complexType name="ParamType"> -->
+
+	<complexType name="ParamMatchType">
+		<attribute name="name" type="string" use="required" />
+	</complexType>
+
+	<complexType name="ParamStringType">
+		<complexContent>
+			<extension base="tns:ParamMatchType">
+				<choice minOccurs="0" maxOccurs="1">
+					<group ref="event:eventGroup" />
+					<group ref="pip:pipGroup" />
+					<group ref="language:FunctionGroup" />
+					<group ref="variable:ReferenceVariableGroup" />
+				</choice>
+				<attribute name="value" use="optional">
+					<simpleType>
+						<restriction base="string">
+							<pattern value=".*"/>
+							<minLength value="1" />
+						</restriction>
+					</simpleType>
+				</attribute>
+				<attribute name="jsonPathQuery" type="string" use="optional"/>
+			</extension>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="ParamObjectType">
+		<complexContent>
+			<extension base="tns:ParamMatchType">
+				<choice minOccurs="0" maxOccurs="1">
+					<group ref="event:eventGroup" />
+					<group ref="pip:pipGroup" />
+					<group ref="language:FunctionGroup" />
+					<group ref="variable:ReferenceVariableGroup" />
+				</choice>
+				<attribute name="value" use="optional">
+					<simpleType>
+						<restriction base="string">
+							<pattern value=".*"/>
+							<minLength value="1" />
+						</restriction>
+					</simpleType>
+				</attribute>
+				<attribute name="jsonPathQuery" type="string" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ParamBoolType">
+		<complexContent>
+			<extension base="tns:ParamMatchType">
+				<choice minOccurs="0" maxOccurs="1">
+					<element ref="pip:boolean" />
+					<element ref="event:boolean" />
+					<group ref="language:BooleanFunctionGroup" />
+					<group ref="variable:ReferenceVariableGroup" />
+				</choice>
+				<attribute name="value" type="boolean" use="optional" />
+				<attribute name="jsonPathQuery" type="string" use="optional"/>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ParamNumberType">
+		<complexContent>
+			<extension base="tns:ParamMatchType">
+				<choice minOccurs="0" maxOccurs="1">
+					<element ref="pip:number" />
+					<element ref="event:number" />
+					<group ref="language:NumberFunctionGroup" />
+					<group ref="variable:ReferenceVariableGroup" />
+
+				</choice>
+				<attribute name="value" type="double" use="optional" />
+				<attribute name="jsonPathQuery" type="string" use="optional"/>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ParamListType">
+		<complexContent>
+			<extension base="tns:ParamMatchType">
+				<choice minOccurs="0" maxOccurs="1">
+					<element ref="pip:list" />
+					<element ref="event:list" />
+					<group ref="variable:ReferenceVariableGroup" />
+				</choice>
+				<attribute name="value" use="optional">
+					<simpleType>
+						<restriction base="string">
+							<!-- comma seperated array, e.g., [1,2.0,'adf'] String in '', floating 
+								point with x.y -->
+							<pattern
+								value="\[([0-9](\.([0-9])+){0,1}|&quot;[A-Za-z0-9()+,-.=@;$_!*]*&quot;)(\s*,\s*([0-9](\.([0-9])+){0,1}|&quot;[A-Za-z0-9()+,-.=@;$_!*]*&quot;)+)*\]|\[\]"></pattern>
+						</restriction>
+					</simpleType>
+				</attribute>
+				<attribute name="jsonPathQuery" type="string" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<element name="string" type="tns:ParamStringType" />
+	<element name="boolean" type="tns:ParamBoolType" />
+	<element name="number" type="tns:ParamNumberType" />
+	<element name="object" type="tns:ParamObjectType" />
+	<element name="list" type="tns:ParamListType" />
+
+	<group name="ParamTypeGroup">
+		<choice>
+			<element ref="tns:string" />
+			<element ref="tns:number" />
+			<element ref="tns:boolean" />
+			<element ref="tns:object" />
+			<element ref="tns:list" />
+		</choice>
+	</group>
+
+</schema>
+
+

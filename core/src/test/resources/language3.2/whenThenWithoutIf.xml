@@ -1,0 +1,35 @@
+﻿<policy id='urn:policy:ind2uce-local:thenWithoutIf' name="then with missing if" description='should fail because of lacking if' xmlns='http://www.iese.fraunhofer.de/ind2uce/3.2.46/ind2uceLanguage' xmlns:tns='http://www.iese.fraunhofer.de/ind2uce/3.2.46/ind2uceLanguage'
+	xmlns:parameter='http://www.iese.fraunhofer.de/ind2uce/3.2.46/parameter' xmlns:pip='http://www.iese.fraunhofer.de/ind2uce/3.2.46/pip' xmlns:function='http://www.iese.fraunhofer.de/ind2uce/3.2.46/function'
+	xmlns:constant='http://www.iese.fraunhofer.de/ind2uce/3.2.46/constant'
+	xmlns:event='http://www.iese.fraunhofer.de/ind2uce/3.2.46/event'  xmlns:variableDeclaration="http://www.iese.fraunhofer.de/ind2uce/3.2.46/variableDeclaration" xmlns:variable='http://www.iese.fraunhofer.de/ind2uce/3.2.46/variable'
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+
+	<variableDeclaration:boolean name="atIESE">
+		<or>
+			<pip:boolean method='urn:info:ind2uce-local:wificonnected' default='false'>
+				<parameter:string name='ssid' value='WLAN-mab' />
+			</pip:boolean>
+			<pip:boolean method='urn:info:ind2uce-local:wificonnected' default='false'>
+				<parameter:string name='ssid' value='wlan-extern' />
+			</pip:boolean>
+			<pip:boolean method='urn:info:ind2uce-local:networkconnected' default='false'>
+				<parameter:string name='description' value='AnyConnect' />
+				<parameter:string name='dns' value='iese.fhg.de' />
+			</pip:boolean>
+		</or>
+	</variableDeclaration:boolean>
+
+
+
+	<mechanism event='urn:action:ind2uce-local:evaluate'>
+		
+			<then>
+				<modify method="bla" eventParameter="blubb" />
+				<modify method="bla" eventParameter="blubb" />
+				<execute action='urn:action:ind2uce-local:notification'>
+					<parameter:string name='message' value='You are now at IESE!' />
+				</execute>
+			</then>
+		
+	</mechanism>
+</policy>

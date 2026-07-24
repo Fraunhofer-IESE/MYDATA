@@ -1,0 +1,24 @@
+spring:
+  jmx:
+    enabled: false
+  jpa:
+    properties:
+      hibernate:
+        '[globally_quoted_identifiers]': true
+mydata:
+  operational-mode: local
+  solution: urn:solution:test
+  datasource:
+    url: jdbc:h2:mem:mydatatest;DATABASE_TO_UPPER=false
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: false
+    properties:
+      hibernate:
+        '[globally_quoted_identifiers]': true
+        ddl-auto: update
+        hbm2ddl:
+          auto: update

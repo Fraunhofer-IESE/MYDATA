@@ -1,0 +1,17 @@
+<policy id='urn:policy:test:preventive-allowExecuteInDecision' description=''
+        xmlns="http://www.mydata-control.de/4.0/mydataLanguage"
+        xmlns:parameter="http://www.mydata-control.de/4.0/parameter"
+        xmlns:constant="http://www.mydata-control.de/4.0/constant">
+    <mechanism id='prevAllowExecuteInAllow' event="urn:action:test:showEmployee">
+        <if>
+            <constant:true/>
+            <then>
+                <allow/>
+                <execute action='urn:action:test:log'>
+                    <parameter:string name='message' value='test'/>
+                </execute>
+            </then>
+        </if>
+
+    </mechanism>
+</policy>

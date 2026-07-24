@@ -1,0 +1,143 @@
+<!--
+=================================LICENSE_START=================================
+MYDATA Control Technologies
+
+Copyright (C) 2016 - present Fraunhofer-Gesellschaft zur Foerderung der
+angewandten Forschung e.V. acting on behalf of its Fraunhofer Institute
+for Experimental Software Engineering (IESE)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+=================================LICENSE_END===================================
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.iese.fraunhofer.de/ind2uce/3.2.46/valueChanged"
+	xmlns:tns="http://www.iese.fraunhofer.de/ind2uce/3.2.46/valueChanged"
+	xmlns:language="http://www.iese.fraunhofer.de/ind2uce/3.2.46/ind2uceLanguage"
+	xmlns:pip="http://www.iese.fraunhofer.de/ind2uce/3.2.46/pip"
+	xmlns:event="http://www.iese.fraunhofer.de/ind2uce/3.2.46/event"
+	xmlns:constant="http://www.iese.fraunhofer.de/ind2uce/3.2.46/constant"
+	elementFormDefault="qualified">
+
+	<import namespace="http://www.iese.fraunhofer.de/ind2uce/3.2.46/constant"
+		schemaLocation="ind2uceConstant.xsd" />
+	<import namespace="http://www.iese.fraunhofer.de/ind2uce/3.2.46/pip"
+		schemaLocation="ind2ucePIP.xsd" />
+	<import namespace="http://www.iese.fraunhofer.de/ind2uce/3.2.46/ind2uceLanguage"
+		schemaLocation="ind2uceLanguage.xsd" />
+	<import namespace="http://www.iese.fraunhofer.de/ind2uce/3.2.46/event"
+		schemaLocation="ind2uceEvent.xsd" />
+
+
+	<complexType name="ValueChangedType">
+		<attribute name="id" use="required">
+			<simpleType>
+				<restriction base="ID">
+					<pattern
+                            value="[a-f]{1}[a-f0-9]{7}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}">
+					</pattern>
+				</restriction>
+			</simpleType>
+		</attribute>
+	</complexType>
+
+
+	<complexType name="ValueChangedBoolType">
+		<complexContent>
+			<extension base="tns:ValueChangedType">
+				<sequence>
+					<choice minOccurs="1" maxOccurs="1">
+						<group ref="language:BooleanGroup" />
+					</choice>
+				</sequence>
+				<attribute name="to" type="boolean" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ValueChangedStringType">
+		<complexContent>
+			<extension base="tns:ValueChangedType">
+				<sequence>
+					<choice minOccurs="1" maxOccurs="1">
+						<group ref="language:StringGroup" />
+					</choice>
+				</sequence>
+				<attribute name="to" type="string" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ValueChangedNumberType">
+		<complexContent>
+			<extension base="tns:ValueChangedType">
+				<sequence>
+					<choice minOccurs="1" maxOccurs="1">
+						<group ref="language:NumberGroup" />
+					</choice>
+				</sequence>
+				<attribute name="to" type="decimal" use="optional" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="ValueChangedListType">
+		<complexContent>
+			<extension base="tns:ValueChangedType">
+				<sequence>
+					<choice minOccurs="1" maxOccurs="1">
+						<element ref="pip:list" />
+						<element ref="event:list" />
+						<element ref="constant:list" />
+					</choice>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+
+	<complexType name="ValueChangedObjectType">
+		<complexContent>
+			<extension base="tns:ValueChangedType">
+				<sequence>
+					<choice minOccurs="1" maxOccurs="1">
+						<element ref="pip:object" />
+						<element ref="event:object" />
+						<element ref="constant:object" />
+					</choice>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<element name="boolean" type="tns:ValueChangedBoolType" />
+	<element name="string" type="tns:ValueChangedStringType" />
+	<element name="number" type="tns:ValueChangedNumberType" />
+	<element name="object" type="tns:ValueChangedObjectType" />
+	<element name="list" type="tns:ValueChangedListType" />
+
+	<group name="ValueChangedGroup">
+		<choice>
+			<element ref="tns:string" />
+			<element ref="tns:number" />
+			<element ref="tns:boolean" />
+			<element ref="tns:object" />
+			<element ref="tns:list" />
+		</choice>
+	</group>
+
+
+
+
+</schema>
+
+

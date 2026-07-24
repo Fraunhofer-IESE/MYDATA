@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration debug="false">
+
+  <!-- define a custom log level by setting the environment variable -->
+  <property name="customLogLevel" value="${logging.level.de.fraunhofer:-WARN}" />
+
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="console-async" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="console" />
+  </appender>
+
+  <logger name="de.fraunhofer" level="${customLogLevel}" />
+  <root level="WARN">
+    <appender-ref ref="console-async" />
+  </root>
+</configuration>

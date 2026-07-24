@@ -1,0 +1,27 @@
+{
+	"name": {
+		"firstName": "John",
+		"lastName": "doe"
+	},
+	"age": 26,
+	"addresses": [
+		{
+			"street": {
+				"streetName": "naist street",
+				"number": 32
+			},
+			"city": "Lautre",
+			"zip": "67663",
+			"type" : "BUSINESS"
+		},
+		{
+			"street": {
+				"streetName": "bla street",
+				"number": 42
+			},
+			"city": "Monnem",
+			"zip": "68161",
+			"type" : "HOME"
+		}
+	]
+}

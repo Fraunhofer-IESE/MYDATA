@@ -1,0 +1,233 @@
+[
+  {
+    "type": "GiroTransaction",
+    "id": 1,
+    "transactionPatternId": 32838,
+    "amount": {
+      "value": -1200,
+      "currency": "EUR"
+    },
+    "bookingDate": "2017-01-02T12:00:00Z",
+    "valueDate": "2017-01-02T12:00:00Z",
+    "creditor": "Political Party ABC",
+    "creditorBankCode": "DEUTDEFFXXX",
+    "creditorAccountNumber": "DE00999940000472337554",
+    "debtor": "Horst Schmitt",
+    "debtorBankCode": null,
+    "debtorAccountNumber": "DE00999940000988773397",
+    "purpose": "Annual membership fee political party ABC",
+    "cleanPurpose": "Annual membership fee political party ABC",
+    "prebooked": false,
+    "bookingKey": null
+  },
+  {
+    "type": "GiroTransaction",
+    "id": 2,
+    "transactionPatternId": 38,
+    "amount": {
+      "value": -8322,
+      "currency": "EUR"
+    },
+    "bookingDate": "2017-01-03T12:00:00Z",
+    "valueDate": "2017-01-03T12:00:00Z",
+    "creditor": "Gas station",
+    "creditorBankCode": "DEUTDEFFXXX",
+    "creditorAccountNumber": "DE00999940000472337554",
+    "debtor": "Horst Schmitt",
+    "debtorBankCode": null,
+    "debtorAccountNumber": "DE00999940000988773397",
+    "purpose": "Fire Fuel Gas Station",
+    "cleanPurpose": "Fire Fuel Gas Station",
+    "prebooked": false,
+    "bookingKey": null
+  },
+  {
+    "type": "GiroTransaction",
+    "id": 3,
+    "transactionPatternId": 38,
+    "amount": {
+      "value": -9413,
+      "currency": "EUR"
+    },
+    "bookingDate": "2017-02-03T12:00:00Z",
+    "valueDate": "2017-02-03T12:00:00Z",
+    "creditor": "Gas station",
+    "creditorBankCode": "DEUTDEFFXXX",
+    "creditorAccountNumber": "DE00999940000472337554",
+    "debtor": "Horst Schmitt",
+    "debtorBankCode": null,
+    "debtorAccountNumber": "DE00999940000988773397",
+    "purpose": "Fire Fuel Gas Station",
+    "cleanPurpose": "Fire Fuel Gas Station",
+    "prebooked": false,
+    "bookingKey": null
+  },
+  {
+    "type": "GiroTransaction",
+    "id": 4,
+    "transactionPatternId": 38,
+    "amount": {
+      "value": -143223,
+      "currency": "EUR"
+    },
+    "bookingDate": "2017-01-13T12:00:00Z",
+    "valueDate": "2017-01-13T12:00:00Z",
+    "creditor": "Balaton Inc",
+    "creditorBankCode": "HONTHUFFXXX",
+    "creditorAccountNumber": "HU429999424324472337554",
+    "debtor": "Horst Schmitt",
+    "debtorBankCode": null,
+    "debtorAccountNumber": "DE00999940000988773397",
+    "purpose": "Hotel Balaton thanks you for choosing our hotel",
+    "cleanPurpose": "Hotel Balaton thanks you for choosing our hotel",
+    "prebooked": false,
+    "bookingKey": null
+  },
+    {
+    "type": "GiroTransaction",
+    "id": 4,
+    "transactionPatternId": 38,
+    "amount": {
+      "value": -4900,
+      "currency": "EUR"
+    },
+    "bookingDate": "2017-03-20T12:00:00Z",
+    "valueDate": "2017-03-21T12:00:00Z",
+    "creditor": "Vodared Telekom",
+    "creditorBankCode": "DEUPBKED",
+    "creditorAccountNumber": "DE429999424324472337554",
+    "debtor": "Horst Schmitt",
+    "debtorBankCode": null,
+    "debtorAccountNumber": "DE00999940000988773397",
+    "purpose": "Cable Internet",
+    "cleanPurpose": "Cable Internet",
+    "prebooked": false,
+    "bookingKey": null
+  },
+  {
+    "type": "GiroTransaction",
+    "id": 5,
+    "transactionPatternId": 38,
+    "amount": {
+      "value": -388952,
+      "currency": "EUR"
+    },
+    "bookingDate": "2017-01-13T12:00:00Z",
+    "valueDate": "2017-01-13T12:00:00Z",
+    "creditor": "Pharmacy Healthy",
+    "creditorBankCode": "DEUPBKXXX",
+    "creditorAccountNumber": "DE729965841352337554",
+    "debtor": "Horst Schmitt",
+    "debtorBankCode": null,
+    "debtorAccountNumber": "DE00999940000988773397",
+    "purpose": "Bill number 1235",
+    "cleanPurpose": "Bill number 1235",
+    "prebooked": false,
+    "bookingKey": null
+  },
+    {
+    "type": "GiroTransaction",
+    "id": 8,
+    "transactionPatternId": 38,
+    "amount": {
+      "value": 388952,
+      "currency": "EUR"
+    },
+    "bookingDate": "2017-03-05T12:00:00Z",
+    "valueDate": "2017-03-05T12:00:00Z",
+    "creditor": "Horst Schmitt",
+    "creditorBankCode": "Horst Schmitt",
+    "creditorAccountNumber": "DE00999940000988773397",
+    "debtor": "Health Insurance",
+    "debtorBankCode": "DEUPBKXXX",
+    "debtorAccountNumber": "DE1567874555472",
+    "purpose": "Reimbursment February 2017",
+    "cleanPurpose": "Reimbursment February 2017",
+    "prebooked": false,
+    "bookingKey": null
+  },
+   {
+    "type": "GiroTransaction",
+    "id": 6,
+    "transactionPatternId": 38,
+    "amount": {
+      "value": -3900,
+      "currency": "EUR"
+    },
+    "bookingDate": "2017-03-20T12:00:00Z",
+    "valueDate": "2017-03-21T12:00:00Z",
+    "creditor": "Redone Phone",
+    "creditorBankCode": "DEUPBKED",
+    "creditorAccountNumber": "DE429999424345472337554",
+    "debtor": "Horst Schmitt",
+    "debtorBankCode": null,
+    "debtorAccountNumber": "DE00999940000988773397",
+    "purpose": "Mobile phone",
+    "cleanPurpose": "Mobile phone",
+    "prebooked": false,
+    "bookingKey": null
+  },
+   {
+    "type": "GiroTransaction",
+    "id": 7,
+    "transactionPatternId": 38,
+    "amount": {
+      "value": -375818,
+      "currency": "EUR"
+    },
+    "bookingDate": "2017-06-15T12:00:00Z",
+    "valueDate": "2017-06-15T12:00:00Z",
+    "creditor": "Lago Maggiore Pharmacy",
+    "creditorBankCode": "ITAPBKED",
+    "creditorAccountNumber": "IT429999424345472337554",
+    "debtor": "Horst Schmitt",
+    "debtorBankCode": null,
+    "debtorAccountNumber": "DE00999940000988773397",
+    "purpose": "Your health is precious",
+    "cleanPurpose": "Your health is precious",
+    "prebooked": false,
+    "bookingKey": null
+  },
+   {
+    "type": "GiroTransaction",
+    "id": 9,
+    "transactionPatternId": 38,
+    "amount": {
+      "value": -148180,
+      "currency": "EUR"
+    },
+    "bookingDate": "2017-06-15T12:00:00Z",
+    "valueDate": "2017-06-15T12:00:00Z",
+    "creditor": "Hotel Lago Maggiore",
+    "creditorBankCode": "ITAPBKED",
+    "creditorAccountNumber": "IT429999424345472337554",
+    "debtor": "Horst Schmitt",
+    "debtorBankCode": null,
+    "debtorAccountNumber": "DE00999940000988773397",
+    "purpose": "Booking ref H.Schmitt-abcd89",
+    "cleanPurpose": "Booking ref H.Schmitt-abcd89",
+    "prebooked": false,
+    "bookingKey": null
+  },
+   {
+    "type": "GiroTransaction",
+    "id": 10,
+    "transactionPatternId": 38,
+    "amount": {
+      "value": -8900,
+      "currency": "EUR"
+    },
+    "bookingDate": "2017-06-15T12:00:00Z",
+    "valueDate": "2017-06-15T12:00:00Z",
+    "creditor": "Labor union GLU",
+    "creditorBankCode": "DEUPBKED",
+    "creditorAccountNumber": "DE789999424345472337554",
+    "debtor": "Horst Schmitt",
+    "debtorBankCode": null,
+    "debtorAccountNumber": "DE00999940000988773397",
+    "purpose": "Annual fee GLU",
+    "cleanPurpose": "Annual fee GLU",
+    "prebooked": false,
+    "bookingKey": null
+  }
+]

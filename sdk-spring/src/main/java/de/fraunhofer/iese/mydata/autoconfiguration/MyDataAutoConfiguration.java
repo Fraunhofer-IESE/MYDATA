@@ -1,0 +1,45 @@
+/*
+ * =================================LICENSE_START=================================
+ * MYDATA Control Technologies
+ *
+ * Copyright (C) 2016 - present Fraunhofer-Gesellschaft zur Foerderung der
+ * angewandten Forschung e.V. acting on behalf of its Fraunhofer Institute
+ * for Experimental Software Engineering (IESE)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =================================LICENSE_END===================================
+ */
+
+package de.fraunhofer.iese.mydata.autoconfiguration;
+
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+/**
+ * This Configuration class configures the most common.
+ */
+@Configuration
+@EnableConfigurationProperties(MyDataConfigurationProperties.class)
+@AutoConfigureAfter({
+    PropertyPlaceholderAutoConfiguration.class, HibernateJpaAutoConfiguration.class
+})
+@Import({
+    MyDataSdkDatabaseSetupConfiguration.class, MyDataConfiguration.class
+})
+public class MyDataAutoConfiguration {
+
+}

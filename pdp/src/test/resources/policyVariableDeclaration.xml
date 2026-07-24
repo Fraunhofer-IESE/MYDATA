@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policy
+        xmlns="http://www.mydata-control.de/4.0/mydataLanguage"
+        xmlns:pip="http://www.mydata-control.de/4.0/pip"
+        xmlns:constant="http://www.mydata-control.de/4.0/constant"
+        xmlns:parameter="http://www.mydata-control.de/4.0/parameter"
+        xmlns:variable="http://www.mydata-control.de/4.0/variable"
+        xmlns:variableDeclaration="http://www.mydata-control.de/4.0/variableDeclaration"
+        id="urn:policy:ppe:b" description="Policy for Fleet PoC Use Case 1">
+
+    <variableDeclaration:string name="content_of_superstring">
+        <pip:string method="urn:info:ppe:theMethod" default="theContent">
+            <parameter:boolean name="firstParameter" value="true"/>
+        </pip:string>
+    </variableDeclaration:string>
+
+    <mechanism id="decideOnStorageOfPositionUpdates"
+               description="Variable declaration"
+               event="urn:action:ppe:cr-writeData">
+
+        <if>
+            <and>
+                <equals>
+                    <variable:string reference="content_of_superstring"/>
+                    <constant:string value="theRealContent"/>
+                </equals>
+            </and>
+            <then>
+                <modify eventParameter="latitude" method="changeTo">
+
+                    <parameter:string  name="newContent">
+                        <variable:string reference="content_of_superstring"/>
+                    </parameter:string>
+                </modify>
+            </then>
+        </if>
+    </mechanism>
+</policy>

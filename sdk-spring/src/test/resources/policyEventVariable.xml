@@ -1,0 +1,41 @@
+<policy id='urn:policy:test:bla' description='The generated policy for dataset with UUID ABCD-1234' xmlns='http://www.iese.fraunhofer.de/ind2uce/3.2.46/ind2uceLanguage' xmlns:tns='http://www.iese.fraunhofer.de/ind2uce/3.2.46/ind2uceLanguage' xmlns:parameter='http://www.iese.fraunhofer.de/ind2uce/3.2.46/parameter' xmlns:pip='http://www.iese.fraunhofer.de/ind2uce/3.2.46/pip' xmlns:function='http://www.iese.fraunhofer.de/ind2uce/3.2.46/function' xmlns:event='http://www.iese.fraunhofer.de/ind2uce/3.2.46/event' xmlns:constant='http://www.iese.fraunhofer.de/ind2uce/3.2.46/constant' xmlns:variable='http://www.iese.fraunhofer.de/ind2uce/3.2.46/variable' xmlns:variableDeclaration='http://www.iese.fraunhofer.de/ind2uce/3.2.46/variableDeclaration' xmlns:valueChanged='http://www.iese.fraunhofer.de/ind2uce/3.2.46/valueChanged' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:date='http://www.iese.fraunhofer.de/ind2uce/3.2.46/date' xmlns:time='http://www.iese.fraunhofer.de/ind2uce/3.2.46/time' xmlns:day='http://www.iese.fraunhofer.de/ind2uce/3.2.46/day'>
+  <variableDeclaration:string name='HandledDataSetUuid'>
+    <constant:string value='ABC-123'/>
+  </variableDeclaration:string>
+  <mechanism event='urn:action:test:read'>
+    <if>
+      <not>
+        <equals>
+          <variable:string reference='HandledDataSetUuid'/>
+          <event:string eventParameter='DataSetUuid' default=''/>
+        </equals>
+      </not>
+      <then>
+        <allow/>
+      </then>
+    </if>
+    <elseif>
+      <and>
+        <constant:true/>
+        <lessEqual>
+          <count>
+            <eventOccurrence event='urn:action:test:read'>
+              <parameter:string name='DataSetUuid'>
+                <variable:string reference='HandledDataSetUuid'/>
+              </parameter:string>
+              <parameter:string name='ConnectionUuid' value='CONN-123'/>
+            </eventOccurrence>
+            <when fixedTime='thisMinute'/>
+          </count>
+          <constant:number value='5'/>
+        </lessEqual>
+      </and>
+      <then>
+        <allow/>
+      </then>
+    </elseif>
+    <else>
+      <inhibit/>
+    </else>
+  </mechanism>
+</policy>

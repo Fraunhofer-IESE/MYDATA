@@ -117,9 +117,8 @@ fabric.properties
 .classpath
 .settings
 .project
+
 .sts4-cache/
 .vscode/
 
 .temp*classpath*.txt
-
-.flattened-pom.xml

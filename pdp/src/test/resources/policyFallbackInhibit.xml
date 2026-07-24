@@ -1,0 +1,18 @@
+<policy id='urn:policy:test:preventive-fallbackAllowModify'
+		description=''
+		xmlns="http://www.mydata-control.de/4.0/mydataLanguage"
+		xmlns:parameter="http://www.mydata-control.de/4.0/parameter">
+	<mechanism id='prevFallback' event='urn:action:test:showEmployee'>
+		<if>
+			<execute action='urn:action:test:log'>
+				<parameter:string name='message' value='test'/>
+			</execute>
+			<then>
+				<allow></allow>
+			</then>
+		</if>
+		<else>
+			<inhibit></inhibit>
+		</else>
+	</mechanism>
+</policy>

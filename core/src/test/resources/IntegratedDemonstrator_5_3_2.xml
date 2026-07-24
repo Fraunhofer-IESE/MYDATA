@@ -1,0 +1,104 @@
+
+<policy id="urn:policy:b0:FireAlarm" name="FireAlarm"
+	description=""
+	xmlns="http://www.iese.fraunhofer.de/ind2uce/3.2.46/ind2uceLanguage"
+	xmlns:tns="http://www.iese.fraunhofer.de/ind2uce/3.2.46/ind2uceLanguage"
+	xmlns:parameter="http://www.iese.fraunhofer.de/ind2uce/3.2.46/parameter"
+	xmlns:pip="http://www.iese.fraunhofer.de/ind2uce/3.2.46/pip"
+	xmlns:function="http://www.iese.fraunhofer.de/ind2uce/3.2.46/function"
+	xmlns:event="http://www.iese.fraunhofer.de/ind2uce/3.2.46/event"
+	xmlns:constant="http://www.iese.fraunhofer.de/ind2uce/3.2.46/constant"
+	xmlns:variable="http://www.iese.fraunhofer.de/ind2uce/3.2.46/variable"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!-- 	<timer cron="*/3 * * * * *"> -->
+<!-- 		<fireEvent action="urn:action:b0:blubb" /> -->
+<!-- 	</timer> -->
+	<mechanism event="urn:action:b0:SmartIntegoMessage">
+		<if>
+			<and>
+				<equals>
+					<event:number eventParameter="msgType" default="0" />
+					<constant:number value="14" />
+				</equals>
+				<greaterEqual>
+					<count>
+						<eventOccurrence event="urn:action:b0:EnoceanTelegram">
+							<parameter:boolean name="RadioTelegram" value="true" />
+							<parameter:boolean name="RPS" value="true" />
+							<parameter:string name="RORG" value="f6" />
+							<parameter:string name="ID" value="180080e" />
+							<parameter:string name="data" value="30" />
+						</eventOccurrence>
+						<when >
+						<start time="*.*.* *:*:-7" />
+						</when>
+					</count>
+					<constant:number value="1" />
+				</greaterEqual>
+			</and>
+			<then>
+				<execute action="urn:action:b0:SmartIntegoAction">
+					<parameter:string name="action" value="ShortTermActivation" />
+					<parameter:number name="duration" value="1" />
+				</execute>
+			</then>
+		</if>
+	</mechanism>
+	<mechanism event="urn:action:b0:EnoceanTelegram">
+		<if>
+			<and>
+				<event:boolean eventParameter="RadioTelegram" default="false" />
+				<event:boolean eventParameter="RPS" default="false" />
+				<equals>
+					<event:string eventParameter="RORG" default="" />
+					<constant:string value="f6" />
+				</equals>
+				<equals>
+					<event:string eventParameter="ID" default="" />
+					<constant:string value="180080e" />
+				</equals>
+				<equals>
+					<event:string eventParameter="data" default="" />
+					<constant:string value="30" />
+				</equals>
+			</and>
+			<then>
+				<execute action="urn:action:b0:EnoceanAction">
+					<parameter:string name="action" value="ToggleSwitch" />
+					<parameter:string name="destination" value="0x01038be3" />
+					<parameter:string name="switchOn" value="true" />
+				</execute>
+				<execute action="urn:action:b0:NestAlarmSender">
+					<parameter:string name="type" value="fire" />
+				</execute>
+			</then>
+		</if>
+	</mechanism>
+	<mechanism event="urn:action:b0:blubb">
+		<if>
+			<greaterEqual>
+				<count>
+					<eventOccurrence event="urn:action:b0:EnoceanTelegram">
+						<parameter:boolean name="RadioTelegram" value="true" />
+						<parameter:boolean name="RPS" value="true" />
+						<parameter:string name="RORG" value="f6" />
+						<parameter:string name="ID" value="180080e" />
+						<parameter:string name="data" value="30" />
+					</eventOccurrence>
+					<when >
+					<start time="*.*.* *:-8:*" />
+					<end time="*.*.* *:-8:*" />
+					</when>
+				</count>
+				<constant:number value="1" />
+			</greaterEqual>
+			<then>
+				<execute action="urn:action:b0:EnoceanAction">
+					<parameter:string name="action" value="ToggleSwitch" />
+					<parameter:string name="destination" value="0x01038be3" />
+					<parameter:boolean name="switchOn" value="false" />
+				</execute>
+			</then>
+		</if>
+	</mechanism>
+</policy>

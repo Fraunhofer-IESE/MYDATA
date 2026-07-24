@@ -1,0 +1,38 @@
+<policy id="urn:policy:test:foo" name="foo" description="basic policy for the tests" xmlns="http://www.iese.fraunhofer.de/ind2uce/3.2.46/ind2uceLanguage"
+	xmlns:tns="http://www.iese.fraunhofer.de/ind2uce/3.2.46/ind2uceLanguage" xmlns:parameter="http://www.iese.fraunhofer.de/ind2uce/3.2.46/parameter" xmlns:pip="http://www.iese.fraunhofer.de/ind2uce/3.2.46/pip"
+	xmlns:function="http://www.iese.fraunhofer.de/ind2uce/3.2.46/function" xmlns:event="http://www.iese.fraunhofer.de/ind2uce/3.2.46/event" xmlns:constant="http://www.iese.fraunhofer.de/ind2uce/3.2.46/constant"
+	xmlns:variable="http://www.iese.fraunhofer.de/ind2uce/3.2.46/variable"  xmlns:valueChanged='http://www.iese.fraunhofer.de/ind2uce/3.2.46/valueChanged'
+	xmlns:variableDeclaration="http://www.iese.fraunhofer.de/ind2uce/3.2.46/variableDeclaration" 
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<variableDeclaration:string name="role">
+		<pip:string method="urn:info:test:checkRole" default="none">
+			<parameter:number name="loggedUser">
+				<event:number eventParameter="userId" default="1" />
+			</parameter:number>
+		</pip:string>
+	</variableDeclaration:string>
+
+  <variableDeclaration:number name="temperature">
+    <pip:number method="urn:info:test:getTemperature" default="0">
+      <parameter:number name="zip">
+        <event:number eventParameter="zip" default="1" />
+      </parameter:number>
+    </pip:number>
+  </variableDeclaration:number>
+
+	<mechanism event="urn:action:test:get-foobar">
+		<if>
+			<valueChanged:boolean to="true" id="de027ca5-502b-4d82-bb04-d7a3e8b2a773">
+				<equals>
+					<variable:string reference="role" />
+					<constant:string value="ALLOW" />
+				</equals>
+			</valueChanged:boolean>
+			<then>
+				<allow />
+			</then>
+		</if>
+	</mechanism>
+</policy>
+

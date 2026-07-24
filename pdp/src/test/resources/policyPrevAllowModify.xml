@@ -1,0 +1,17 @@
+<policy id='urn:policy:test:preventive-allowModify' description=''
+        xmlns="http://www.mydata-control.de/4.0/mydataLanguage"
+        xmlns:constant="http://www.mydata-control.de/4.0/constant"
+        xmlns:parameter="http://www.mydata-control.de/4.0/parameter">
+    <mechanism id='prevAllowModify' event="urn:action:test:showEmployee">
+        <if>
+            <constant:true/>
+            <then>
+                <modify eventParameter="role" method="changeTo">
+                    <parameter:string name='role' value='ConstructionSiteManager'/>
+                </modify>
+                <modify eventParameter="id" method="anonymize">
+                </modify>
+            </then>
+        </if>
+    </mechanism>
+</policy>

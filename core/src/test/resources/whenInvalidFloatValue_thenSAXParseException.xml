@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policy xmlns="http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage" xmlns:tns="http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage" xmlns:param="http://www.iese.fraunhofer.de/ind2uce/3.0.25/param"
+  xmlns:pip="http://www.iese.fraunhofer.de/ind2uce/3.0.25/pip" xmlns:function="http://www.iese.fraunhofer.de/ind2uce/3.0.25/function" xmlns:constant="http://www.iese.fraunhofer.de/ind2uce/3.0.25/constant"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="urn:policy:a:b" description="Policy for Fleet PoC Use Case 1">
+
+  <preventiveMechanism id="decideOnStorageOfPositionUpdates">
+    <description>Decides whether to store a position update coming from a vehicle.</description>
+    <event action="urn:action:ppe:cr-writeData" >
+      <param:string name="attribute/longitude" />
+    </event>
+    <condition>
+      <not>
+        <function:contains>
+          <pip:list method="urn:pip:fleet:currentTripEqualsType" default="[1,2,'adsf']" ttlAmount="30">
+          </pip:list>
+          <constant:float value="bla" />
+        </function:contains>
+        <!-- thingId is labeled as vehicleId -->
+      </not>
+    </condition>
+    <authorizationDecision name="default_writeData" fallback="sasf">
+      <allow>
+        <modify>
+          <param:event name="latitude">
+            <function:engine method="delete" />
+          </param:event>
+          <param:event name="longitude">
+            <function:engine method="delete" />
+          </param:event>
+        </modify>
+      </allow>
+    </authorizationDecision>
+    <fallbackAuthorizationDecision name="sasf">
+      <allow>
+        <modify>
+          <param:event name="latitude">
+            <function:engine method="delete" />
+          </param:event>
+          <param:event name="longitude">
+            <function:engine method="delete" />
+          </param:event>
+        </modify>
+      </allow>
+    </fallbackAuthorizationDecision>
+  </preventiveMechanism>
+
+  <preventiveMechanism id="aggregatePrivateTrips">
+    <description>Decide whether to read private trips in detail or aggregated only.</description>
+    <event action="urn:action:ppe:fleet:readTripData" >
+    </event>
+    <condition>
+      <and>
+        <not>
+          <pip:boolean method="urn:pip:local:isAssignedDriver" default="false">
+            <param:string name="userId">
+              <pip:string method="urn:pip:im:getUserName" default="UNKNOWN">
+                <param:string name="contextId" />
+              </pip:string>
+            </param:string>
+          </pip:boolean>
+        </not>
+        <and>
+          <!-- values of roleName are not known -->
+          <pip:boolean method="urn:pip:im:hasRole" default="false">
+            <param:string name="contextId" />
+            <param:string name="roleName" value="FleetManager" />
+            <!-- FleetManager, Driver -->
+          </pip:boolean>
+          <and>
+            <pip:boolean method="urn:pip:local:isShowPrivateTripsAggregated" default="false">
+              <param:string name="userName">
+                <pip:string method="urn:pip:im:getUserName" default="UNKNOWN">
+                  <param:string name="contextId" />
+                </pip:string>
+              </param:string>
+            </pip:boolean>
+            <pip:boolean method="urn:pip:local:isVehicleStolen" default="false">
+              <param:string name="vehicleId" />
+            </pip:boolean>
+          </and>
+        </and>
+      </and>
+    </condition>
+    <authorizationDecision name="default_readTripData">
+      <allow>
+        <modify>
+          <param:event name="trips">
+            <function:engine name="aggregate">
+              <param:string name="carStolenDate">
+                <pip:string method="urn:pip:local:getVehicleStolenDate" default="none">
+                  <param:string name="vehicleId" />
+                </pip:string>
+              </param:string>
+            </function:engine>
+          </param:event>
+        </modify>
+      </allow>
+    </authorizationDecision>
+  </preventiveMechanism>
+
+</policy>

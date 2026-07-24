@@ -1,0 +1,78 @@
+<policy xmlns="http://www.iese.fhg.de/ind2uce/1.0/enforcementLanguage"
+	xmlns:tns="http://www.iese.fhg.de/ind2uce/1.0/enforcementLanguage"
+	xmlns:a="http://www.iese.fhg.de/ind2uce/1.0/action" xmlns:e="http://www.iese.fhg.de/ind2uce/1.0/event"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.iese.fhg.de/ind2uce/1.0/enforcementLanguage
+ enforcementLanguage-FhG.xsd http://www.iese.fhg.de/ind2uce/1.0/action action-FhG.xsd http://www.iese.fhg.de/ind2uce/1.0/event
+ event-FhG.xsd http://www.master-fp7.eu/mcalculus.xsd mcalculus.xsd"
+	description="description" name="FireAlarm">
+	<preventiveMechanism name="ACPfire_23115018">
+		<timestep amount="3" unit="SECONDS" />
+		<trigger action="SmartIntegoMessage" isTry="false">
+			<paramMatch name="msgType" value="14" />
+		</trigger>
+		<condition>
+			<within amount="7" unit="SECONDS">
+				<eventMatch action="EnoceanTelegram" >
+					<paramMatch name="RadioTelegram" value="true" />
+					<paramMatch name="RPS" value="true" />
+					<paramMatch name="RORG" value="f6" />
+					<paramMatch name="ID" value="180080e" />
+					<paramMatch name="data" value="30" />
+				</eventMatch>
+			</within>
+		</condition>
+		<authorizationAction name="default">
+			<allow>
+				<executeAction name="SmartIntegoAction">
+					<parameter name="action" value="ShortTermActivation" />
+					<parameter name="duration" value="1" />
+				</executeAction>
+			</allow>
+		</authorizationAction>
+	</preventiveMechanism>
+	<preventiveMechanism name="Enocean_20395081">
+		<timestep amount="30000" unit="SECONDS" />
+		<trigger action="EnoceanTelegram" isTry="false">
+			<paramMatch name="RadioTelegram" value="true" />
+			<paramMatch name="RPS" value="true" />
+			<paramMatch name="RORG" value="f6" />
+			<paramMatch name="ID" value="180080e" />
+			<paramMatch name="data" value="30" />
+		</trigger>
+		<condition>
+			<true />
+		</condition>
+		<authorizationAction name="default">
+			<allow>
+				<executeAction name="EnoceanAction">
+					<parameter name="action" value="ToggleSwitch" />
+					<parameter name="destination" value="0x01038be3" />
+					<parameter name="switchOn" value="true" />
+				</executeAction>
+				<executeAction name="NestAlarmSender">
+					<parameter name="type" value="fire" />
+				</executeAction>
+			</allow>
+		</authorizationAction>
+	</preventiveMechanism>
+	<detectiveMechanism name="EnoceanDeactivate_59495885">
+		<timestep amount="3" unit="SECONDS" />
+		<condition>
+			<before amount="8" unit="MINUTES">
+				<eventMatch action="EnoceanTelegram" >
+					<paramMatch name="RadioTelegram" value="true" />
+					<paramMatch name="RPS" value="true" />
+					<paramMatch name="RORG" value="f6" />
+					<paramMatch name="ID" value="180080e" />
+					<paramMatch name="data" value="30" />
+				</eventMatch>
+			</before>
+		</condition>
+		<executeAction name="EnoceanAction">
+			<parameter name="action" value="ToggleSwitch" />
+			<parameter name="destination" value="0x01038be3" />
+			<parameter name="switchOn" value="false" />
+		</executeAction>
+	</detectiveMechanism>
+</policy>

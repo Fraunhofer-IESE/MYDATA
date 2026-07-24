@@ -1,0 +1,79 @@
+﻿<policy id="urn:policy:banking-demo:bankuser" name="bankuser" description="The email will be hidden if a banker request the customer details" xmlns="http://www.iese.fraunhofer.de/ind2uce/3.2.46/ind2uceLanguage"
+	xmlns:tns="http://www.iese.fraunhofer.de/ind2uce/3.2.46/ind2uceLanguage" xmlns:parameter="http://www.iese.fraunhofer.de/ind2uce/3.2.46/parameter" xmlns:pip="http://www.iese.fraunhofer.de/ind2uce/3.2.46/pip"
+	xmlns:function="http://www.iese.fraunhofer.de/ind2uce/3.2.46/function" xmlns:event="http://www.iese.fraunhofer.de/ind2uce/3.2.46/event" xmlns:constant="http://www.iese.fraunhofer.de/ind2uce/3.2.46/constant"
+	xmlns:variable="http://www.iese.fraunhofer.de/ind2uce/3.2.46/variable" xmlns:variableDeclaration="http://www.iese.fraunhofer.de/ind2uce/3.2.46/variableDeclaration" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<variableDeclaration:string name="role">
+		<pip:string method="urn:info:banking-demo:checkRole" default="none">
+			<parameter:number name="loggedUser">
+				<event:number eventParameter="userId" default="1" />
+			</parameter:number>
+		</pip:string>
+	</variableDeclaration:string>
+
+	<variableDeclaration:string name="policyState">
+		<pip:string method="urn:info:banking-demo:getBasicCustomerPolicyState" default="none">
+			<parameter:number name="customerId">
+				<event:number eventParameter="userId" default="1" />
+			</parameter:number>
+ <parameter:number name="psd2Id">
+				<event:number eventParameter="psd2Id" default="1" />
+			</parameter:number>
+			<parameter:string name="policyURN" value="urn:policy:banking-demo:bankuser" />
+		</pip:string>
+	</variableDeclaration:string>
+
+	<mechanism event="urn:action:banking-demo:get-bankuser">
+		<if>
+			<or>
+				<equals>
+					<variable:string reference="role" />
+					<constant:string value="ALLOW" />
+				</equals>
+				<equals>
+					<variable:string reference="policyState" />
+					<constant:string value="ALLOW" />
+				</equals>
+			</or>
+			<then>
+				<allow />
+				<execute action="urn:action:banking-demo:logNotification">
+				
+					<parameter:string name="message">
+						<event:string eventParameter="bla" default="" />
+					</parameter:string>
+					
+					<parameter:string name="message" >
+						<variable:string reference="role"/>
+					</parameter:string>
+				</execute>
+			</then>
+		</if>
+		<elseif>
+			<or>
+				<equals>
+					<variable:string reference="role" />
+					<constant:string value="MODIFY" />
+				</equals>
+				<equals>
+					<variable:string reference="policyState" />
+					<constant:string value="MODIFY" />
+				</equals>
+			</or>
+			<then>
+				<modify eventParameter="user" jsonPathQuery="$.email" method="anagram">
+					<parameter:number name="percentage" value="100" />
+				</modify>
+			</then>
+		</elseif>
+		<else>
+			<modify eventParameter="user" jsonPathQuery="$.email" method="delete" />
+			<execute action="urn:action:banking-demo:logNotification">
+				<parameter:string name="message" value="Email inhibited from user" />
+			</execute>
+		</else>
+		<execute action="urn:action:banking-demo:logNotification">
+				<parameter:string name="message" value="Email inhibited from user" />
+		</execute>
+	</mechanism>
+</policy>

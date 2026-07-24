@@ -1,0 +1,72 @@
+﻿<policy id='urn:policy:ind2uce-local:atIESE' description='' xmlns='http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage' xmlns:tns='http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage'
+	xmlns:param='http://www.iese.fraunhofer.de/ind2uce/3.0.25/param' xmlns:pip='http://www.iese.fraunhofer.de/ind2uce/3.0.25/pip' xmlns:function='http://www.iese.fraunhofer.de/ind2uce/3.0.25/function'
+	xmlns:constant='http://www.iese.fraunhofer.de/ind2uce/3.0.25/constant' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+	<detectiveMechanism>
+		<event action='urn:action:ind2uce-local:evaluate' />
+		<condition>
+			<and>
+				<or>
+					<pip:boolean method='urn:info:ind2uce-local:wificonnected' default='false'>
+						<param:string name='ssid' value='WLAN-mab' />
+					</pip:boolean>
+					<pip:boolean method='urn:info:ind2uce-local:wificonnected' default='false'>
+						<param:string name='ssid' value='wlan-extern' />
+					</pip:boolean>
+					<pip:boolean method='urn:info:ind2uce-local:networkconnected' default='false'>
+						<param:string name='description' value='AnyConnect' />
+						<param:string name='dns' value='iese.fhg.de' />
+					</pip:boolean>
+				</or>
+				<not>
+					<function:equals>
+						<pip:string method='urn:info:ind2uce-local:keyvalue' default='none'>
+							<param:string name='key' value='location' />
+						</pip:string>
+						<constant:string value='IESE' />
+					</function:equals>
+				</not>
+			</and>
+		</condition>
+		<executeAction name='urn:action:ind2uce-local:keyvalue'>
+			<param:string name='key' value='location' />
+			<param:string name='value' value='IESE' />
+		</executeAction>
+		<executeAction name='urn:action:ind2uce-local:notification'>
+			<param:string name='message' value='You are now at IESE!' />
+		</executeAction>
+	</detectiveMechanism>
+	<detectiveMechanism>
+		<event action='urn:action:ind2uce-local:evaluate' />
+		<condition>
+			<and>
+				<not>
+					<or>
+						<pip:boolean method='urn:info:ind2uce-local:wificonnected' default='false'>
+							<param:string name='ssid' value='WLAN-mab' />
+						</pip:boolean>
+						<pip:boolean method='urn:info:ind2uce-local:wificonnected' default='false'>
+							<param:string name='ssid' value='wlan-extern' />
+						</pip:boolean>
+						<pip:boolean method='urn:info:ind2uce-local:networkconnected' default='false'>
+							<param:string name='description' value='AnyConnect' />
+							<param:string name='dns' value='iese.fhg.de' />
+						</pip:boolean>
+					</or>
+				</not>
+				<function:equals>
+					<pip:string method='urn:info:ind2uce-local:keyvalue' default='none'>
+						<param:string name='key' value='location' />
+					</pip:string>
+					<constant:string value='IESE' />
+				</function:equals>
+			</and>
+		</condition>
+		<executeAction name='urn:action:ind2uce-local:notification'>
+			<param:string name='message' value='You are not IESE anymore!' />
+		</executeAction>
+		<executeAction name='urn:action:ind2uce-local:keyvalue'>
+			<param:string name='key' value='location' />
+			<param:string name='value' value='somewhere' />
+		</executeAction>
+	</detectiveMechanism>
+</policy>

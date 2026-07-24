@@ -1,0 +1,20 @@
+<policy id='urn:policy:test:detective-eventExecuteAction' description=''
+		xmlns='http://www.mydata-control.de/4.0/mydataLanguage'
+		xmlns:parameter='http://www.mydata-control.de/4.0/parameter'
+		xmlns:constant='http://www.mydata-control.de/4.0/constant'
+		xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+	<mechanism id='detectiveTest1' event="urn:action:test:showEmployee">
+		<if>
+			<constant:true/>
+			<then>
+				<execute action='urn:action:test:fireEmployee'>
+					<parameter:string name='messageToTell' value='you are fired!' />
+					<parameter:number name='daysUntilFiring' value='5' />
+				</execute>
+				<execute action='urn:action:test:alertOnSite'>
+					<parameter:number name='duration' value='60' />
+				</execute>
+			</then>
+		</if>
+	</mechanism>
+</policy>

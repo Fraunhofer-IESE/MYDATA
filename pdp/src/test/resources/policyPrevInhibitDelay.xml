@@ -1,0 +1,16 @@
+<policy id='urn:policy:test:preventive-inhibitDelay' description='' xmlns='http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage'
+	xmlns:tns='http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage' xmlns:param='http://www.iese.fraunhofer.de/ind2uce/3.0.25/param'
+	xmlns:pip='http://www.iese.fraunhofer.de/ind2uce/3.0.25/pip' xmlns:function='http://www.iese.fraunhofer.de/ind2uce/3.0.25/function' xmlns:constant='http://www.iese.fraunhofer.de/ind2uce/3.0.25/constant'
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+	<preventiveMechanism id='prevInhibitDelay'>
+		<event action='urn:action:test:showEmployee' />
+		<condition>
+			<true />
+		</condition>
+		<authorizationDecision name='decideInhibitDelay'>
+			<inhibit>
+				<delay amount='666' unit='MILLISECONDS' />
+			</inhibit>
+		</authorizationDecision>
+	</preventiveMechanism>
+</policy>

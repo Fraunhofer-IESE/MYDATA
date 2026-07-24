@@ -1,0 +1,95 @@
+﻿<policy id='urn:policy:banking-demo:bankuser2' description='The email will be hidden if a banker request the customer details'
+   xmlns='http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage'
+   xmlns:tns='http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage'
+   xmlns:param='http://www.iese.fraunhofer.de/ind2uce/3.0.25/param'
+   xmlns:pip='http://www.iese.fraunhofer.de/ind2uce/3.0.25/pip'
+   xmlns:function='http://www.iese.fraunhofer.de/ind2uce/3.0.25/function'
+   xmlns:constant='http://www.iese.fraunhofer.de/ind2uce/3.0.25/constant'
+   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+   <preventiveMechanism>
+      <event action='urn:action:banking-demo:get-bankuser'/>
+      <condition>
+         <or>
+            <function:equals>
+               <pip:string method='urn:info:banking-demo:checkRole' default='none'>
+                  <param:long name='loggedUser'/>
+               </pip:string>
+               <constant:string value='DENY'/>
+            </function:equals>
+            <function:equals>
+               <pip:string method='urn:info:banking-demo:getBasicCustomerPolicyState' default='none'>
+                  <param:long name='customerId'/>
+                  <param:string name='policyURN' value='urn:policy:banking-demo:bankuser'/>
+               </pip:string>
+               <constant:string value='DENY'/>
+            </function:equals>
+         </or>
+      </condition>
+      <authorizationDecision>
+         <allow>
+            <modify>
+               <param:event name='user' expression='$.email'>
+                  <function:engine method='delete'/>
+               </param:event>
+            </modify>
+         </allow>
+         <executeAction name='urn:action:banking-demo:logNotification'>
+            <param:string name='message' value='Email inhibited from user'/>
+         </executeAction>
+      </authorizationDecision>
+   </preventiveMechanism>
+   <preventiveMechanism>
+      <event action='urn:action:banking-demo:get-bankuser'/>
+      <condition>
+         <and>
+            <function:equals>
+               <pip:string method='urn:info:banking-demo:checkRole' default='none'>
+                  <param:long name='loggedUser'/>
+               </pip:string>
+               <constant:string value='MODIFY'/>
+            </function:equals>
+            <function:equals>
+               <pip:string method='urn:info:banking-demo:getBasicCustomerPolicyState' default='none'>
+                  <param:long name='customerId'/>
+                  <param:string name='policyURN' value='urn:policy:banking-demo:bankuser'/>
+               </pip:string>
+               <constant:string value='MODIFY'/>
+            </function:equals>
+         </and>
+      </condition>
+      <authorizationDecision>
+         <allow>
+            <modify>
+               <param:event name='user' expression='$.email'>
+                  <function:engine method='anagram'>
+                     <param:int name='percentage' value='100'/>
+                  </function:engine>
+               </param:event>
+            </modify>
+         </allow>
+      </authorizationDecision>
+   </preventiveMechanism>
+   <preventiveMechanism>
+      <event action='urn:action:banking-demo:get-bankusers'/>
+      <condition>
+         <or>
+            <function:equals>
+               <pip:string method='urn:info:banking-demo:checkRole' default='none'>
+                  <param:long name='loggedUser'/>
+               </pip:string>
+               <constant:string value='ALLOW'/>
+            </function:equals>
+            <function:equals>
+               <pip:string method='urn:info:banking-demo:getCustomerPolicyState' default='none'>
+                  <param:long name='customerId'/>
+                  <param:string name='policyURN' value='urn:policy:banking-demo:bankusers'/>
+               </pip:string>
+               <constant:string value='ALLOW'/>
+            </function:equals>
+         </or>
+      </condition>
+      <authorizationDecision>
+         <allow/>
+      </authorizationDecision>
+   </preventiveMechanism>
+</policy>

@@ -1,0 +1,24 @@
+<timer  xmlns='http://www.mydata-control.de/4.0/mydataLanguageTimer'
+ xmlns:tns='http://www.mydata-control.de/4.0/mydataLanguageTimer'
+ xmlns:parameter='http://www.mydata-control.de/4.0/parameter'
+ xmlns:pip='http://www.mydata-control.de/4.0/pip'
+ xmlns:event='http://www.mydata-control.de/4.0/event' 
+ xmlns:constant='http://www.mydata-control.de/4.0/constant' 
+ xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+ cron="0/5 * * * * *" id="urn:timer:test:log" description="Its my description.">
+
+    <event action="urn:action:test1:writeData">
+        <parameter:string name="blubb" value="xc"/>
+        <parameter:number name="blubb" value="1"/>
+        <parameter:boolean name="blubb" value="true"/>
+        <parameter:object name="blubb" value="xc"/>
+    </event>
+
+    <event action="urn:action:test2:writeData">
+        <parameter:string name="blubb" value="xc"/>
+        <parameter:number name="blubb" value="2"/>
+        <parameter:boolean name="blubb" value="false"/>
+        <parameter:object name="blubb" value="xc"/>
+    </event>
+
+</timer>

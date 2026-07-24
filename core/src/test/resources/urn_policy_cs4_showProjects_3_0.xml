@@ -1,0 +1,44 @@
+﻿<policy id='urn:policy:cs4:showProjects' description='When a user or foreman accesses the project list, the budget is deleted and the access attempt is logged' xmlns='http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage'
+	xmlns:tns='http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage' xmlns:param='http://www.iese.fraunhofer.de/ind2uce/3.0.25/param' xmlns:pip='http://www.iese.fraunhofer.de/ind2uce/3.0.25/pip'
+	xmlns:function='http://www.iese.fraunhofer.de/ind2uce/3.0.25/function' xmlns:constant='http://www.iese.fraunhofer.de/ind2uce/3.0.25/constant' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+	<preventiveMechanism>
+		<event action='urn:action:cs4:show-project' />
+		<condition>
+			<not>
+				<function:equals>
+					<pip:string method='urn:info:cs4:getRoleByUsername' default='none'>
+						<param:string name='userId'>
+							<param:string name='user' expression='$.userId' />
+						</param:string>
+					</pip:string>
+					<constant:string value='ROLE_MANAGER' />
+				</function:equals>
+			</not>
+		</condition>
+		<authorizationDecision>
+			<allow>
+				<modify>
+					<param:event name='project' expression='$.name'>
+						<function:engine method='append'>
+							<param:string name='prefix' value='' />
+							<param:string name='suffix' value=' (Information partially hidden)' />
+						</function:engine>
+					</param:event>
+					<param:event name='project' expression='$.budget'>
+						<function:engine method='delete' />
+					</param:event>
+				</modify>
+			</allow>
+			<executeAction name='urn:action:cs4:logNotification'>
+				<param:string name='message'>
+					<function:concat>
+						<param:string name='user' expression='$.firstName' />
+						<constant:string value=' ' />
+						<param:string name='user' expression='$.lastName' />
+						<constant:string value=' accessed the project list.' />
+					</function:concat>
+				</param:string>
+			</executeAction>
+		</authorizationDecision>
+	</preventiveMechanism>
+</policy>

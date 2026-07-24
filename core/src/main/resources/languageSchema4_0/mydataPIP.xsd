@@ -1,0 +1,125 @@
+<!--
+=================================LICENSE_START=================================
+MYDATA Control Technologies
+
+Copyright (C) 2016 - present Fraunhofer-Gesellschaft zur Foerderung der
+angewandten Forschung e.V. acting on behalf of its Fraunhofer Institute
+for Experimental Software Engineering (IESE)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+=================================LICENSE_END===================================
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+		targetNamespace="http://www.mydata-control.de/4.0/pip"
+		xmlns:tns="http://www.mydata-control.de/4.0/pip"
+		xmlns:parameter="http://www.mydata-control.de/4.0/parameter"
+		elementFormDefault="qualified">
+
+	<import namespace="http://www.mydata-control.de/4.0/parameter"
+		schemaLocation="mydataParameter.xsd" />
+	<import namespace="http://www.mydata-control.de/4.0/constant"
+		schemaLocation="mydataConstant.xsd" />
+
+	<complexType name="PipType">
+		<sequence>
+			<group ref="parameter:ParamTypeGroup" minOccurs="0"
+				maxOccurs="unbounded" />
+		</sequence>
+		<attribute name="method" use="required">
+			<simpleType>
+				<restriction base="string">
+					<pattern value="urn:info:[a-z0-9\-_.]+:[a-zA-Z0-9\-_.]+"/>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="ttl" use="optional">
+			<simpleType>
+				<restriction base="string">
+					<pattern
+						value="(([0-9]+y)?([0-9]+w)?([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?)" />
+				</restriction>
+			</simpleType>
+		</attribute>
+	</complexType>
+
+	<complexType name="PipStringType">
+		<complexContent>
+			<extension base="tns:PipType">
+				<attribute name="default" use="required">
+					<simpleType>
+						<restriction base="string">
+							<pattern value=".*" />
+						</restriction>
+					</simpleType>
+				</attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="PipBoolType">
+		<complexContent>
+			<extension base="tns:PipType">
+				<attribute name="default" type="boolean" use="required" />
+			</extension>
+		</complexContent>
+	</complexType>
+	<complexType name="PipNumberType">
+		<complexContent>
+			<extension base="tns:PipType">
+				<attribute name="default" type="double" use="required" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="PipListType">
+		<complexContent>
+			<extension base="tns:PipType">
+				<attribute name="default" use="required">
+					<simpleType>
+						<restriction base="string">
+							<!-- comma seperated array, e.g., [1,2.0,'adf'] String in '', floating 
+								point with x.y -->
+							<pattern
+									value="\[([0-9](\.([0-9])+){0,1}|'[A-Za-z0-9()+,-.=@;$_!*]*')(\s*,\s*([0-9](\.([0-9])+){0,1}|'[A-Za-z0-9()+,-.=@;$_!*]*')+)*\]|\[\]"/>
+						</restriction>
+					</simpleType>
+				</attribute>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="PipObjectType">
+		<complexContent>
+			<extension base="tns:PipType">
+				<attribute name="default" type="string" use="required" />
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<element name="string" type="tns:PipStringType" />
+	<element name="boolean" type="tns:PipBoolType" />
+	<element name="number" type="tns:PipNumberType" />
+	<element name="list" type="tns:PipListType" />
+	<element name="object" type="tns:PipObjectType" />
+
+	<group name="pipGroup">
+		<choice>
+			<element ref="tns:string" />
+			<element ref="tns:boolean" />
+			<element ref="tns:number" />
+			<element ref="tns:list" />
+			<element ref="tns:object" />
+		</choice>
+	</group>
+
+
+</schema>

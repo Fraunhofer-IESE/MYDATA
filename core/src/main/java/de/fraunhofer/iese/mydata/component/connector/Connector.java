@@ -1,0 +1,49 @@
+/*
+ * =================================LICENSE_START=================================
+ * MYDATA Control Technologies
+ *
+ * Copyright (C) 2016 - present Fraunhofer-Gesellschaft zur Foerderung der
+ * angewandten Forschung e.V. acting on behalf of its Fraunhofer Institute
+ * for Experimental Software Engineering (IESE)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * =================================LICENSE_END===================================
+ */
+
+package de.fraunhofer.iese.mydata.component.connector;
+
+import de.fraunhofer.iese.mydata.component.ComponentType;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+/**
+ * Interface which defines the common methods of all available connectors.
+ */
+public @interface Connector {
+
+  /**
+   * The protocol of the connector as a string (e.g., RMI, tcp, ...).
+   */
+  String[] protocol();
+
+  /**
+   * The component type as a string like PMP.
+   */
+  ComponentType type();
+
+}

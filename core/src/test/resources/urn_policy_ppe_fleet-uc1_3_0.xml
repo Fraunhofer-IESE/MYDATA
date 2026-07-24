@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policy xmlns="http://www.iese.fhg.de/ind2uce/1.2/enforcementLanguage" xmlns:tns="http://www.iese.fhg.de/ind2uce/1.2/enforcementLanguage" xmlns:param="http://www.iese.fhg.de/ind2uce/1.2/param"
+	xmlns:pip="http://www.iese.fhg.de/ind2uce/1.2/pip" xmlns:function="http://www.iese.fhg.de/ind2uce/1.2/function" xmlns:constant="http://www.iese.fhg.de/ind2uce/1.2/constant" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	id="fleet-uc1" description="Policy for Fleet PoC Use Case 1">
+
+	<preventiveMechanism id="decideOnStorageOfPositionUpdates">
+		<description>Decides whether to store a position update coming from a
+			vehicle.
+		</description>
+		<trigger action="urn:event:ppe:cr:writeData" isTry="false">
+			<function:exists>
+				<param:string name="attribute/longitude" />
+			</function:exists>
+		</trigger>
+		<condition>
+			<not>
+				<pip:boolean urn="urn:pip:fleet:currentTripEqualsType" default="false" ttl="30">
+					<param:string name="vehicleId">
+						<param:event name="thingId" />
+					</param:string>
+					<param:string name="tripType" value="BUSINESS" />
+				</pip:boolean>
+			</not>
+		</condition>
+		<authorizationAction name="default_writeData">
+			<allow>
+				<modify>
+					<param:event name="latitude">
+						<function:engine name="delete" />
+					</param:event>
+					<param:event name="longitude">
+						<function:engine name="delete" />
+					</param:event>
+				</modify>
+			</allow>
+		</authorizationAction>
+	</preventiveMechanism>
+
+	<preventiveMechanism id="aggregatePrivateTrips">
+		<description>Decide whether to read private trips in detail or
+			aggregated only.
+		</description>
+		<trigger action="urn:event:ppe:fleet:readTripData" isTry="false">
+		</trigger>
+		<condition>
+			<and>
+				<not>
+					<pip:boolean urn="urn:pip:local:isAssignedDriver" default="false">
+						<param:string name="userId">
+							<pip:string urn="urn:pip:im:getUserName" default="UNKNOWN">
+								<param:string name="contextId">
+									<param:event name="contextId" />
+								</param:string>
+							</pip:string>
+						</param:string>
+					</pip:boolean>
+				</not>
+				<and>
+					<pip:boolean urn="urn:pip:im:hasRole" default="false">
+						<param:string name="contextId">
+							<param:event name="contextId" />
+						</param:string>
+						<param:string name="roleName" value="FleetManager" /><!-- FleetManager, Driver -->
+					</pip:boolean>
+					<and>
+						<pip:boolean urn="urn:pip:local:isShowPrivateTripsAggregated" default="false">
+							<param:string name="userName">
+								<pip:string urn="urn:pip:im:getUserName" default="UNKNOWN">
+									<param:string name="contextId">
+										<param:event name="contextId" />
+									</param:string>
+								</pip:string>
+							</param:string>
+						</pip:boolean>
+						<pip:boolean urn="urn:pip:local:isVehicleStolen" default="false">
+							<param:string name="vehicleId">
+								<param:event name="vehicleId" />
+							</param:string>
+						</pip:boolean>
+					</and>
+				</and>
+			</and>
+		</condition>
+		<authorizationAction name="default_readTripData">
+			<allow>
+				<modify>
+					<param:event name="trips">
+						<function:engine name="aggregate">
+							<param:string name="carStolenDate">
+								<pip:string urn="urn:pip:local:getVehicleStolenDate" default="none">
+									<param:string name="vehicleId">
+										<param:event name="vehicleId" />
+									</param:string>
+								</pip:string>
+							</param:string>
+						</function:engine>
+					</param:event>
+				</modify>
+			</allow>
+		</authorizationAction>
+	</preventiveMechanism>
+
+</policy>

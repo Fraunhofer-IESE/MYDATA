@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policy xmlns="http://www.iese.fraunhofer.de/ind2uce/3.2.46/ind2uceLanguage"
+        xmlns:parameter='http://www.iese.fraunhofer.de/ind2uce/3.2.46/parameter'
+        xmlns:pip="http://www.iese.fraunhofer.de/ind2uce/3.2.46/pip"
+        xmlns:event="http://www.iese.fraunhofer.de/ind2uce/3.2.46/event"
+        xmlns:constant="http://www.iese.fraunhofer.de/ind2uce/3.2.46/constant"
+        id="urn:policy:test:b" description="Policy for Fleet PoC Use Case 1">
+
+    <mechanism id="decideOnStorageOfPositionUpdates" event="urn:action:test:cr-writeData" description="Decides whether to store a position update coming from a vehicle.">
+        <if>
+            <and>
+                <equals>
+                    <event:boolean eventParameter="basdf" default="false"/>
+                    <constant:true/>
+                </equals>
+                <contains>
+                    <event:list eventParameter="eventType" default="[1, 2]"/>
+                    <constant:string value="attribute/longitude"/>
+                </contains>
+                <equals>
+                    <event:number eventParameter="b" default="1"/>
+                    <constant:number value="2"/>
+                </equals>
+                <equals>
+                    <event:number eventParameter="d" default="1"/>
+                    <constant:number value="2"/>
+                </equals>
+                <equals>
+                    <event:number eventParameter="e" default="1"/>
+                    <constant:number value="2"/>
+                </equals>
+                <equals>
+                    <event:string eventParameter="e" default=""/>
+                    <constant:string value="&quot;abc"/>
+                </equals>
+                <event:boolean eventParameter="h" default="false"/>
+                <eventHasParameter>
+                    <constant:string value="i"/>
+                </eventHasParameter>
+                <eventHasParameter>
+                    <event:string eventParameter="j" default="0"/>
+                </eventHasParameter>
+                <eventHasParameter>
+                    <event:string eventParameter="k" default="0"/>
+                </eventHasParameter>
+                <eventHasParameter>
+                    <event:string eventParameter="l" default=""/>
+                </eventHasParameter>
+                <eventHasParameter>
+                    <event:string eventParameter="m" default="0"/>
+                </eventHasParameter>
+                <equals>
+
+                    <event:number eventParameter="n" default="0"/>
+                    <constant:number value="2"/>
+                </equals>
+                <not>
+                    <equals>
+                        <contains mode="NONE">
+                            <pip:list default="[1, 2]" method="urn:info:test:bla"/>
+                            <constant:number value="2.0"/>
+                            <constant:boolean value="false"/>
+                            <constant:list value="[1,2]"/>
+                            <constant:string value="blubb"/>
+                        </contains>
+
+                        <eventHasParameter>
+                            <constant:string value="name"/>
+                        </eventHasParameter>
+
+                        <eventHasParameter mode="AT_LEAST_ONE">
+                            <constant:string value="bla"/>
+                            <constant:string value="blubb"/>
+                        </eventHasParameter>
+
+                        <greater>
+                            <size>
+                                <pip:list default="[]" method="urn:info:test:bla"/>
+                            </size>
+                            <constant:number value="234"/>
+                        </greater>
+
+                        <greaterEqual>
+                            <size>
+                                <pip:list default="['bla', 'blub'  ,'blib']" method="urn:info:test:bla"/>
+                            </size>
+                            <constant:number value="234"/>
+                        </greaterEqual>
+
+                        <less>
+                            <size>
+                                <pip:list default="[]" method="urn:info:test:bla"/>
+                            </size>
+                            <constant:number value="234"/>
+                        </less>
+
+                        <lessEqual>
+                            <size>
+                                <pip:list default="[]" method="urn:info:test:bla"/>
+                            </size>
+                            <constant:number value="234"/>
+                        </lessEqual>
+
+                        <regex regex=".*\.docx">
+                            <event:string eventParameter="bla.docx" default=""/>
+                        </regex>
+
+                        <regex regex=".*\.docx" mode="EXACTLY_ONE">
+                            <event:string eventParameter="blubb.docx" default=""/>
+                            <event:string eventParameter="bla.jpg" default=""/>
+                        </regex>
+
+                        <concat>
+                            <pip:boolean default="true" method="urn:info:test:bla" ttl="123s"/>
+                            <pip:number default="1" method="urn:info:test:bla"/>
+                            <pip:number default="3" method="urn:info:test:bla"/>
+                            <pip:number default="3" method="urn:info:test:bla"/>
+                            <pip:number default="4" method="urn:info:test:bla"/>
+                            <pip:string default="true" method="urn:info:test:bla"/>
+                            <pip:list default="[]" method="urn:info:test:list"></pip:list>
+                        </concat>
+
+                    </equals>
+                </not>
+                <or>
+                    <constant:false/>
+                    <constant:true/>
+                    <implies>
+                        <constant:true/>
+                        <pip:boolean default="true" method="urn:info:test:b"/>
+                    </implies>
+
+                </or>
+            </and>
+
+            <then>
+                <modify method="delete" eventParameter="latitude" jsonPathQuery="$.lat">
+                </modify>
+                <modify method="delete" eventParameter="longitude">
+                </modify>
+            </then>
+        </if>
+        <else>
+            <modify method="blur" eventParameter="latitude"/>
+            <modify method="blur" eventParameter="longitude"/>
+        </else>
+        <execute action="urn:action:test:sendmail">
+            <parameter:string name="msg" value="hallo"/>
+        </execute>
+    </mechanism>
+
+    <mechanism id="aggregatePrivateTrips" event="urn:action:test:fleet-readTripData" description="Decide whether to read private trips in detail or aggregated only.">
+        <if>
+            <and>
+                <not>
+                    <pip:boolean method="urn:info:test:isAssignedDriver" default="false">
+                        <parameter:string name="userId">
+                            <pip:string method="urn:info:test:getUserName" default="UNKNOWN">
+                                <parameter:string name="contextId">
+                                    <event:string eventParameter="contextId" default=""/>
+                                </parameter:string>
+                            </pip:string>
+                        </parameter:string>
+                    </pip:boolean>
+                </not>
+                <and>
+                    <!-- values of roleName are not known -->
+                    <pip:boolean method="urn:info:test:hasRole" default="false">
+                        <parameter:string name="contextId"/>
+                        <parameter:string name="roleName" value="FleetManager"/>
+                        <!-- FleetManager, Driver -->
+                    </pip:boolean>
+                    <and>
+                        <pip:boolean method="urn:info:test:isShowPrivateTripsAggregated" default="false">
+                            <parameter:string name="userName">
+                                <pip:string method="urn:info:test:getUserName" default="UNKNOWN">
+                                    <parameter:string name="contextId"/>
+                                </pip:string>
+                            </parameter:string>
+                        </pip:boolean>
+                        <pip:boolean method="urn:info:test:isVehicleStolen" default="false">
+                            <parameter:string name="vehicleId"/>
+                        </pip:boolean>
+                    </and>
+                </and>
+            </and>
+            <then >
+                <inhibit></inhibit>
+            </then>
+        </if>
+    </mechanism>
+
+</policy>

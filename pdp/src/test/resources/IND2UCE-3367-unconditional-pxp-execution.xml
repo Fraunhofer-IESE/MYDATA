@@ -1,0 +1,17 @@
+<policy id='urn:policy:test:ab1a041c-44a4-4af1-ace2-00af00ee3e49'
+        description='hide city if less than 16, additional checks the weather and logs messages'
+        xmlns="http://www.mydata-control.de/4.0/mydataLanguage"
+        xmlns:parameter="http://www.mydata-control.de/4.0/parameter"
+        xmlns:constant="http://www.mydata-control.de/4.0/constant">
+  <mechanism event='urn:action:test:test'>
+    <if>
+      <constant:true/>
+      <then>
+        <allow/>
+      </then>
+    </if>
+    <execute action='urn:action:test:mytestpxp'>
+      <parameter:string name='value' value='ich bin ein test'/>
+    </execute>
+  </mechanism>
+</policy>

@@ -1,0 +1,19 @@
+<policy id="urn:policy:cs4:anonymizeTasksOfOthers" name="at IESE"
+        description="Foremen can only see their own tasks in full detail. "
+        xmlns="http://www.mydata-control.de/4.0/mydataLanguage"
+        xmlns:parameter="http://www.mydata-control.de/4.0/parameter" xmlns:pip="http://www.mydata-control.de/4.0/pip"
+        xmlns:event="http://www.mydata-control.de/4.0/event"
+>
+    <mechanism event="urn:action:cs4:show-task">
+        <if>
+            <pip:boolean method="urn:give-me-info" default="true">
+                <parameter:string name="userId">
+                    <event:string eventParameter="user" jsonPathQuery="$.userId" default=""/>
+                </parameter:string>
+            </pip:boolean>
+            <then>
+                <inhibit/>
+            </then>
+        </if>
+    </mechanism>
+</policy>

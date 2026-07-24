@@ -1,0 +1,26 @@
+<policy id='urn:policy:test:preventive-ConditionOperatorTestImplies' description=''
+		xmlns="http://www.mydata-control.de/4.0/mydataLanguage"
+		xmlns:constant="http://www.mydata-control.de/4.0/constant">
+	<mechanism id='conditonOperatorTestImpliesFalse' event="urn:action:test:showEmployee">
+		<if>
+			<implies>
+				<constant:true />
+				<constant:false />
+			</implies>
+			<then>
+				<inhibit />
+			</then>
+		</if>
+	</mechanism>
+	<mechanism id='conditonOperatorTestImpliesTrue' event="urn:action:test:createConstructionSite">
+		<if>
+			<implies>
+				<constant:false />
+				<constant:true />
+			</implies>
+			<then>
+				<inhibit />
+			</then>
+		</if>
+	</mechanism>
+</policy>

@@ -1,0 +1,43 @@
+<policy id='urn:policy:test:preventive-decisionAndModifierAggregation' description=''
+        xmlns="http://www.mydata-control.de/4.0/mydataLanguage"
+        xmlns:parameter="http://www.mydata-control.de/4.0/parameter"
+        xmlns:constant="http://www.mydata-control.de/4.0/constant">
+    <mechanism id='mechanismAllow1' event='urn:action:test:showEmployee'>
+        <if>
+            <constant:true/>
+            <then>
+                <modify eventParameter="id" method="engine1">
+                    <parameter:string name='testParam' value='test1'/>
+                </modify>
+                <modify eventParameter="role" method="engine2"></modify>
+            </then>
+        </if>
+    </mechanism>
+    <mechanism id='mechanismAllow2' event='urn:action:test:showEmployee'>
+        <if>
+            <constant:true/>
+            <then>
+                <modify eventParameter='id' method='engine1'>
+                    <parameter:string name='testParam' value='test2'/>
+                </modify>
+            </then>
+        </if>
+    </mechanism>
+    <mechanism id='mechanismAllow3' event="urn:action:test:showEmployee">
+        <if>
+            <constant:true/>
+            <then>
+                <modify eventParameter='id' method='engine3'/>
+                <modify eventParameter='role' method='engine4'/>
+                <modify eventParameter='role' method='engine5'>
+                    <parameter:string name='testParamString' value='blub'/>
+                    <parameter:number name='testParamInt' value='8'/>
+                    <parameter:number name='testParamLong' value='-98461687987'/>
+                    <parameter:boolean name='testParamBoolean' value='true'/>
+                    <parameter:number name='testParamFloat' value='64.54'/>
+                    <parameter:number name='testParamDouble' value='-6546461.9874651648'/>
+                </modify>
+            </then>
+        </if>
+    </mechanism>
+</policy>

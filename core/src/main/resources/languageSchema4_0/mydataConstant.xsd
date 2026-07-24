@@ -1,0 +1,63 @@
+<!--
+=================================LICENSE_START=================================
+MYDATA Control Technologies
+
+Copyright (C) 2016 - present Fraunhofer-Gesellschaft zur Foerderung der
+angewandten Forschung e.V. acting on behalf of its Fraunhofer Institute
+for Experimental Software Engineering (IESE)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+=================================LICENSE_END===================================
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mydata-control.de/4.0/constant" xmlns:tns="http://www.mydata-control.de/4.0/constant"
+	elementFormDefault="qualified">
+
+	<complexType name="ConstantStringType">
+		<attribute name="value" type="string" use="required" />
+	</complexType>
+	<complexType name="ConstantNumberType">
+		<attribute name="value" type="double" use="required" />
+	</complexType>
+
+	<complexType name="ConstantListType">
+		<attribute name="value" use="required">
+			<simpleType>
+				<restriction base="string">
+					<!-- comma seperated array, e.g., [1,2.0,'adf'] String in '', floating point with x.y -->
+					<pattern value="\[([0-9](\.([0-9])+){0,1}|&quot;[A-Za-z0-9()+,-.=@;$_!*]*&quot;)(\s*,\s*([0-9](\.([0-9])+){0,1}|&quot;[A-Za-z0-9()+,-.=@;$_!*]*&quot;)+)*\]|\[\]"></pattern>
+				</restriction>
+			</simpleType>
+		</attribute>
+	</complexType>
+
+	<element name="string" type="tns:ConstantStringType" />
+	<element name="number" type="tns:ConstantNumberType" />
+	<element name="object" type="tns:ConstantStringType" />
+	<element name="list" type="tns:ConstantListType" />
+	<element name="true" />
+	<element name="false" />
+
+	<group name="ConstantGroup">
+		<choice>
+			<element ref="tns:string" />
+			<element ref="tns:number" />
+			<element ref="tns:object" />
+			<element ref="tns:list" />
+			<element ref="tns:true" />
+			<element ref="tns:false" />
+		</choice>
+	</group>
+
+</schema>
+
+

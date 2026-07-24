@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policy xmlns="http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage" xmlns:tns="http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage" xmlns:param="http://www.iese.fraunhofer.de/ind2uce/3.0.25/param"
+  xmlns:pip="http://www.iese.fraunhofer.de/ind2uce/3.0.25/pip" xmlns:function="http://www.iese.fraunhofer.de/ind2uce/3.0.25/function" xmlns:constant="http://www.iese.fraunhofer.de/ind2uce/3.0.25/constant"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="urn:policy:ppe:b" description="smallest valid detective">
+
+  <detectiveMechanism id="id1">
+    <event action="urn:action:ppe:cr-writeData" />
+    <condition>
+      <true />
+    </condition>
+    <executeAction name="urn:action:ppe:bla" />
+  </detectiveMechanism>
+
+
+  <detectiveMechanism id="id2">
+    <timestep amount="1" unit="SECONDS" />
+    <condition>
+      <true />
+    </condition>
+    <executeAction name="urn:action:ppe:bla" />
+  </detectiveMechanism>
+
+</policy>

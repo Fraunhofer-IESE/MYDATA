@@ -1,0 +1,41 @@
+<policy id="urn:policy:test:foo" name="foo" description="basic policy for the tests" 
+xmlns='http://www.mydata-control.de/4.0/mydataLanguage'
+        xmlns:parameter='http://www.mydata-control.de/4.0/parameter'
+        xmlns:pip='http://www.mydata-control.de/4.0/pip'
+        xmlns:constant='http://www.mydata-control.de/4.0/constant'        
+        xmlns:variable="http://www.mydata-control.de/4.0/variable"
+        xmlns:variableDeclaration="http://www.mydata-control.de/4.0/variableDeclaration" 
+         xmlns:valueChanged='http://www.mydata-control.de/4.0/valueChanged'
+        xmlns:event='http://www.mydata-control.de/4.0/event' >
+
+	<variableDeclaration:string name="role">
+		<pip:string method="urn:info:test:checkRole" default="none">
+			<parameter:number name="loggedUser">
+				<event:number eventParameter="userId" default="1" />
+			</parameter:number>
+		</pip:string>
+	</variableDeclaration:string>
+
+  <variableDeclaration:number name="temperature">
+    <pip:number method="urn:info:test:getTemperature" default="0">
+      <parameter:number name="zip">
+        <event:number eventParameter="zip" default="1" />
+      </parameter:number>
+    </pip:number>
+  </variableDeclaration:number>
+
+	<mechanism event="urn:action:test:get-foobar">
+		<if>
+			<valueChanged:boolean to="true" id="de027ca5-502b-4d82-bb04-d7a3e8b2a773">
+				<equals>
+					<variable:string reference="role" />
+					<constant:string value="ALLOW" />
+				</equals>
+			</valueChanged:boolean>
+			<then>
+				<allow />
+			</then>
+		</if>
+	</mechanism>
+</policy>
+

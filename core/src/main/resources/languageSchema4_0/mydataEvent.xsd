@@ -1,0 +1,80 @@
+<!--
+=================================LICENSE_START=================================
+MYDATA Control Technologies
+
+Copyright (C) 2016 - present Fraunhofer-Gesellschaft zur Foerderung der
+angewandten Forschung e.V. acting on behalf of its Fraunhofer Institute
+for Experimental Software Engineering (IESE)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+=================================LICENSE_END===================================
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mydata-control.de/4.0/event" xmlns:tns="http://www.mydata-control.de/4.0/event"
+	elementFormDefault="qualified">
+
+	<complexType name="EventStringType">
+		<attribute name="eventParameter" type="string" use="required" />
+		<attribute name="default" type="string" use="required" />
+		<attribute name="jsonPathQuery" type="string" use="optional" />
+	</complexType>
+
+	<complexType name="EventBoolType">
+		<attribute name="eventParameter" type="string" use="required" />
+		<attribute name="default" type="boolean" use="required" />
+		<attribute name="jsonPathQuery" type="string" use="optional" />
+	</complexType>
+
+	<complexType name="EventNumberType">
+		<attribute name="eventParameter" type="string" use="required" />
+		<attribute name="default" type="double" use="required" />
+		<attribute name="jsonPathQuery" type="string" use="optional" />
+	</complexType>
+
+	<complexType name="EventObjectType">
+		<attribute name="eventParameter" type="string" use="required" />
+		<attribute name="default" type="string" use="required" />
+		<attribute name="jsonPathQuery" type="string" use="optional" />
+	</complexType>
+
+	<complexType name="EventListType">
+		<attribute name="eventParameter" type="string" use="required" />
+		<attribute name="default" use="required">
+			<simpleType>
+				<restriction base="string">
+					<!-- comma seperated array, e.g., [1,2.0,'adf'] String in '', floating point with x.y -->
+					<pattern value="\[([0-9](\.([0-9])+){0,1}|&quot;[A-Za-z0-9()+,-.=@;$_!*]*&quot;)(\s*,\s*([0-9](\.([0-9])+){0,1}|&quot;[A-Za-z0-9()+,-.=@;$_!*]*&quot;)+)*\]|\[\]"></pattern>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="jsonPathQuery" type="string" use="optional" />
+	</complexType>
+	
+	<element name="string" type="tns:EventStringType" />
+	<element name="boolean" type="tns:EventBoolType" />
+	<element name="number" type="tns:EventNumberType" />
+	<element name="object" type="tns:EventObjectType" />
+	<element name="list" type="tns:EventListType" />
+
+	<group name="eventGroup">
+		<choice>
+			<element ref="tns:string" />
+			<element ref="tns:number" />
+			<element ref="tns:boolean" />
+			<element ref="tns:object" />
+			<element ref="tns:list" />
+		</choice>
+	</group>
+
+</schema>
+
+

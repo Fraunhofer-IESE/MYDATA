@@ -1,0 +1,28 @@
+<policy id='urn:policy:test:preventive-decisionAggregation' description=''
+        xmlns="http://www.mydata-control.de/4.0/mydataLanguage"
+        xmlns:constant="http://www.mydata-control.de/4.0/constant">
+    <mechanism id='mechanismAllow1' event="urn:action:test:showEmployee">
+        <if>
+            <constant:true/>
+            <then>
+                <allow/>
+            </then>
+        </if>
+    </mechanism>
+    <mechanism id='mechanismInhibit' event="urn:action:test:showEmployee">
+        <if>
+            <constant:true/>
+            <then>
+                <inhibit/>
+            </then>
+        </if>
+    </mechanism>
+    <mechanism id='mechanismAllow2' event="urn:action:test:showEmployee">
+        <if>
+            <constant:false/>
+            <then>
+                <inhibit/>
+            </then>
+        </if>
+    </mechanism>
+</policy>

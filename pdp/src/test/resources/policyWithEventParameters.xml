@@ -1,0 +1,68 @@
+<policy id='urn:policy:cs4:BankContractOptimization' xmlns='http://www.mydata-control.de/4.0/mydataLanguage' xmlns:tns='http://www.mydata-control.de/4.0/mydataLanguage' xmlns:parameter='http://www.mydata-control.de/4.0/parameter' xmlns:pip='http://www.mydata-control.de/4.0/pip' xmlns:function='http://www.mydata-control.de/4.0/function' xmlns:event='http://www.mydata-control.de/4.0/event' xmlns:constant='http://www.mydata-control.de/4.0/constant' xmlns:variable='http://www.mydata-control.de/4.0/variable' xmlns:variableDeclaration='http://www.mydata-control.de/4.0/variableDeclaration' xmlns:valueChanged='http://www.mydata-control.de/4.0/valueChanged' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+  <variableDeclaration:string name='userCategory'>
+    <pip:string method='urn:info:cs4:getContractOptimizationCategory' default='NONE'/>
+  </variableDeclaration:string>
+  <mechanism event='urn:action:cs4:enforceBankTransaction'>
+    <if>
+      <or>
+        <equals>
+          <count>
+            <eventOccurrence event='urn:action:cs4:enforceBankData'>
+              <parameter:object name='user'>
+                <event:string eventParameter='user' default='' jsonPathQuery='$.name'/>
+              </parameter:object>
+            </eventOccurrence>
+            <when fixedTime='always'/>
+          </count>
+          <constant:number value='4'/>
+        </equals>
+        <equals>
+          <count>
+            <eventOccurrence event='urn:action:cs4:enforceBankData'>
+              <parameter:object name='user' jsonPathQuery="$.firstName">
+                <event:string eventParameter='user' default='' jsonPathQuery='$.name'/>
+              </parameter:object>
+            </eventOccurrence>
+            <when fixedTime='always'/>
+          </count>
+          <constant:number value='4'/>
+        </equals>
+        <equals>
+          <count>
+            <eventOccurrence event='urn:action:cs4:enforceBankData'>
+              <parameter:object name='user' jsonPathQuery="$.uname.prenom">
+                <event:string eventParameter='user' default='' jsonPathQuery='$.name'/>
+              </parameter:object>
+            </eventOccurrence>
+            <when fixedTime='always'/>
+          </count>
+          <constant:number value='4'/>
+        </equals>
+        <equals>
+          <count>
+            <eventOccurrence event='urn:action:cs4:enforceBankData'>
+              <parameter:object name='user' jsonPathQuery="$.firstName" value="toto">
+              </parameter:object>
+            </eventOccurrence>
+            <when fixedTime='always'/>
+          </count>
+          <constant:number value='4'/>
+        </equals>
+        <equals>
+          <count>
+            <eventOccurrence event='urn:action:cs4:enforceBankData'>
+              <parameter:string name='blabla' value="toto">
+              </parameter:string>
+            </eventOccurrence>
+            <when fixedTime='always'/>
+          </count>
+          <constant:number value='4'/>
+        </equals>
+      </or>
+
+      <then>
+        <allow/>
+      </then>
+    </if>
+  </mechanism>
+</policy>

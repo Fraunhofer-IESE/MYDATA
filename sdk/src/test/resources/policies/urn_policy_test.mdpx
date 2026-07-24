@@ -1,0 +1,12 @@
+<policy id='urn:policy:test:test'
+        xmlns='http://www.mydata-control.de/4.0/mydataLanguage'
+        xmlns:constant='http://www.mydata-control.de/4.0/constant'>
+    <mechanism event='urn:action:test:test'>
+        <if>
+            <constant:false/>
+            <then>
+                <allow/>
+            </then>
+        </if>
+    </mechanism>
+</policy>

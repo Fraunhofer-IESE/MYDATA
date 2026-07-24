@@ -1,0 +1,36 @@
+<policy id='urn:policy:cs4:valueChangedBooleanWithoutID'
+   xmlns='http://www.mydata-control.de/4.0/mydataLanguage'
+   xmlns:tns='http://www.mydata-control.de/4.0/mydataLanguage'
+   xmlns:parameter='http://www.mydata-control.de/4.0/parameter'
+   xmlns:pip='http://www.mydata-control.de/4.0/pip'
+   xmlns:function='http://www.mydata-control.de/4.0/function'
+   xmlns:event='http://www.mydata-control.de/4.0/event'
+   xmlns:constant='http://www.mydata-control.de/4.0/constant'
+   xmlns:variable='http://www.mydata-control.de/4.0/variable'
+   xmlns:variableDeclaration='http://www.mydata-control.de/4.0/variableDeclaration'
+    xmlns:valueChanged='http://www.mydata-control.de/4.0/valueChanged'
+   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+   <variableDeclaration:number name='numberAccess'>
+      <count>
+         <eventOccurrence event='urn:action:cs4:show-user'/>
+         <when fixedTime='today'/>
+      </count>
+   </variableDeclaration:number>
+   <mechanism event='urn:action:cs4:show-project'>
+      <if>
+	  <or>
+         <valueChanged:boolean to='true'>
+            <greater>
+               <variable:number reference='numberAccess'/>
+               <constant:number value='5'/>
+            </greater>
+         </valueChanged:boolean>
+         <then>
+            <execute action='urn:action:cs4:logNotification'>
+               <parameter:string name='message' value='Users where display more than 5 time today'/>
+            </execute>
+         </then>
+       </or>
+      </if>
+   </mechanism>
+</policy>

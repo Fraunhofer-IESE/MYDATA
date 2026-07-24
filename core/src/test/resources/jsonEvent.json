@@ -1,0 +1,26 @@
+{
+  "actionId": {
+    "platform": "test",
+    "context": "local",
+    "action": "showEmployee"
+  },
+  "timestamp": "1726751316",
+  "parameters": [
+    {
+      "name": "user",
+      "value": {
+        "value": "{\"name\":{\"firstName\":\"John\",\"lastName\":\"doe\"},\"addresses\":[{\"street\":{\"streetName\":\"naist street\",\"number\":32},\"city\":\"Lautre\",\"zip\":67663},{\"street\":{\"streetName\":\"bla street\",\"number\":42},\"city\":\"Monnem\",\"zip\":68161}],\"age\":26}",
+        "type": "de.fraunhofer.iese.mydata.pdp.java.test.Project",
+        "isComplex": "true"
+      }
+    },
+    {
+      "name": "userName",
+      "value": {
+        "value": "Manu",
+        "type": "java.lang.String",
+        "isComplex": "true"
+      }
+    }
+  ]
+}

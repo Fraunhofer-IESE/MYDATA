@@ -1,0 +1,23 @@
+<policy id='urn:policy:test:preventive-inhibitWithJsonPathInEvent' description=''
+        xmlns='http://www.mydata-control.de/4.0/mydataLanguage'
+        xmlns:constant='http://www.mydata-control.de/4.0/constant'
+        xmlns:event="http://www.mydata-control.de/4.0/event">
+    <mechanism id='prevAllowExecuteInAllow' event='urn:action:test:showEmployee'>
+        <if>
+            <and>
+                <equals>
+                    <event:object eventParameter="user" default=""/>
+                    <constant:object
+                            value='{"name":{"firstName" :"John","lastName":"doe"},"addresses":[{"street":{"streetName":"naist street","number":32},"city":"Lautre","zip":67663},{"street":{"streetName":"bla street","number":42},"city":"Monnem","zip":68161}],"age":26}'/>
+                </equals>
+                <equals>
+                    <event:string eventParameter="userName" default=""/>
+                    <constant:string value="John"/>
+                </equals>
+            </and>
+            <then>
+                <inhibit/>
+            </then>
+        </if>
+    </mechanism>
+</policy>

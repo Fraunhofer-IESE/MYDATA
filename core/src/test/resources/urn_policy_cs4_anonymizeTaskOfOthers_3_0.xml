@@ -1,0 +1,44 @@
+<policy id='urn:policy:cs4:anonymizeTasksOfOthers' description='Foremen can only see their own tasks in full detail. Tasks of others are anonymized.' xmlns='http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage'
+	xmlns:tns='http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage' xmlns:param='http://www.iese.fraunhofer.de/ind2uce/3.0.25/param' xmlns:pip='http://www.iese.fraunhofer.de/ind2uce/3.0.25/pip'
+	xmlns:function='http://www.iese.fraunhofer.de/ind2uce/3.0.25/function' xmlns:constant='http://www.iese.fraunhofer.de/ind2uce/3.0.25/constant' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+	<preventiveMechanism>
+		<event action='urn:action:cs4:show-task' />
+		<condition>
+			<and>
+				<function:equals>
+					<pip:string method='urn:info:cs4:getRoleByUsername' default='none'>
+						<param:string name='userId'>
+							<param:string name='user' expression='$.userId' />
+						</param:string>
+					</pip:string>
+					<constant:string value='ROLE_USER' />
+				</function:equals>
+				<not>
+					<function:equals>
+						<param:string name='user' expression='$.userId' />
+						<param:string name='task' expression='$.foreman.userId' />
+					</function:equals>
+				</not>
+			</and>
+		</condition>
+		<authorizationDecision>
+			<allow>
+				<modify>
+					<param:event name='task' expression='$.description'>
+						<function:engine method='anagram'>
+							<param:int name='percentage' value='100' />
+						</function:engine>
+					</param:event>
+					<param:event name='task' expression='$.name'>
+						<function:engine method='replace'>
+							<param:object name='replaceWith' value='"XXXX"' />
+						</function:engine>
+					</param:event>
+					<param:event name='task' expression='$.budget'>
+						<function:engine method='delete' />
+					</param:event>
+				</modify>
+			</allow>
+		</authorizationDecision>
+	</preventiveMechanism>
+</policy>

@@ -1,0 +1,34 @@
+<policy id='urn:policy:cs4:updateTest' xmlns='http://www.mydata-control.de/4.0/mydataLanguage'
+        xmlns:event='http://www.mydata-control.de/4.0/event'
+        xmlns:constant='http://www.mydata-control.de/4.0/constant'
+        xmlns:valueChanged='http://www.mydata-control.de/4.0/valueChanged'
+>
+    <mechanism event='urn:action:cs4:show-task'>
+        <if>
+            <or>
+                <valueChanged:boolean to='true' id='b5626220-b18f-6e9e-c848-d4cb17381b58'>
+                    <greater>
+                        <constant:number value='5'/>
+                        <constant:number value='6'/>
+                    </greater>
+                </valueChanged:boolean>
+                <valueChanged:string to='No hello' id='dc021c0a-1774-272b-3031-d47f68810cfc'>
+                    <event:string eventParameter='task' default=''/>
+                </valueChanged:string>
+                <greater>
+                    <count>
+                        <eventOccurrence event='urn:action:cs4:show-user'/>
+                        <when fixedTime='lastHour'/>
+                    </count>
+                    <count>
+                        <eventOccurrence event='urn:action:cs4:show-project'/>
+                        <when fixedTime='lastHour'/>
+                    </count>
+                </greater>
+            </or>
+            <then>
+                <allow/>
+            </then>
+        </if>
+    </mechanism>
+</policy>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policy
+   xmlns="http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage"
+   xmlns:tns="http://www.iese.fraunhofer.de/ind2uce/3.0.25/enforcementLanguage"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:param="http://www.iese.fraunhofer.de/ind2uce/3.0.25/param"
+   xmlns:pip="http://www.iese.fraunhofer.de/ind2uce/3.0.25/pip"
+   xmlns:constant="http://www.iese.fraunhofer.de/ind2uce/3.0.25/constant"
+   xmlns:function="http://www.iese.fraunhofer.de/ind2uce/3.0.25/function" 
+id="urn:policy:cs4-test:userAccessIsLoggedc1c2" description="When any user access logs do following Log this event and Send email to mail with subject sub and body boddy.">
+   <detectiveMechanism>
+      <event action="urn:action:cs4-test:modify-user"/>
+      <condition>
+         <true/>
+      </condition>
+      <executeAction name="urn:action:cs4-test:sendMail">
+         <param:string name="username" value="notification@mydata.example"/>
+         <param:string name="password" value="password"/>
+         <param:string name="recipient" value="mail"/>
+         <param:string name="sender" value="cs4@mydata.example"/>
+         <param:string name="port" value="587"/>
+         <param:string name="host" value="smtp.mydata.example"/>
+         <param:string name="subject" value="sub"/>
+         <param:string name="msgPlain" value="body"/>
+         <param:boolean name="debuggable" value="true"/>
+         <param:string name="msgHTML">
+            <function:concat>
+               <param:string name="accessor" expression="$.firstName"/>
+               <constant:string value=" accessed logs"/>
+            </function:concat>
+         </param:string>
+      </executeAction>
+      <executeAction name="urn:action:cs4-test:logNotification">
+         <param:string name="message">
+            <function:concat>
+               <param:string name="user" expression="$.firstName"/>
+               <constant:string value=" "/>
+               <param:string name="user" expression="$.lastName"/>
+               <constant:string value=" details accessed by "/>
+               <param:string name="accessor" expression="$.firstName"/>
+               <constant:string value=" "/>
+               <param:string name="accessor" expression="$.lastName"/>
+            </function:concat>
+         </param:string>
+      </executeAction>
+   </detectiveMechanism>
+</policy>

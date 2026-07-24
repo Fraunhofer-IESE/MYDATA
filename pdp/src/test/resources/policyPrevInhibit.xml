@@ -1,0 +1,15 @@
+<policy id='urn:policy:test:preventive-inhibit'
+        description=''
+        xmlns="http://www.mydata-control.de/4.0/mydataLanguage"
+        xmlns:constant="http://www.mydata-control.de/4.0/constant">
+    <mechanism id='prevFallback' event='urn:action:test:showEmployee'>
+        <if>
+            <constant:true></constant:true>
+            <then>
+
+                <inhibit></inhibit>
+            </then>
+        </if>
+    </mechanism>
+</policy>
+

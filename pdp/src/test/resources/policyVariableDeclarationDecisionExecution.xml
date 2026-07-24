@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policy id='urn:policy:test:b' description='Policy for variable in execution in decisions'
+   xmlns='http://www.mydata-control.de/4.0/mydataLanguage'
+   xmlns:tns='http://www.mydata-control.de/4.0/mydataLanguage'
+   xmlns:parameter='http://www.mydata-control.de/4.0/parameter'
+   xmlns:pip='http://www.mydata-control.de/4.0/pip'
+   xmlns:function='http://www.mydata-control.de/4.0/function'
+   xmlns:event='http://www.mydata-control.de/4.0/event'
+   xmlns:constant='http://www.mydata-control.de/4.0/constant'
+   xmlns:variable='http://www.mydata-control.de/4.0/variable'
+   xmlns:variableDeclaration='http://www.mydata-control.de/4.0/variableDeclaration'
+   xmlns:valueChanged='http://www.mydata-control.de/4.0/valueChanged'
+   xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+
+   <variableDeclaration:number name='num'>
+      <constant:number value='14'/>
+   </variableDeclaration:number>
+
+  <mechanism event='urn:action:test:executeWithVar'>
+      <if>
+         <constant:true/>
+         <then>
+            <execute action='urn:action:test:deleteWithVar'>
+               <parameter:number name='value'>
+                  <variable:number reference='num'/>
+               </parameter:number>
+               <parameter:string name='unit' value='days'/>
+            </execute>
+         </then>
+      </if>
+   </mechanism>
+</policy>

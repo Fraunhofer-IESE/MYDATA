@@ -1,0 +1,22 @@
+<policy id='urn:policy:mydata-solution:sdfdsf' xmlns='http://www.mydata-control.de/4.0/mydataLanguage'
+        xmlns:constant='http://www.mydata-control.de/4.0/constant'>
+    <mechanism event='urn:action:mydata-solution:enforceBankData'>
+        <if>
+            <equals>
+                <count>
+                    <eventOccurrence event='urn:action:mydata-solution:enforceBankData'/>
+                    <when>
+                        <start time='*.*.* *:*:*'>
+                            <eventOccurrence event='urn:action:andere-solution:enforceBankData' mode='FIRST'/>
+                        </start>
+                        <end time='*.*.* *:*:*'/>
+                    </when>
+                </count>
+                <constant:number value='5'/>
+            </equals>
+            <then>
+                <inhibit/>
+            </then>
+        </if>
+    </mechanism>
+</policy>
