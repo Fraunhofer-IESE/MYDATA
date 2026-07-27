@@ -307,11 +307,10 @@ public class RxPepFactory {
    * @return                 the annotation of type given annotation class or it returns NULL if
    *                         there is non.
    */
-  private static <T> T filter(Annotation[] annotations, Class<T> annotationClass) {
+  private static <T extends Annotation> T filter(Annotation[] annotations, Class<T> annotationClass) {
     for (final Annotation annotation : annotations) {
       if (annotationClass.isInstance(annotation)) {
-        // noinspection unchecked
-        return (T) annotation;
+        return annotationClass.cast(annotation);
       }
     }
     return null;
@@ -325,7 +324,7 @@ public class RxPepFactory {
    * @return                     PepType
    */
   public static <T> PepType findAPIDocumentationType(final Class<T> pepDocumentationApi) {
-    if (isValidDocumentation(pepDocumentationApi).getKey()) {
+    if (Boolean.TRUE.equals(isValidDocumentation(pepDocumentationApi).getKey())) {
       return PepType.REACTIVE;
     }
     return PepType.INVALID;
@@ -585,7 +584,7 @@ public class RxPepFactory {
   private static <T> void validateMethodReturnType(final Class<T> pepDocumentationApi) {
     final Pair<Boolean, RuntimeException> booleanRuntimeExceptionPair = isValidDocumentation(
         pepDocumentationApi);
-    if (!booleanRuntimeExceptionPair.getKey()) {
+    if (Boolean.FALSE.equals(booleanRuntimeExceptionPair.getKey())) {
       throw booleanRuntimeExceptionPair.getValue();
     }
   }
