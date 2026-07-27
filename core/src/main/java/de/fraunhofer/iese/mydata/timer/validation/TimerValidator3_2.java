@@ -73,14 +73,9 @@ class TimerValidator3_2 implements ITimerValidator {
   private static final String SCHEMA_RESOURCE_FILEPATH = "/languageSchema3_2/ind2uceLanguageTimer.xsd";
 
   /**
-   * The schema.
-   */
-  private Schema schema;
-
-  /**
    * The validator.
    */
-  private Validator validator;
+  private final Validator validator;
 
   public TimerValidator3_2() {
     try {
@@ -88,9 +83,9 @@ class TimerValidator3_2 implements ITimerValidator {
           .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
       schemaFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       final URL url = TimerValidator3_2.class.getResource(SCHEMA_RESOURCE_FILEPATH);
-      this.schema = schemaFactory.newSchema(url);
+      final Schema schema = schemaFactory.newSchema(url);
 
-      this.validator = this.schema.newValidator();
+      this.validator = schema.newValidator();
       this.validator.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       this.validator.setErrorHandler(new ErrorHandler() {
         @Override

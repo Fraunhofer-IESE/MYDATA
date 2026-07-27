@@ -70,14 +70,9 @@ class PolicyValidator3_2 implements IPolicyValidator {
   private static final String SCHEMA_RESOURCE_FILEPATH = "/languageSchema3_2/ind2uceLanguage.xsd";
 
   /**
-   * The schema.
-   */
-  private Schema schema;
-
-  /**
    * The validator.
    */
-  private Validator validator;
+  private final Validator validator;
 
   public PolicyValidator3_2() {
     try {
@@ -85,9 +80,9 @@ class PolicyValidator3_2 implements IPolicyValidator {
           .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
       schemaFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       final URL url = PolicyValidator3_2.class.getResource(SCHEMA_RESOURCE_FILEPATH);
-      this.schema = schemaFactory.newSchema(url);
+      final Schema schema = schemaFactory.newSchema(url);
 
-      this.validator = this.schema.newValidator();
+      this.validator = schema.newValidator();
       this.validator.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       this.validator.setErrorHandler(new ErrorHandler() {
         @Override
@@ -123,15 +118,6 @@ class PolicyValidator3_2 implements IPolicyValidator {
       throw new InvalidEntityException("Policy is not valid according to XML Schema", e);
     }
   }
-
-  //  private Document getDocument(String p)
-  //      throws SAXException, IOException, ParserConfigurationException {
-  //    final DocumentBuilderFactory documentumentBuilderFactory = DocumentBuilderFactory.newInstance();
-  //    documentumentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-  //    documentumentBuilderFactory.setNamespaceAware(true);
-  //    final DocumentBuilder documentumentBuilder = documentumentBuilderFactory.newDocumentBuilder();
-  //    return documentumentBuilder.parse(new InputSource(new StringReader(p)));
-  //  }
 
   @Override
   public void validatePolicySolutionAndComponents(SolutionId solutionId, String p)

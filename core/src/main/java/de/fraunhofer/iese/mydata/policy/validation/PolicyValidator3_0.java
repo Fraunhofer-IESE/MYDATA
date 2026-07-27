@@ -74,14 +74,9 @@ class PolicyValidator3_0 implements IPolicyValidator {
   private static final String SCHEMA_RESOURCE_FILEPATH = "/languageSchema/enfLanguage.xsd";
 
   /**
-   * The schema.
-   */
-  private Schema schema;
-
-  /**
    * The validator.
    */
-  private Validator validator;
+  private final Validator validator;
 
   @Deprecated
   public PolicyValidator3_0() {
@@ -90,9 +85,9 @@ class PolicyValidator3_0 implements IPolicyValidator {
           .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
       schemaFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       final URL url = PolicyValidator3_0.class.getResource(SCHEMA_RESOURCE_FILEPATH);
-      this.schema = schemaFactory.newSchema(url);
+      final Schema schema = schemaFactory.newSchema(url);
 
-      this.validator = this.schema.newValidator();
+      this.validator = schema.newValidator();
       this.validator.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       this.validator.setErrorHandler(new ErrorHandler() {
         @Override
