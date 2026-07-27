@@ -96,7 +96,7 @@ public final class MyDataEnvironmentManager {
    * Enable overwriting of existing MyDataEnvironments for testing purpose
    */
   public static void enableOverwritingOfExistingMyDataEnvironments() {
-    LOG.warn("Going to enableOverwritingOfExistingMyDataEnvironments");
+    LOG.debug("Going to enableOverwritingOfExistingMyDataEnvironments");
     MyDataEnvironmentManager.enableOverwritingOfExistingMyDataEnvironments.set(true);
   }
 
@@ -104,7 +104,7 @@ public final class MyDataEnvironmentManager {
    * Disable overwriting of existing MyDataEnvironments for testing purpose
    */
   public static void disableOverwritingOfExistingMyDataEnvironments() {
-    LOG.warn("Going to disableOverwritingOfExistingMyDataEnvironments");
+    LOG.debug("Going to disableOverwritingOfExistingMyDataEnvironments");
     MyDataEnvironmentManager.enableOverwritingOfExistingMyDataEnvironments.set(false);
   }
 
