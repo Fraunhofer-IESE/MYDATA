@@ -179,11 +179,10 @@ public class ConnectorFactory {
       authenticationForConnector = protocolToAuthentication.get(connectorURI.getScheme());
 
     }
-    final IMyDataComponent componentConnector = this.getConnector(connectorURI, type,
+    final T componentConnector = this.getConnector(connectorURI, type,
         authenticationForConnector);
     LOG.trace("Leaving getConnector(): {}", componentConnector);
-    // noinspection unchecked
-    return (T) componentConnector;
+    return componentConnector;
   }
 
   /**
@@ -224,10 +223,9 @@ public class ConnectorFactory {
       connectorURI = findHighestPriorityURI(urls);
     }
 
-    final IMyDataComponent componentConnector = this.getConnector(connectorURI, type, credentials);
+    final T componentConnector = this.getConnector(connectorURI, type, credentials);
     LOG.trace("Leaving getConnector(): {}", componentConnector);
-    // noinspection unchecked
-    return (T) componentConnector;
+    return componentConnector;
   }
 
   /**
@@ -270,8 +268,9 @@ public class ConnectorFactory {
       final Connector annotation = connector.getAnnotation(Connector.class);
       final boolean annotationOk = annotation.type() == type;
       final boolean protocolOk = contains(annotation.protocol(), protocol);
+      final boolean isAssignable = type.getInterface().isAssignableFrom(connector);
 
-      if (annotationOk && protocolOk) {
+      if (annotationOk && protocolOk && isAssignable) {
         try {
 
           final Constructor<?> constructor = this.getConstructor(connector, authentication);
