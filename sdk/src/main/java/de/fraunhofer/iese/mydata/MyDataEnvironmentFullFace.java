@@ -851,7 +851,7 @@ final class MyDataEnvironmentFullFace implements IMyDataEnvironmentFullFace {
 
   @Override
   public void destroy() {
-    LOG.warn("--- DESTROY CALLED on IMyDataEnvironment with id {} ---", this.environmentId);
+    LOG.debug("destroy called on MyDataEnvironment with id {}", this.environmentId);
     this.active.set(false);
     final ISyncService syncService = this.syncServiceReference.getAndSet(null);
     if (null != syncService) {
