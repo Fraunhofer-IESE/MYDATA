@@ -29,6 +29,7 @@ import de.fraunhofer.iese.mydata.policy.event.InfoId;
 import de.fraunhofer.iese.mydata.solution.SolutionId;
 import de.fraunhofer.iese.mydata.util.SecureXmlUtils;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -59,7 +60,7 @@ class PolicyValidator4_0 implements IPolicyValidator {
   /**
    * The Constant LOG.
    */
-  private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(PolicyValidator4_0.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PolicyValidator4_0.class);
 
   /**
    * The Constant SCHEMA_RESOURCE_FILEPATH.
@@ -106,9 +107,9 @@ class PolicyValidator4_0 implements IPolicyValidator {
         }
       });
 
-      LOG.info("Successfully loaded schema");
+      LOG.debug("Successfully loaded schema");
     } catch (final SAXException e) {
-      LOG.info("Unable to create schema", e);
+      throw new RuntimeException("Unable to create schema", e);
     }
   }
 

@@ -90,26 +90,26 @@ class TimerValidator4_0 implements ITimerValidator {
       this.validator.setErrorHandler(new ErrorHandler() {
         @Override
         public void error(SAXParseException exception) throws SAXException {
-          LOG.error("Validation error: {}", exception.getMessage(), exception);
+          LOG.debug("Validation error: {}", exception.getMessage(), exception);
           throw exception;
         }
 
         @Override
         public void fatalError(SAXParseException exception) throws SAXException {
-          LOG.error("Validation fatal error: {}", exception.getMessage(), exception);
+          LOG.debug("Validation fatal error: {}", exception.getMessage(), exception);
           throw exception;
         }
 
         @Override
         public void warning(SAXParseException exception) throws SAXException {
-          LOG.error("Validation warning: {}", exception.getMessage(), exception);
+          LOG.debug("Validation warning: {}", exception.getMessage(), exception);
           throw exception;
         }
       });
 
       LOG.info("Successfully loaded schema");
     } catch (final SAXException e) {
-      LOG.error("Unable to create schema", e);
+      throw new RuntimeException("Unable to create schema", e);
     }
   }
 
@@ -117,7 +117,7 @@ class TimerValidator4_0 implements ITimerValidator {
   public void validateXMLSchema(String timerXML) throws InvalidEntityException {
     try {
       this.validator.validate(new StreamSource(new StringReader(timerXML)));
-    } catch (IOException | SAXException e) {
+    } catch (final Exception e) {
       throw new InvalidEntityException("Timer is not valid according to XML Schema", e);
     }
   }

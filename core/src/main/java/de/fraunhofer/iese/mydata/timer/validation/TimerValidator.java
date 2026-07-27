@@ -121,7 +121,16 @@ public class TimerValidator implements ITimerValidator, ConstraintValidator<MyDa
       // TODO add check for cron
       return true;
     } catch (final InvalidEntityException e) {
-      LOG.debug("Policy String is invalid because of: {}", e.getMessage(), e);
+      LOG.debug("Timer String is invalid because of: {}", e.getMessage(), e);
+      String msg = e.getMessage() != null ? e.getMessage() : "";
+      final Throwable cause = e.getCause();
+      if(cause != null && cause.getMessage() != null) {
+        msg += " - " + cause.getMessage();
+      }
+      if(StringUtils.isNotBlank(msg)){
+        context.disableDefaultConstraintViolation();
+        context.buildConstraintViolationWithTemplate(msg).addConstraintViolation();
+      }
       return false;
     }
   }
