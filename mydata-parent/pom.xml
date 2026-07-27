@@ -374,7 +374,7 @@
           <configuration>
             <java>
               <licenseHeader>
-                <file>${maven.multiModuleProjectDirectory}/license-header-java.txt</file>
+                <file>${maven.multiModuleProjectDirectory}/.tooling/license-headers/license-header-java.txt</file>
               </licenseHeader>
             </java>
             <formats>
@@ -383,7 +383,7 @@
                   <include>src/main/resources/**/*.xsd</include>
                 </includes>
                 <licenseHeader>
-                  <file>${maven.multiModuleProjectDirectory}/license-header-xml.txt</file>
+                  <file>${maven.multiModuleProjectDirectory}/.tooling/license-headers/license-header-xml.txt</file>
                   <delimiter>&lt;(schema|(xs|xsd):schema)</delimiter>
                 </licenseHeader>
               </format>
