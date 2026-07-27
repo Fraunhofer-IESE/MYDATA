@@ -71,7 +71,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Entry Point to define reactive Policy Enforcement Points. This Factory has the capability to
@@ -291,7 +290,7 @@ public class RxPepFactory {
     final List<PepInterfaceDescription> duplicateInterfaceDescriptions = interfaceDescriptions
         .stream().filter(existingDescription -> existingDescription.getEvent()
             .equals(pepInterfaceDescription.getEvent()))
-        .collect(Collectors.toList());
+        .toList();
     if (!duplicateInterfaceDescriptions.isEmpty()) {
       throw new IncorrectPepDescriptionError(
           "The event " + pepInterfaceDescription.getEvent() + " for more then one enforcements.");
@@ -301,16 +300,14 @@ public class RxPepFactory {
   /**
    * Filters annotations of type given annotation class.
    *
-   * @param  <T>             the generic type
-   * @param  annotations     the annotations
-   * @param  annotationClass the annotation class
-   * @return                 the annotation of type given annotation class or it returns NULL if
-   *                         there is non.
+   * @param annotations the annotations
+   * @return the annotation of type EventParameter or it returns NULL if
+   * there is no such.
    */
-  private static <T extends Annotation> T filter(Annotation[] annotations, Class<T> annotationClass) {
+  private static EventParameter findEventParameterAnnotation(Annotation[] annotations) {
     for (final Annotation annotation : annotations) {
-      if (annotationClass.isInstance(annotation)) {
-        return annotationClass.cast(annotation);
+      if (annotation instanceof EventParameter eventParameterAnnotation) {
+        return eventParameterAnnotation;
       }
     }
     return null;
@@ -486,9 +483,9 @@ public class RxPepFactory {
   private static List<InputParameterDescription> readEventParameterDetails(Method method) {
     final List<InputParameterDescription> inputParameterDescriptions = new ArrayList<>();
     final Parameter[] parameters = method.getParameters();
-    final Annotation[][] annotation = method.getParameterAnnotations();
-    for (int i = 0; i < annotation.length; i++) {
-      final EventParameter pepParamKey = filter(annotation[i], EventParameter.class);
+    final Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+    for (int i = 0; i < parameterAnnotations.length; i++) {
+      final EventParameter pepParamKey = findEventParameterAnnotation(parameterAnnotations[i]);
       if (pepParamKey != null) {
         inputParameterDescriptions
             .add(new InputParameterDescription(pepParamKey.name(), pepParamKey.description(), true,
