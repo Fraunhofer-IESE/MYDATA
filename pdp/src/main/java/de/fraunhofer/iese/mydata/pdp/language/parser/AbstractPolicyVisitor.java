@@ -105,7 +105,7 @@ public abstract class AbstractPolicyVisitor implements PolicyVisitor {
   }
 
   @Override
-  public void visit(PipOperator pipOperator) {
+  public <T> void visit(PipOperator<T> pipOperator) {
     final List<IFunction> subOperators = pipOperator.getSubOperators();
     if (subOperators != null) {
       subOperators.stream().forEach(operator -> operator.accept(this));
