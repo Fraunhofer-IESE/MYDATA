@@ -25,6 +25,7 @@ package de.fraunhofer.iese.mydata.reactive.test.happy;
 import de.fraunhofer.iese.mydata.JavaNonParameterizedType;
 import de.fraunhofer.iese.mydata.JavaTimeObjects;
 import de.fraunhofer.iese.mydata.User;
+import de.fraunhofer.iese.mydata.pep.modifiers.basic.DeleteModifierMethod;
 import de.fraunhofer.iese.mydata.pep.modifiers.basic.ReplaceModifierMethod;
 import de.fraunhofer.iese.mydata.pep.modifiers.string.AnagramModifierMethod;
 import de.fraunhofer.iese.mydata.pep.modifiers.string.AppendModifierMethod;
@@ -43,9 +44,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @PepServiceDescription(componentName = "cs4")
-// only the three modifiers Append, Replace and Anagram must be added
 @Modifiers(classNames = {
-    AppendModifierMethod.class, ReplaceModifierMethod.class, AnagramModifierMethod.class
+    AppendModifierMethod.class, ReplaceModifierMethod.class, AnagramModifierMethod.class,
+    DeleteModifierMethod.class
 })
 public interface MyRxPepDocumentationAPI {
 

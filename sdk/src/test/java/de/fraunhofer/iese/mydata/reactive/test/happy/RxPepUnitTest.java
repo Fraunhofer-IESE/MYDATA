@@ -126,8 +126,8 @@ class RxPepUnitTest {
         field.setAccessible(true);
         final List<MethodInterfaceDescription> modifierInterfaceDescriptions = (List<MethodInterfaceDescription>) field
             .get(pep);
-        // Append, Replace, Anagram
-        assertEquals(3, modifierInterfaceDescriptions.size());
+        // Append, Replace, Anagram, Delete
+        assertEquals(4, modifierInterfaceDescriptions.size());
       }
     }
   }

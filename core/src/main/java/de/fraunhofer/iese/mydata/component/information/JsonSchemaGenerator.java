@@ -149,20 +149,20 @@ public class JsonSchemaGenerator {
         final Type lGenericType = actualTypeArguments[1];
         final String lGenericTypeName = lGenericType.getTypeName();
         final Class<?> lGenericTypeClass;
+        String classToLookup = lGenericTypeName;
         try {
           if (lGenericType instanceof ParameterizedType) {
-            lGenericTypeClass = Class
-                .forName(((ParameterizedType) lGenericType).getRawType().getTypeName());
-          } else {
-            lGenericTypeClass = Class.forName(lGenericTypeName);
+            classToLookup = ((ParameterizedType) lGenericType).getRawType().getTypeName();
           }
+          lGenericTypeClass = Class.forName(classToLookup);
+
           // found
           genericType = lGenericType;
           genericTypeName = lGenericTypeName;
           genericTypeClass = lGenericTypeClass;
-        } catch (final ClassNotFoundException e) {
-          LOG.warn("Exception in JsonSchemaGenerator.getMapType, fallback by assuming type Object",
-              e);
+        } catch (final ClassNotFoundException _) {
+          LOG.warn("Cannot find class {}, fallback by assuming type Object",
+              classToLookup);
         }
       }
     } else {
@@ -230,21 +230,19 @@ public class JsonSchemaGenerator {
         final Type lGenericType = actualTypeArguments[0];
         final String lGenericTypeName = lGenericType.getTypeName();
         final Class<?> lGenericTypeClass;
+        String classToLookup = lGenericTypeName;
         try {
           if (lGenericType instanceof ParameterizedType) {
-            lGenericTypeClass = Class
-                .forName(((ParameterizedType) lGenericType).getRawType().getTypeName());
-          } else {
-            lGenericTypeClass = Class.forName(lGenericTypeName);
+            classToLookup = ((ParameterizedType) lGenericType).getRawType().getTypeName();
           }
+          lGenericTypeClass = Class.forName(classToLookup);
           // found
           genericType = lGenericType;
           genericTypeName = lGenericTypeName;
           genericTypeClass = lGenericTypeClass;
-        } catch (final ClassNotFoundException e) {
-          LOG.warn(
-              "Exception in JsonSchemaGenerator.getIterableType, fallback by assuming type Object",
-              e);
+        } catch (final ClassNotFoundException _) {
+          LOG.warn("Cannot find class {}, fallback by assuming type Object",
+              classToLookup);
         }
       }
     } else {
@@ -306,7 +304,7 @@ public class JsonSchemaGenerator {
    * Returns all the fields of the class provided including the fields of all its ancestors.
    *
    * @param  anyClass Class to get fields for.
-   * @return          List of fields.
+   * @return          Array of fields.
    */
   static Field[] getAllFields(final Class<?> anyClass) {
     final Map<String, Field> stringFieldMap = new TreeMap<>();
