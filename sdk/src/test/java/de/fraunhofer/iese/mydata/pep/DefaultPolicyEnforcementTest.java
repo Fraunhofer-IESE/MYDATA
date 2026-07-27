@@ -25,9 +25,7 @@ package de.fraunhofer.iese.mydata.pep;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-import de.fraunhofer.iese.mydata.component.ComponentId;
 import de.fraunhofer.iese.mydata.component.interfaces.IPolicyDecisionPoint;
 import de.fraunhofer.iese.mydata.internal.IMyDataEnvironmentFullFace;
 import de.fraunhofer.iese.mydata.pep.common.DecisionEnforcer;
@@ -41,25 +39,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.WARN)
 class DefaultPolicyEnforcementTest {
   private DefaultPolicyEnforcementPoint testCandidate;
 
   @Mock
-  private DecisionEnforcer enforcer;
+  private DecisionEnforcer enforcerMock;
 
   @Mock
-  private IMyDataEnvironmentFullFace myDataEnvironment;
+  private IMyDataEnvironmentFullFace myDataEnvironmentMock;
 
   @BeforeEach
   void setup() {
-    this.testCandidate = new DefaultPolicyEnforcementPoint(this.myDataEnvironment, this.enforcer);
+    this.testCandidate = new DefaultPolicyEnforcementPoint(this.myDataEnvironmentMock, this.enforcerMock);
   }
 
   //TODO check what is the desired behaviour
@@ -75,8 +70,7 @@ class DefaultPolicyEnforcementTest {
   void whenDecisionIsInhibit_ParametersShouldBeCleared() throws Exception {
     final IPolicyDecisionPoint iPolicyDecisionPoint = MockedPdpPmp
         .mockedPDP(AuthorizationDecision.getDecisionInhibit());
-    doReturn(Optional.of(iPolicyDecisionPoint)).when(this.myDataEnvironment).getPdp();
-    when(iPolicyDecisionPoint.getId()).thenReturn(new ComponentId("urn:component:mydata:pdp:pdp"));
+    doReturn(Optional.of(iPolicyDecisionPoint)).when(this.myDataEnvironmentMock).getPdp();
     final Event event = Mockito.mock(Event.class);
     assertThrows(InhibitException.class, () -> this.testCandidate.enforce(event));
     verify(event).clearParameters();
