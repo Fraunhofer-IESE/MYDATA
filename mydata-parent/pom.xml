@@ -57,7 +57,6 @@
     <xercesImpl.version>2.12.2</xercesImpl.version>
 
     <!--additional properties-->
-    <additionalparam>-Xdoclint:none</additionalparam>
     <argLine />
     <timestamp>${maven.build.timestamp}</timestamp>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
@@ -267,6 +266,7 @@
           <configuration>
             <sourcepath>${project.build.directory}/delomboked-sources</sourcepath>
             <detectOfflineLinks>false</detectOfflineLinks>
+            <doclint>all,-missing</doclint>
           </configuration>
           <executions>
             <execution>
