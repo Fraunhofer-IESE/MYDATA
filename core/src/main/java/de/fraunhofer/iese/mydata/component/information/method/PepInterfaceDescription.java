@@ -97,9 +97,10 @@ public class PepInterfaceDescription extends MyDataEntity {
   private PepComponentInformation pepComponentInformation;
 
   /** * List of parameter. */
-  @OneToMany(orphanRemoval = true, mappedBy = "pepInterfaceDescription", cascade = {
+  @OneToMany(orphanRemoval = true, cascade = {
       CascadeType.PERSIST, CascadeType.MERGE
   })
+  @JoinColumn(name = "pep_interface_description_id")
   @Fetch(FetchMode.SUBSELECT)
   @OrderColumn(name = "parameter_order")
   private List<@Valid InputParameterDescription> eventParameterDescription;
@@ -107,7 +108,7 @@ public class PepInterfaceDescription extends MyDataEntity {
   /**
    * Default Constructor, at least required by JPA.s
    */
-  public PepInterfaceDescription() {
+  protected PepInterfaceDescription() {
     // required by JPA
   }
 
@@ -137,9 +138,6 @@ public class PepInterfaceDescription extends MyDataEntity {
     this.isPreventive = isPreventive;
     this.eventParameterDescription = new ArrayList<>();
     this.eventParameterDescription.addAll(eventInputParameters);
-    for (final InputParameterDescription pid : eventInputParameters) {
-      pid.setPepInterfaceDescription(this);
-    }
   }
 
   /*
@@ -206,9 +204,6 @@ public class PepInterfaceDescription extends MyDataEntity {
     this.getEventParameterDescription();
     this.eventParameterDescription.clear();
     this.eventParameterDescription.addAll(eventParameterDescription);
-    for (final InputParameterDescription pid : eventParameterDescription) {
-      pid.setPepInterfaceDescription(this);
-    }
   }
 
 }
