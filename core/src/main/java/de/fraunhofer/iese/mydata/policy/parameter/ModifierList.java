@@ -24,6 +24,8 @@ package de.fraunhofer.iese.mydata.policy.parameter;
 
 import de.fraunhofer.iese.mydata.policy.decision.Modifier;
 
+import jakarta.validation.Valid;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,7 +33,7 @@ import java.util.Collection;
 /**
  * The Class ModifierList.
  */
-public class ModifierList extends ArrayList<Modifier> {
+public class ModifierList extends ArrayList<@Valid Modifier> {
 
   /**
    * The Constant serialVersionUID.

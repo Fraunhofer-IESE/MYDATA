@@ -81,12 +81,11 @@ public class PepComponentInformation extends MyDataEntity {
   /**
    * Set of Modifier.
    */
-  @Valid
   @Fetch(FetchMode.SUBSELECT)
   @OneToMany(orphanRemoval = true, mappedBy = "pepComponentInformation", cascade = {
       CascadeType.PERSIST, CascadeType.MERGE
   })
-  private List<MethodInterfaceDescription> methodInterfaceDescriptions;
+  private List<@Valid MethodInterfaceDescription> methodInterfaceDescriptions;
 
   /**
    * Used for JPA.

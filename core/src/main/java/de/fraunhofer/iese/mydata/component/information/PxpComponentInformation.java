@@ -83,10 +83,9 @@ public class PxpComponentInformation extends MyDataEntity {
    * A description of the methods provided by the {@link PxpComponentInformation} (i.e., its
    * Interface).
    */
-  @Valid
   @OneToMany(orphanRemoval = true, mappedBy = "pxpComponentInformation", cascade = CascadeType.ALL)
   @Fetch(FetchMode.SUBSELECT)
-  private List<MethodInterfaceDescription> methodInterfaceDescriptions;
+  private List<@Valid MethodInterfaceDescription> methodInterfaceDescriptions;
 
   // optional as components in the library do not need a solution..
   @Hide

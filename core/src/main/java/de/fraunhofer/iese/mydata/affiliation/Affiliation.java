@@ -92,15 +92,13 @@ public class Affiliation extends MyDataEntity {
   @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "affiliation", cascade = {
       CascadeType.ALL
   })
-  @Valid
-  private Set<Solution> solutions;
+  private Set<@Valid Solution> solutions;
 
   @Hide
-  @Valid
   @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "affiliation", cascade = {
       CascadeType.PERSIST, CascadeType.MERGE
   })
-  private Set<User> users;
+  private Set<@Valid User> users;
 
   /**
    * Default constructor for JPA

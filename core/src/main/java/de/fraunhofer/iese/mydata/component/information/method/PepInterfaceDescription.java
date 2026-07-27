@@ -97,13 +97,12 @@ public class PepInterfaceDescription extends MyDataEntity {
   private PepComponentInformation pepComponentInformation;
 
   /** * List of parameter. */
-  @Valid
   @OneToMany(orphanRemoval = true, mappedBy = "pepInterfaceDescription", cascade = {
       CascadeType.PERSIST, CascadeType.MERGE
   })
   @Fetch(FetchMode.SUBSELECT)
   @OrderColumn(name = "parameter_order")
-  private List<InputParameterDescription> eventParameterDescription;
+  private List<@Valid InputParameterDescription> eventParameterDescription;
 
   /**
    * Default Constructor, at least required by JPA.s

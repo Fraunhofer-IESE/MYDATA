@@ -109,11 +109,10 @@ public class MethodInterfaceDescription extends MyDataEntity {
   /**
    * A list of parameters.
    */
-  @Valid
   @OneToMany(orphanRemoval = true, mappedBy = "methodInterfaceDescription", cascade = CascadeType.ALL)
   @Fetch(FetchMode.SUBSELECT)
   @OrderColumn(name = "parameter_order")
-  private List<InputParameterDescription> parameters;
+  private List<@Valid InputParameterDescription> parameters;
   // normally set is sufficient. however at runtime, we do not know the parameter names
   // (compiler removes them). Thus a list (with ordered elements) is needed.
 

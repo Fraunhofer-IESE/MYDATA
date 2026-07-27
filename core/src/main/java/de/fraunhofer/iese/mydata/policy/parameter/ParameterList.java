@@ -22,6 +22,8 @@
 
 package de.fraunhofer.iese.mydata.policy.parameter;
 
+import jakarta.validation.Valid;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +34,7 @@ import java.util.Collection;
  *
  * @author Fraunhofer IESE
  */
-public class ParameterList extends ArrayList<Parameter<?>> {
+public class ParameterList extends ArrayList<@Valid Parameter<?>> {
 
   /**
    * The Constant serialVersionUID.

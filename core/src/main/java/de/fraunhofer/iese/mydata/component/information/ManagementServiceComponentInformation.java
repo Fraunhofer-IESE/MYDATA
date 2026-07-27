@@ -44,6 +44,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.validator.constraints.URL;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -66,7 +67,6 @@ public class ManagementServiceComponentInformation extends MyDataEntity {
   /**
    * A list of {@link URI}s that can be used to communicate with the component.
    */
-  @Valid
   @NotEmpty
   @ElementCollection(fetch = FetchType.EAGER)
   @Column(name = "url")
