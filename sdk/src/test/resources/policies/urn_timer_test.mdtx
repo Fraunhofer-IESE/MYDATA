@@ -5,7 +5,7 @@
  xmlns:event='http://www.mydata-control.de/4.0/event' 
  xmlns:constant='http://www.mydata-control.de/4.0/constant' 
  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
- cron="0/5 * * * * *" id="urn:timer:test:log" description="Its my description.">
+ cron="0/5 * * * * ?" id="urn:timer:test:log" description="Its my description.">
 
     <event action="urn:action:test:writeData">
         <parameter:string name="blubb" value="xc"/>
