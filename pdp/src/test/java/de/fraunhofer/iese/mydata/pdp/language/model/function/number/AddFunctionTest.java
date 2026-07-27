@@ -39,23 +39,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * The Class AndOperatorTest.
- */
-public class AddFunctionTest {
+class AddFunctionTest {
   public Evaluation evaluation;
 
-  /**
-   * And operator basic tests.
-   *
-   * @throws EvaluationUndecidableException the evaluation undecidable exception
-   */
   @MethodSource("data")
   @SuppressWarnings({
       "rawtypes", "unchecked"
   })
   @ParameterizedTest(name = "add {0}")
-  public void addOperatorBasicTests(Evaluation evaluation) throws EvaluationUndecidableException {
+  void addOperatorBasicTests(Evaluation evaluation) throws EvaluationUndecidableException {
 
     this.initAddFunctionTest(evaluation);
 
@@ -88,11 +80,6 @@ public class AddFunctionTest {
     assertEquals(evaluation.expectedResult, result.getValue());
   }
 
-  /**
-   * Data.
-   *
-   * @return the collection
-   */
   public static Collection<Object[]> data() {
     return Arrays.asList(new Object[][] {
         {
@@ -112,7 +99,7 @@ public class AddFunctionTest {
         }, {
             new Evaluation(10.4, 1.4, 2, 3, 4)
         }, {
-            new Evaluation(10, 1.5d, 2, 2.5f, 4l)
+            new Evaluation(10, 1.5d, 2, 2.5f, 4L)
         }, {
             new Evaluation(5, 3, "2")
         }, {
@@ -120,11 +107,11 @@ public class AddFunctionTest {
         }, {
             new Evaluation(5, 3, "2.0")
         }, {
-            new Evaluation(new Double(Float.MAX_VALUE), Float.MAX_VALUE, 0)
+            new Evaluation((double) Float.MAX_VALUE, Float.MAX_VALUE, 0)
         }, {
-            new Evaluation(new Double(Float.MAX_VALUE + 1.0d), Float.MAX_VALUE, 1d)
+            new Evaluation(Float.MAX_VALUE + 1.0d, Float.MAX_VALUE, 1d)
         }, {
-            new Evaluation(new Long(Integer.MAX_VALUE + 300l), Integer.MAX_VALUE, 300l)
+            new Evaluation(Integer.MAX_VALUE + 300L, Integer.MAX_VALUE, 300L)
 
         }, {
             new Evaluation(EvaluationUndecidableException.class, 3, "a String")
