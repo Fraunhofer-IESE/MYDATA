@@ -155,7 +155,7 @@ public class ConnectorFactory {
     }
 
     if (urls.size() == 1) {
-      return this.getConnector(urls.iterator().next(), type, null);
+      return this.getConnector(urls.getFirst(), type, null);
     }
 
     URI connectorURI = null;
@@ -206,7 +206,7 @@ public class ConnectorFactory {
     }
 
     if (urls.size() == 1) {
-      return this.getConnector(urls.iterator().next(), type, null);
+      return this.getConnector(urls.getFirst(), type, null);
     }
 
     URI connectorURI = null;
