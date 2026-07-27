@@ -518,9 +518,7 @@ spring:
     username: sa
     password:
     platform: h2
-    driver-class-name: org.h2.Driver
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     show-sql: false
     hibernate:
       ddl-auto: update
@@ -529,7 +527,6 @@ spring:
 
 mydata:
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     show-sql: false
     properties:
       hibernate:
@@ -541,7 +538,6 @@ mydata:
     username: sa
     password:
     platform: h2
-    driver-class-name: org.h2.Driver
   operational-mode: local # choose your operational mode
   timezone: Europe/Berlin # determine the timezone
   solution: urn:solution:my-solution # name your solution
@@ -562,9 +558,7 @@ spring:
     username: sa
     password:
     platform: h2
-    driver-class-name: org.h2.Driver
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     show-sql: false
     hibernate:
       ddl-auto: update
@@ -573,7 +567,6 @@ spring:
 
 mydata:
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     show-sql: false
     properties:
       hibernate:
@@ -585,7 +578,6 @@ mydata:
     username: sa
     password:
     platform: h2
-    driver-class-name: org.h2.Driver
   operational-mode: local-with-file-sync
   sync:
     file-sync:
@@ -605,9 +597,7 @@ spring:
     username: sa
     password:
     platform: h2
-    driver-class-name: org.h2.Driver
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     show-sql: false
     hibernate:
       ddl-auto: update
@@ -616,7 +606,6 @@ spring:
 
 mydata:
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     show-sql: false
     properties:
       hibernate:
@@ -628,7 +617,6 @@ mydata:
     username: sa
     password:
     platform: h2
-    driver-class-name: org.h2.Driver
   operational-mode: local-with-cloud-sync
   sync:
     cloud-sync:
@@ -659,9 +647,7 @@ spring:
     username: sa
     password:
     platform: h2
-    driver-class-name: org.h2.Driver
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     show-sql: false
     hibernate:
       ddl-auto: update
@@ -670,7 +656,6 @@ spring:
 
 mydata:
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     show-sql: false
     properties:
       hibernate:
@@ -682,7 +667,6 @@ mydata:
     username: sa
     password:
     platform: h2
-    driver-class-name: org.h2.Driver
   operational-mode: cloud
   solution: urn:solution:my-solution
   external-server-url: https://my-application.my-example.de # address under which this application instance can be reached
