@@ -35,7 +35,7 @@ import io.reactivex.rxjava3.core.Observable;
 
 @PepServiceDescription(componentName = "smartsite")
 @Modifiers(classNames = {
-    WrongDeclaredModifier.class, NonDefaultConstructorModifier.class, AnagramModifierMethod.class
+    AnagramModifierMethod.class
 })
 public interface DuplicateActionFailInterface {
 

@@ -35,7 +35,7 @@ import io.reactivex.rxjava3.core.Observable;
 
 @PepServiceDescription(componentName = "smartsite")
 @Modifiers(classNames = {
-    WrongDeclaredModifier.class, NonDefaultConstructorModifier.class, AnagramModifierMethod.class
+    AnagramModifierMethod.class
 })
 public interface ExFailInterface {
 
@@ -48,10 +48,5 @@ public interface ExFailInterface {
 
   @EventSpecification(action = "dont-show-project")
   void enforceForSmartsiteProjectDontShow(@EventParameter(name = "user") User user);
-
-  // java 8 features
-  static WrongDeclaredModifier getXYZModifierInstance() {
-    return new WrongDeclaredModifier();
-  }
 
 }
