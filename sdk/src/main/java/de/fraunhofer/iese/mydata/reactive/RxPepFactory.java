@@ -188,7 +188,6 @@ public class RxPepFactory {
     if (annotation != null) {
       final String parameterName = annotation.name();
       final String description = annotation.description();
-      parameterType = annotation.type().equals(Void.class) ? parameterType : annotation.type();
       return new InputParameterDescription(parameterName, description, annotation.mandatory(),
           parameterType);
     }

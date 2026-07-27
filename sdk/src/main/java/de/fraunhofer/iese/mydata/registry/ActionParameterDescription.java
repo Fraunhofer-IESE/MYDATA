@@ -68,13 +68,4 @@ public @interface ActionParameterDescription {
    * @return The parameter name.
    */
   String name();
-
-  /**
-   * Type of the parameter. Per default introspected with method.getReturnType()
-   *
-   * @return Parametertype
-   * @deprecated
-   */
-  @Deprecated
-  Class<?> type() default Void.class;
 }
