@@ -16,6 +16,8 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    env:
+      MAVEN_ARGS: -B -e -V
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -26,6 +28,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Check with Spotless
-        run: mvn -B spotless:check --no-transfer-progress
+        run: ./mvnw spotless:check
       - name: Run tests with JaCoCo
-        run: mvn -B clean verify --no-transfer-progress
+        run: ./mvnw clean verify
