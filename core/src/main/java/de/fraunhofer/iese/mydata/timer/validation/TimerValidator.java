@@ -42,13 +42,15 @@ import java.util.Properties;
  */
 public class TimerValidator implements ITimerValidator, ConstraintValidator<MyDataTimer, String> {
 
-  private static final String SUPPORTED_LANGUAGE_VERSION = "4.0";
+  private static final String DEFAULT_SUPPORTED_LANGUAGE_VERSION = "4.0";
+  private static final String FILENAME = "application.properties";
+  private static final String SUPPORTEDLANGUAGE_VERSION_PROPERTY = "mydata.supportedlanguage.version";
 
   private static final ITimerValidator TIMER_VALIDATOR_3_2 = new TimerValidator3_2();
 
   private static final ITimerValidator TIMER_VALIDATOR_4_0 = new TimerValidator4_0();
 
-  private String supportedLanguageVersion = SUPPORTED_LANGUAGE_VERSION;
+  private final String supportedLanguageVersion;
 
   /**
    * The logger.
@@ -56,28 +58,23 @@ public class TimerValidator implements ITimerValidator, ConstraintValidator<MyDa
   private static final Logger LOG = LoggerFactory.getLogger(TimerValidator.class);
 
   public TimerValidator() {
-    final Properties prop = new Properties();
-    InputStream input = null;
-
-    final String filename = "application.properties";
-    input = this.getClass().getClassLoader().getResourceAsStream(filename);
-    if (input == null) {
-      LOG.warn(
-          "Could not find application properties file {}, use default supported language version {}",
-          filename, SUPPORTED_LANGUAGE_VERSION);
-      return;
-    }
-
-    // load a properties file from class path, inside static method
-    try {
-      prop.load(input);
-    } catch (final IOException e) {
+    String supportedLanguageVersionToUse = DEFAULT_SUPPORTED_LANGUAGE_VERSION;
+    try (final InputStream input = this.getClass().getClassLoader().getResourceAsStream(FILENAME)) {
+      if (null == input) {
+        LOG.warn(
+            "Could not find application properties file {}, use default supported language version {}",
+            FILENAME, DEFAULT_SUPPORTED_LANGUAGE_VERSION);
+      } else {
+        final Properties prop = new Properties();
+        prop.load(input);
+        supportedLanguageVersionToUse = prop.getProperty(SUPPORTEDLANGUAGE_VERSION_PROPERTY, DEFAULT_SUPPORTED_LANGUAGE_VERSION);
+      }
+    } catch (IOException e) {
       LOG.warn("Could not parse the properties file {}, use default supported language version {}",
-          filename, SUPPORTED_LANGUAGE_VERSION, e);
+          FILENAME, DEFAULT_SUPPORTED_LANGUAGE_VERSION, e);
+    } finally {
+      this.supportedLanguageVersion = supportedLanguageVersionToUse;
     }
-    this.supportedLanguageVersion = prop.getProperty("mydata.supportedlanguage.version",
-        SUPPORTED_LANGUAGE_VERSION);
-
   }
 
   @Override
@@ -110,7 +107,7 @@ public class TimerValidator implements ITimerValidator, ConstraintValidator<MyDa
    * Use this method to test the constraint.
    *
    * @see jakarta.validation.ConstraintValidator#isValid(java.lang.Object,
-   *      jakarta.validation.ConstraintValidatorContext)
+   * jakarta.validation.ConstraintValidatorContext)
    */
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
@@ -121,7 +118,16 @@ public class TimerValidator implements ITimerValidator, ConstraintValidator<MyDa
       // TODO add check for cron
       return true;
     } catch (final InvalidEntityException e) {
-      LOG.debug("Policy String is invalid because of: {}", e.getMessage(), e);
+      LOG.debug("Timer String is invalid because of: {}", e.getMessage(), e);
+      String msg = e.getMessage() != null ? e.getMessage() : "";
+      final Throwable cause = e.getCause();
+      if (cause != null && cause.getMessage() != null) {
+        msg += " - " + cause.getMessage();
+      }
+      if (StringUtils.isNotBlank(msg)) {
+        context.disableDefaultConstraintViolation();
+        context.buildConstraintViolationWithTemplate(msg).addConstraintViolation();
+      }
       return false;
     }
   }
@@ -154,7 +160,7 @@ public class TimerValidator implements ITimerValidator, ConstraintValidator<MyDa
     if (!timer.getContent()
         .contains("http://www.iese.fraunhofer.de/ind2uce/" + this.supportedLanguageVersion)
         && !timer.getContent()
-            .contains("http://www.mydata-control.de/" + this.supportedLanguageVersion)) {
+        .contains("http://www.mydata-control.de/" + this.supportedLanguageVersion)) {
       timer.setLanguageValid(false);
       throw new InvalidEntityException(
           "The language version is outdated, please update your timers first.");

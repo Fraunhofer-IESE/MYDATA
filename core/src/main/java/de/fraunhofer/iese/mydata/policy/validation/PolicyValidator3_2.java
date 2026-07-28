@@ -27,6 +27,7 @@ import de.fraunhofer.iese.mydata.policy.event.ActionId;
 import de.fraunhofer.iese.mydata.solution.SolutionId;
 import de.fraunhofer.iese.mydata.util.SecureXmlUtils;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -61,7 +62,7 @@ class PolicyValidator3_2 implements IPolicyValidator {
   /**
    * The Constant LOG.
    */
-  private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(PolicyValidator3_2.class);
+  private static final Logger LOG = LoggerFactory.getLogger(PolicyValidator3_2.class);
 
   /**
    * The Constant SCHEMA_RESOURCE_FILEPATH.
@@ -69,14 +70,9 @@ class PolicyValidator3_2 implements IPolicyValidator {
   private static final String SCHEMA_RESOURCE_FILEPATH = "/languageSchema3_2/ind2uceLanguage.xsd";
 
   /**
-   * The schema.
-   */
-  private Schema schema;
-
-  /**
    * The validator.
    */
-  private Validator validator;
+  private final Validator validator;
 
   public PolicyValidator3_2() {
     try {
@@ -84,9 +80,9 @@ class PolicyValidator3_2 implements IPolicyValidator {
           .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
       schemaFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       final URL url = PolicyValidator3_2.class.getResource(SCHEMA_RESOURCE_FILEPATH);
-      this.schema = schemaFactory.newSchema(url);
+      final Schema schema = schemaFactory.newSchema(url);
 
-      this.validator = this.schema.newValidator();
+      this.validator = schema.newValidator();
       this.validator.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       this.validator.setErrorHandler(new ErrorHandler() {
         @Override
@@ -108,9 +104,9 @@ class PolicyValidator3_2 implements IPolicyValidator {
         }
       });
 
-      LOG.info("Successfully loaded schema");
+      LOG.debug("Successfully loaded schema");
     } catch (final SAXException e) {
-      LOG.info("Unable to create schema", e);
+      throw new RuntimeException("Unable to create schema", e);
     }
   }
 
@@ -122,15 +118,6 @@ class PolicyValidator3_2 implements IPolicyValidator {
       throw new InvalidEntityException("Policy is not valid according to XML Schema", e);
     }
   }
-
-  //  private Document getDocument(String p)
-  //      throws SAXException, IOException, ParserConfigurationException {
-  //    final DocumentBuilderFactory documentumentBuilderFactory = DocumentBuilderFactory.newInstance();
-  //    documentumentBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-  //    documentumentBuilderFactory.setNamespaceAware(true);
-  //    final DocumentBuilder documentumentBuilder = documentumentBuilderFactory.newDocumentBuilder();
-  //    return documentumentBuilder.parse(new InputSource(new StringReader(p)));
-  //  }
 
   @Override
   public void validatePolicySolutionAndComponents(SolutionId solutionId, String p)
@@ -155,12 +142,12 @@ class PolicyValidator3_2 implements IPolicyValidator {
           b.append(error);
           b.append("\n");
         }
-        throw new IllegalArgumentException(b.toString());
+        throw new InvalidEntityException(b.toString());
       }
 
     } catch (IOException | SAXException | XPathExpressionException
         | ParserConfigurationException e) {
-      throw new IllegalArgumentException("Policy validation failed", e);
+      throw new InvalidEntityException("Policy validation failed", e);
     }
 
   }

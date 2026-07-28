@@ -28,6 +28,7 @@ import de.fraunhofer.iese.mydata.policy.validation.SimpleNamespaceContext;
 import de.fraunhofer.iese.mydata.solution.SolutionId;
 import de.fraunhofer.iese.mydata.util.SecureXmlUtils;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -64,7 +65,7 @@ class TimerValidator3_2 implements ITimerValidator {
   /**
    * The Constant LOG.
    */
-  private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(TimerValidator3_2.class);
+  private static final Logger LOG = LoggerFactory.getLogger(TimerValidator3_2.class);
 
   /**
    * The Constant SCHEMA_RESOURCE_FILEPATH.
@@ -72,14 +73,9 @@ class TimerValidator3_2 implements ITimerValidator {
   private static final String SCHEMA_RESOURCE_FILEPATH = "/languageSchema3_2/ind2uceLanguageTimer.xsd";
 
   /**
-   * The schema.
-   */
-  private Schema schema;
-
-  /**
    * The validator.
    */
-  private Validator validator;
+  private final Validator validator;
 
   public TimerValidator3_2() {
     try {
@@ -87,43 +83,42 @@ class TimerValidator3_2 implements ITimerValidator {
           .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
       schemaFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       final URL url = TimerValidator3_2.class.getResource(SCHEMA_RESOURCE_FILEPATH);
-      this.schema = schemaFactory.newSchema(url);
+      final Schema schema = schemaFactory.newSchema(url);
 
-      this.validator = this.schema.newValidator();
+      this.validator = schema.newValidator();
       this.validator.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       this.validator.setErrorHandler(new ErrorHandler() {
         @Override
         public void error(SAXParseException exception) throws SAXException {
-          LOG.error("Validation error: {}", exception.getMessage());
+          LOG.debug("Validation error: {}", exception.getMessage());
           throw exception;
         }
 
         @Override
         public void fatalError(SAXParseException exception) throws SAXException {
-          LOG.error("Validation fatal error: {}", exception.getMessage());
+          LOG.debug("Validation fatal error: {}", exception.getMessage());
           throw exception;
         }
 
         @Override
         public void warning(SAXParseException exception) throws SAXException {
-          LOG.error("Validation warning: {}", exception.getMessage());
+          LOG.debug("Validation warning: {}", exception.getMessage());
           throw exception;
         }
       });
 
-      LOG.info("Successfully loaded schema");
+      LOG.debug("Successfully loaded schema");
     } catch (final SAXException e) {
-      LOG.error("Unable to create schema", e);
+      throw new RuntimeException("Unable to create schema", e);
     }
   }
 
   @Override
-  public void validateXMLSchema(String timerXML) {
+  public void validateXMLSchema(String timerXML) throws InvalidEntityException {
     try {
       this.validator.validate(new StreamSource(new StringReader(timerXML)));
-    } catch (IOException | SAXException e) {
-      LOG.info("Exception: {}", e.getMessage());
-      throw new IllegalArgumentException("Timer is not valid according to XML Schema", e);
+    } catch (final Exception e) {
+      throw new InvalidEntityException("Timer is not valid according to XML Schema", e);
     }
   }
 
@@ -162,12 +157,12 @@ class TimerValidator3_2 implements ITimerValidator {
           b.append(error);
           b.append("\n");
         }
-        throw new IllegalArgumentException(b.toString());
+        throw new InvalidEntityException(b.toString());
       }
 
     } catch (IOException | SAXException | XPathExpressionException | ParserConfigurationException
         | XPathFactoryConfigurationException e) {
-      throw new IllegalArgumentException("Timer validation failed", e);
+      throw new InvalidEntityException("Timer validation failed", e);
     }
 
   }

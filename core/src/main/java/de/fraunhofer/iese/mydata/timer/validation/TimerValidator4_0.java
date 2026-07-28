@@ -68,14 +68,9 @@ class TimerValidator4_0 implements ITimerValidator {
   private static final String SCHEMA_RESOURCE_FILEPATH = "/languageSchema4_0/mydataLanguageTimer.xsd";
 
   /**
-   * The schema.
-   */
-  private Schema schema;
-
-  /**
    * The validator.
    */
-  private Validator validator;
+  private final Validator validator;
 
   public TimerValidator4_0() {
     try {
@@ -83,33 +78,33 @@ class TimerValidator4_0 implements ITimerValidator {
           .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
       schemaFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       final URL url = TimerValidator4_0.class.getResource(SCHEMA_RESOURCE_FILEPATH);
-      this.schema = schemaFactory.newSchema(url);
+      final Schema schema = schemaFactory.newSchema(url);
 
-      this.validator = this.schema.newValidator();
+      this.validator = schema.newValidator();
       this.validator.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       this.validator.setErrorHandler(new ErrorHandler() {
         @Override
         public void error(SAXParseException exception) throws SAXException {
-          LOG.error("Validation error: {}", exception.getMessage(), exception);
+          LOG.debug("Validation error: {}", exception.getMessage(), exception);
           throw exception;
         }
 
         @Override
         public void fatalError(SAXParseException exception) throws SAXException {
-          LOG.error("Validation fatal error: {}", exception.getMessage(), exception);
+          LOG.debug("Validation fatal error: {}", exception.getMessage(), exception);
           throw exception;
         }
 
         @Override
         public void warning(SAXParseException exception) throws SAXException {
-          LOG.error("Validation warning: {}", exception.getMessage(), exception);
+          LOG.debug("Validation warning: {}", exception.getMessage(), exception);
           throw exception;
         }
       });
 
       LOG.info("Successfully loaded schema");
     } catch (final SAXException e) {
-      LOG.error("Unable to create schema", e);
+      throw new RuntimeException("Unable to create schema", e);
     }
   }
 
@@ -117,7 +112,7 @@ class TimerValidator4_0 implements ITimerValidator {
   public void validateXMLSchema(String timerXML) throws InvalidEntityException {
     try {
       this.validator.validate(new StreamSource(new StringReader(timerXML)));
-    } catch (IOException | SAXException e) {
+    } catch (final Exception e) {
       throw new InvalidEntityException("Timer is not valid according to XML Schema", e);
     }
   }

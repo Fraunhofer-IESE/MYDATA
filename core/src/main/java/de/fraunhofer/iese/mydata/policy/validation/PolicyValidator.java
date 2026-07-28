@@ -42,7 +42,9 @@ import java.util.Properties;
 public class PolicyValidator
     implements IPolicyValidator, ConstraintValidator<MyDataPolicy, String> {
 
-  private static final String SUPPORTED_LANGUAGE_VERSION = "4.0";
+  private static final String DEFAULT_SUPPORTED_LANGUAGE_VERSION = "4.0";
+  private static final String FILENAME = "application.properties";
+  private static final String SUPPORTEDLANGUAGE_VERSION_PROPERTY = "mydata.supportedlanguage.version";
 
   @SuppressWarnings("deprecation")
   private static final IPolicyValidator POLICY_VALIDATOR_3_0 = new PolicyValidator3_0();
@@ -51,7 +53,7 @@ public class PolicyValidator
 
   private static final IPolicyValidator POLICY_VALIDATOR_4_0 = new PolicyValidator4_0();
 
-  private String supportedLanguageVersion = SUPPORTED_LANGUAGE_VERSION;
+  private final String supportedLanguageVersion;
 
   /**
    * The logger.
@@ -59,27 +61,23 @@ public class PolicyValidator
   private static final Logger LOG = LoggerFactory.getLogger(PolicyValidator.class);
 
   public PolicyValidator() {
-    final Properties prop = new Properties();
-    InputStream input = null;
-
-    final String filename = "application.properties";
-    input = this.getClass().getClassLoader().getResourceAsStream(filename);
-    if (input == null) {
+    String supportedLanguageVersionToUse = DEFAULT_SUPPORTED_LANGUAGE_VERSION;
+    try (final InputStream input = this.getClass().getClassLoader().getResourceAsStream(FILENAME)) {
+      if (null == input) {
+        LOG.warn(
+            "Could not find application properties file {}, use default supported language version {}",
+            FILENAME, DEFAULT_SUPPORTED_LANGUAGE_VERSION);
+      } else {
+        final Properties prop = new Properties();
+        prop.load(input);
+        supportedLanguageVersionToUse = prop.getProperty(SUPPORTEDLANGUAGE_VERSION_PROPERTY, DEFAULT_SUPPORTED_LANGUAGE_VERSION);
+      }
+    } catch (IOException e) {
       LOG.warn("Could not parse the properties file {}, use default supported language version {}",
-          filename, SUPPORTED_LANGUAGE_VERSION);
-      return;
+          FILENAME, DEFAULT_SUPPORTED_LANGUAGE_VERSION, e);
+    } finally {
+      this.supportedLanguageVersion = supportedLanguageVersionToUse;
     }
-
-    // load a properties file from class path, inside static method
-    try {
-      prop.load(input);
-    } catch (final IOException e) {
-      LOG.warn("Could not parse the properties file {}, use default supported language version {}",
-          filename, SUPPORTED_LANGUAGE_VERSION, e);
-    }
-    this.supportedLanguageVersion = prop.getProperty("mydata.supportedlanguage.version",
-        SUPPORTED_LANGUAGE_VERSION);
-
   }
 
   @Override
@@ -173,6 +171,15 @@ public class PolicyValidator
       return true;
     } catch (final InvalidEntityException e) {
       LOG.debug("Policy String is invalid because of: {}", e.getMessage(), e);
+      String msg = e.getMessage() != null ? e.getMessage() : "";
+      final Throwable cause = e.getCause();
+      if(cause != null && cause.getMessage() != null) {
+        msg += " - " + cause.getMessage();
+      }
+      if(StringUtils.isNotBlank(msg)){
+        context.disableDefaultConstraintViolation();
+        context.buildConstraintViolationWithTemplate(msg).addConstraintViolation();
+      }
       return false;
     }
   }
