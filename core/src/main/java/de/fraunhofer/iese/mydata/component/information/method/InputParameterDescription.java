@@ -22,7 +22,6 @@
 
 package de.fraunhofer.iese.mydata.component.information.method;
 
-import de.fraunhofer.iese.mydata.common.Hide;
 import de.fraunhofer.iese.mydata.common.MyDataEntity;
 import de.fraunhofer.iese.mydata.component.information.JsonSchemaGenerator;
 
@@ -35,7 +34,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -91,20 +89,10 @@ public class InputParameterDescription extends MyDataEntity {
   @JoinColumn(name = "type_description_id")
   private TypeDescription typeDescription;
 
-  @Hide
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "method_interface_description_id")
-  private MethodInterfaceDescription methodInterfaceDescription;
-
-  @Hide
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "pep_interface_description_id")
-  private PepInterfaceDescription pepInterfaceDescription;
-
   /**
    * Instantiates a new input parameter description for JPA.
    */
-  InputParameterDescription() {
+  protected InputParameterDescription() {
     // required by JPA
   }
 

@@ -80,10 +80,9 @@ public class TypeDescription extends MyDataEntity {
   @ElementCollection(fetch = FetchType.EAGER)
   private Map<String, String> fieldTypeNames = new HashMap<>();
 
-  @Valid
   @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @MapKey(name = "typeName")
-  private Map<String, TypeDescription> referencedTypeDescriptions;
+  private Map<String, @Valid TypeDescription> referencedTypeDescriptions;
 
   @Transient
   @Hide

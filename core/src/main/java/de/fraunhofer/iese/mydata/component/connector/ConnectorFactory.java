@@ -123,6 +123,13 @@ public class ConnectorFactory {
     return false;
   }
 
+  private static URI findHighestPriorityURI(final List<URI> urls) {
+    final ArrayList<URI> sortedUrls = new ArrayList<>(urls);
+    // Sort urls with respect to the defined priority
+    sortedUrls.sort(Comparator.<URI>comparingInt(uri -> connectorPriorities.indexOf(uri.getScheme())).reversed());
+    return sortedUrls.getFirst();
+  }
+
   /**
    * Uses reflection to lookup a connector class and instantiates it for a certain communication
    * protocol.
@@ -148,7 +155,7 @@ public class ConnectorFactory {
     }
 
     if (urls.size() == 1) {
-      return this.getConnector(urls.iterator().next(), type, null);
+      return this.getConnector(urls.getFirst(), type, null);
     }
 
     URI connectorURI = null;
@@ -164,22 +171,7 @@ public class ConnectorFactory {
     }
 
     if (connectorURI == null) {
-      final ArrayList<URI> sortedUrls = new ArrayList<>(urls);
-      // Sort urls with respect to the defined priority
-      sortedUrls.sort(new Comparator<URI>() {
-        @Override
-        public int compare(URI o1, URI o2) {
-          final Integer prio1 = this.getPriority(o1.getScheme());
-          final Integer prio2 = this.getPriority(o2.getScheme());
-          return -prio1.compareTo(prio2);
-        }
-
-        private int getPriority(String protocol) {
-          return connectorPriorities.indexOf(protocol);
-        }
-      });
-
-      connectorURI = sortedUrls.get(0);
+      connectorURI = findHighestPriorityURI(urls);
     }
     Authentication authenticationForConnector = null;
     if (protocolToAuthentication != null
@@ -187,11 +179,10 @@ public class ConnectorFactory {
       authenticationForConnector = protocolToAuthentication.get(connectorURI.getScheme());
 
     }
-    final IMyDataComponent componentConnector = this.getConnector(connectorURI, type,
+    final T componentConnector = this.getConnector(connectorURI, type,
         authenticationForConnector);
     LOG.trace("Leaving getConnector(): {}", componentConnector);
-    // noinspection unchecked
-    return (T) componentConnector;
+    return componentConnector;
   }
 
   /**
@@ -215,7 +206,7 @@ public class ConnectorFactory {
     }
 
     if (urls.size() == 1) {
-      return this.getConnector(urls.iterator().next(), type, null);
+      return this.getConnector(urls.getFirst(), type, null);
     }
 
     URI connectorURI = null;
@@ -229,28 +220,12 @@ public class ConnectorFactory {
     }
 
     if (connectorURI == null) {
-      final ArrayList<URI> sortedUrls = new ArrayList<>(urls);
-      // Sort urls with respect to the defined priority
-      sortedUrls.sort(new Comparator<URI>() {
-        @Override
-        public int compare(URI o1, URI o2) {
-          final Integer prio1 = this.getPriority(o1.getScheme());
-          final Integer prio2 = this.getPriority(o2.getScheme());
-          return -prio1.compareTo(prio2);
-        }
-
-        private int getPriority(String protocol) {
-          return connectorPriorities.indexOf(protocol);
-        }
-      });
-
-      connectorURI = sortedUrls.get(0);
+      connectorURI = findHighestPriorityURI(urls);
     }
 
-    final IMyDataComponent componentConnector = this.getConnector(connectorURI, type, credentials);
+    final T componentConnector = this.getConnector(connectorURI, type, credentials);
     LOG.trace("Leaving getConnector(): {}", componentConnector);
-    // noinspection unchecked
-    return (T) componentConnector;
+    return componentConnector;
   }
 
   /**
@@ -293,8 +268,9 @@ public class ConnectorFactory {
       final Connector annotation = connector.getAnnotation(Connector.class);
       final boolean annotationOk = annotation.type() == type;
       final boolean protocolOk = contains(annotation.protocol(), protocol);
+      final boolean isAssignable = type.getInterface().isAssignableFrom(connector);
 
-      if (annotationOk && protocolOk) {
+      if (annotationOk && protocolOk && isAssignable) {
         try {
 
           final Constructor<?> constructor = this.getConstructor(connector, authentication);

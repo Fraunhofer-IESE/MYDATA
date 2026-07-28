@@ -87,8 +87,7 @@ public class HistoricEvent {
    * Event parameters.
    */
   @OneToMany(orphanRemoval = true, mappedBy = "historicEvent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @Valid
-  private Collection<HistoricEventParameter> historicEventParameters;
+  private Collection<@Valid HistoricEventParameter> historicEventParameters;
 
   /**
    * Event occurred at. millisecond since epoch

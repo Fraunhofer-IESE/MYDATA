@@ -40,10 +40,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.OrderColumn;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
@@ -109,18 +111,18 @@ public class MethodInterfaceDescription extends MyDataEntity {
   /**
    * A list of parameters.
    */
-  @Valid
-  @OneToMany(orphanRemoval = true, mappedBy = "methodInterfaceDescription", cascade = CascadeType.ALL)
+  @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+  @JoinColumn(name = "method_interface_description_id")
   @Fetch(FetchMode.SUBSELECT)
   @OrderColumn(name = "parameter_order")
-  private List<InputParameterDescription> parameters;
+  private List<@Valid InputParameterDescription> parameters;
   // normally set is sufficient. however at runtime, we do not know the parameter names
   // (compiler removes them). Thus a list (with ordered elements) is needed.
 
   /**
    * Instantiates a new method interface description.
    */
-  MethodInterfaceDescription() {
+  protected MethodInterfaceDescription() {
     // required by JPA
   }
 
@@ -162,9 +164,6 @@ public class MethodInterfaceDescription extends MyDataEntity {
     this.methodName = methodName;
     this.parameters = new ArrayList<>();
     this.parameters.addAll(parameters);
-    for (final InputParameterDescription pid : this.parameters) {
-      pid.setMethodInterfaceDescription(this);
-    }
 
     this.setReturnType(returnType);
     // TODO Check difference with this.returnType =
@@ -179,7 +178,6 @@ public class MethodInterfaceDescription extends MyDataEntity {
    */
   public void addParameter(InputParameterDescription param) {
     this.parameters.add(param);
-    param.setMethodInterfaceDescription(this);
   }
 
   /*
@@ -188,8 +186,7 @@ public class MethodInterfaceDescription extends MyDataEntity {
    */
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof MethodInterfaceDescription) {
-      final MethodInterfaceDescription mid = (MethodInterfaceDescription) obj;
+    if (obj instanceof MethodInterfaceDescription mid) {
       if (!Objects.equal(this.getReturnType(), mid.getReturnType())) {
         return false;
       }
@@ -249,8 +246,5 @@ public class MethodInterfaceDescription extends MyDataEntity {
     this.getParameters();
     this.parameters.clear();
     this.parameters.addAll(parameters);
-    for (final InputParameterDescription pid : parameters) {
-      pid.setMethodInterfaceDescription(this);
-    }
   }
 }

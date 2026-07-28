@@ -66,11 +66,12 @@ public class JsonPathDecisionEnforcer implements DecisionEnforcer {
   public boolean addModificationMethod(ModifierMethod method) {
     if (method.nameIsValid()) {
       this.modifiers.put(method.getDisplayName(), method);
-      LOG.info("Modifiers is added to the list of modifiers: {}", method.getDisplayName());
+      LOG.info("Modifier {} is added to the list of modifiers as {}", method.getClass().getName(), method.getDisplayName());
       return true;
     } else {
       LOG.warn(
-          "Modifiers was not added to the list of modifiers because the display name does not match the method name: {}",
+          "Modifier {} was not added to the list of modifiers because the method name does not match the display name {}",
+          method.getClass().getName(),
           method.getDisplayName());
       return false;
     }

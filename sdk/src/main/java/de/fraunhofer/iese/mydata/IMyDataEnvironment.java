@@ -51,24 +51,24 @@ import java.util.Optional;
  * pay special attention when registering PIP/PXP components because they need
  * to be accessible to the PDP. Currently we distinguish three modes in which a
  * service component can be registered to the MyDataEnvironment:
- * <p>
+ *
  * <ul>
  * <li><b>local:</b> component instance will be registered to the
  * MyDataEnvironment, will be accessible to local PDP and component information
  * will be published to PMP; no need to provide further information like URL.
- * see {@link #registerLocalPip(ComponentId, Object)}
+ * see {@link #registerLocalPip(ComponentId, Object)}</li>
  * <li><b>managed:</b> component instance will be registered to the
  * MyDataEnvironment, can programmatically be retrieved via
  * {@link #getManagedPip(ComponentId)}/{@link #getManagedPxp(ComponentId)} and
  * the corresponding component information is published to the PMP. <b>You are
  * in charge to make the component accessible for the PDP under the specified
- * URL.</b> see {@link #registerManagedPip(ComponentId, Object, List)}
+ * URL.</b> see {@link #registerManagedPip(ComponentId, Object, List)}</li>
  * <li><b>unmanaged:</b> component will not be managed by the MyDataEnvironment,
  * only the component information is published to the PMP. <b>You are in charge
  * to make the component accessible for the PDP.</b> see
- * {@link #registerUnmanagedPip(PipComponentInformation)}
+ * {@link #registerUnmanagedPip(PipComponentInformation)}</li>
  * </ul>
- * <p>
+ *
  * {@link IMyDataEnvironment} instances can be created and retrieved by using the
  * {@link MyDataEnvironmentManager}
  *

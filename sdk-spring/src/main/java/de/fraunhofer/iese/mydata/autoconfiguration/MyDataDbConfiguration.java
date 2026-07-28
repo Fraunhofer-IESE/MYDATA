@@ -41,6 +41,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import javax.sql.DataSource;
@@ -85,24 +86,28 @@ public class MyDataDbConfiguration {
   private EntityManagerFactoryBuilder createEntityManagerFactoryBuilder(
       JpaProperties jpaProperties) {
     final JpaVendorAdapter jpaVendorAdapter = this.createJpaVendorAdapter(jpaProperties);
-    final Function<DataSource, Map<String, ?>> jpaPropertiesFactory = (dataSource) -> this
-        .createJpaProperties(dataSource, jpaProperties.getProperties());
+    final Function<DataSource, Map<String, ?>> jpaPropertiesFactory = _ -> this
+        .createJpaProperties(jpaProperties.getProperties());
     return new EntityManagerFactoryBuilder(jpaVendorAdapter, jpaPropertiesFactory, null);
   }
 
   private JpaVendorAdapter createJpaVendorAdapter(JpaProperties jpaProperties) {
     final HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
     adapter.setShowSql(jpaProperties.isShowSql());
-    adapter.setDatabase(jpaProperties.getDatabase());
-    adapter.setDatabasePlatform(jpaProperties.getDatabasePlatform());
     adapter.setGenerateDdl(jpaProperties.isGenerateDdl());
+
+    Optional.ofNullable(jpaProperties.getDatabase())
+        .ifPresent(adapter::setDatabase);
+
+    Optional.ofNullable(jpaProperties.getDatabasePlatform())
+        .filter(platform -> !platform.isBlank())
+        .ifPresent(adapter::setDatabasePlatform);
+
     return adapter;
   }
 
-  private Map<String, ?> createJpaProperties(DataSource dataSource,
-      Map<String, ?> existingProperties) {
-    final Map<String, ?> jpaProperties = new LinkedHashMap<>(existingProperties);
-    return jpaProperties;
+  private Map<String, ?> createJpaProperties(Map<String, ?> existingProperties) {
+    return new LinkedHashMap<>(existingProperties);
   }
 
   @Bean(name = "mydataTransactionManager", defaultCandidate = false)

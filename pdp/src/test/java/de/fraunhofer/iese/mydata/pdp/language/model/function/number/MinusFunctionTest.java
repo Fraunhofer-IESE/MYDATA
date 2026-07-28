@@ -55,7 +55,7 @@ public class MinusFunctionTest {
       "rawtypes", "unchecked"
   })
   @ParameterizedTest(name = "minus {0}")
-  public void minusOperatorBasicTests(Evaluation evaluation) throws EvaluationUndecidableException {
+  void minusOperatorBasicTests(Evaluation evaluation) throws EvaluationUndecidableException {
 
     this.initMinusFunctionTest(evaluation);
 
@@ -120,9 +120,9 @@ public class MinusFunctionTest {
         }, {
             new Evaluation(1, 3, "2.0")
         }, {
-            new Evaluation(new Double(Float.MAX_VALUE), Float.MAX_VALUE, 0)
+            new Evaluation((double) Float.MAX_VALUE, Float.MAX_VALUE, 0)
         }, {
-            new Evaluation(new Double(Float.MAX_VALUE - 1.0d), Float.MAX_VALUE, 1d)
+            new Evaluation(Float.MAX_VALUE - 1.0d, Float.MAX_VALUE, 1d)
         }, {
             new Evaluation(Integer.MAX_VALUE - 300, Integer.MAX_VALUE, 300l)
 

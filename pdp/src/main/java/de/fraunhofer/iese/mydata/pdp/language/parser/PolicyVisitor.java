@@ -60,7 +60,7 @@ public interface PolicyVisitor {
 
   void visit(VariableReference varialbleReference);
 
-  void visit(PipOperator pipOperator);
+  <T> void visit(PipOperator<T> pipOperator);
 
   void visit(ExecuteFunction executeFunction);
 

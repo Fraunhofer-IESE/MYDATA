@@ -88,10 +88,9 @@ public class PipComponentInformation extends MyDataEntity {
    * A description of the methods provided by the {@link PipComponentInformation} (i.e., its
    * Interface).
    */
-  @Valid
   @OneToMany(orphanRemoval = true, mappedBy = "pipComponentInformation", cascade = CascadeType.ALL)
   @Fetch(FetchMode.SUBSELECT)
-  private List<MethodInterfaceDescription> methodInterfaceDescriptions;
+  private List<@Valid MethodInterfaceDescription> methodInterfaceDescriptions;
 
   /**
    * Default constructor for JPA.

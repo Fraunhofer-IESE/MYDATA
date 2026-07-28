@@ -58,8 +58,7 @@ public class Modifier extends MyDataEntity {
   /**
    * An Engine used to modify the parameter value.
    */
-  @Valid
-  private List<ModifierEngine> engine;
+  private List<@Valid ModifierEngine> engine;
 
   /**
    * Instantiates a new modifier.

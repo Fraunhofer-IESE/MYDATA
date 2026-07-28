@@ -83,7 +83,7 @@ Action methods are annotated with `@ActionDescription`, which has the following 
 * for each parameter annotated by `@ActionParameterDescription`, the following information is specified:
 ** `name` (As Java drops the parameter names per default, this could not be introspected by the registration discovery)
 ** `description` (optional) of the purpose of the parameter.
-** `mandatory` (default false) if the parameter is mandatory to use this PIP. Be aware when setting parameters with primitive datatypes as optional.In that case the default value of the datatype is assigned when the function is called.Better use wrapper datatypes as Boolean for example.
+** `mandatory` (default false) if the parameter is mandatory to use this PIP. Be aware when setting parameters with primitive datatypes as optional. In that case the default value of the datatype is assigned when the function is called.Better use wrapper datatypes as Boolean for example.
 
 Here is an example for a PIP Action Method in an `PipService`:
 

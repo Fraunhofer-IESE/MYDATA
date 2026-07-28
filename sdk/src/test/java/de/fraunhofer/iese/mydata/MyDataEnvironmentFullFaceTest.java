@@ -66,8 +66,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,7 +80,6 @@ import java.util.Optional;
  * initialization will be tested in {@link MyDataEnvironmentInitTest}
  */
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.WARN)
 public class MyDataEnvironmentFullFaceTest { // TODO clean up and improve
 
   private static final Logger LOG = LoggerFactory.getLogger(MyDataEnvironmentFullFaceTest.class);

@@ -33,6 +33,7 @@ import de.fraunhofer.iese.mydata.pep.MockedPdpPmp;
 import de.fraunhofer.iese.mydata.policy.exception.EvaluationUndecidableException;
 import de.fraunhofer.iese.mydata.reactive.RxPepFactory;
 import de.fraunhofer.iese.mydata.reactive.common.IncorrectPepDescriptionError;
+import de.fraunhofer.iese.mydata.solution.SolutionId;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -52,6 +53,7 @@ public class RxPepFailJunitTest {
     final IPolicyDecisionPoint ipdp = MockedPdpPmp.mockedPDP();
     doReturn(ipmp).when(mockedMyDataEnvironment).getPmp();
     doReturn(Optional.ofNullable(ipdp)).when(mockedMyDataEnvironment).getPdp();
+    doReturn(new SolutionId("urn:solution:test")).when(mockedMyDataEnvironment).getSolutionId();
 
     assertThrows(IncorrectPepDescriptionError.class, () -> {
       RxPepFactory.createRxPep(mockedMyDataEnvironment, ExFailInterface.class);
@@ -59,7 +61,7 @@ public class RxPepFailJunitTest {
   }
 
   @Test
-  void checkDuplicateEventDefinintion_LeadsToError() throws IOException, URISyntaxException,
+  void checkDuplicateEventDefinition_LeadsToError() throws IOException, URISyntaxException,
       EvaluationUndecidableException, NoSuchEntityException {
     final IMyDataEnvironmentFullFace mockedMyDataEnvironment = Mockito
         .mock(IMyDataEnvironmentFullFace.class);
@@ -67,6 +69,7 @@ public class RxPepFailJunitTest {
     final IPolicyDecisionPoint ipdp = MockedPdpPmp.mockedPDP();
     doReturn(ipmp).when(mockedMyDataEnvironment).getPmp();
     doReturn(Optional.ofNullable(ipdp)).when(mockedMyDataEnvironment).getPdp();
+    doReturn(new SolutionId("urn:solution:test")).when(mockedMyDataEnvironment).getSolutionId();
 
     assertThrows(IncorrectPepDescriptionError.class, () -> RxPepFactory
         .createRxPep(mockedMyDataEnvironment, DuplicateActionFailInterface.class));

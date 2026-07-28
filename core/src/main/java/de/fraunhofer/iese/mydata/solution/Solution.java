@@ -102,7 +102,6 @@ public class Solution extends MyDataEntity {
   private String firstDayOfWeek;
 
   @Hide
-  @Valid
   @JoinTable(name = "solution_user", indexes = {
       @Index(columnList = "solution_id, user_uuid", unique = true)
   }, joinColumns = {
@@ -113,43 +112,37 @@ public class Solution extends MyDataEntity {
   @ManyToMany(fetch = FetchType.LAZY, cascade = {
       CascadeType.PERSIST, CascadeType.MERGE
   })
-  private Set<User> users;
+  private Set<@Valid User> users;
 
-  @Valid
   @OneToMany(mappedBy = "solution", orphanRemoval = true, fetch = FetchType.LAZY, cascade = {
       CascadeType.ALL
   })
-  private Set<PepComponentInformation> peps;
+  private Set<@Valid PepComponentInformation> peps;
 
-  @Valid
   @OneToMany(mappedBy = "solution", orphanRemoval = true, fetch = FetchType.LAZY, cascade = {
       CascadeType.ALL
   })
-  private Set<PxpComponentInformation> pxps;
+  private Set<@Valid PxpComponentInformation> pxps;
 
-  @Valid
   @OneToMany(mappedBy = "solution", orphanRemoval = true, fetch = FetchType.LAZY, cascade = {
       CascadeType.ALL
   })
-  private Set<PipComponentInformation> pips;
+  private Set<@Valid PipComponentInformation> pips;
 
-  @Valid
   @OneToMany(mappedBy = "solution", orphanRemoval = true, fetch = FetchType.LAZY, cascade = {
       CascadeType.ALL
   })
-  private Set<Timer> timers;
+  private Set<@Valid Timer> timers;
 
-  @Valid
   @OneToMany(mappedBy = "solution", orphanRemoval = true, fetch = FetchType.LAZY, cascade = {
       CascadeType.ALL
   })
-  private Set<Policy> policies;
+  private Set<@Valid Policy> policies;
 
-  @Valid
   @OneToMany(mappedBy = "solution", orphanRemoval = true, fetch = FetchType.LAZY, cascade = {
       CascadeType.PERSIST, CascadeType.MERGE
   })
-  private Set<LibraryClient> libraryClients;
+  private Set<@Valid LibraryClient> libraryClients;
 
   @Hide
   @ManyToOne(fetch = FetchType.LAZY)
