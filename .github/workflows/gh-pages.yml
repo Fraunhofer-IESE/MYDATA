@@ -5,6 +5,11 @@ on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' || github.ref != 'refs/heads/main' }}
+
 jobs:
   build:
     permissions:
@@ -87,9 +92,6 @@ jobs:
     if: >-
       github.ref == 'refs/heads/main' &&
       (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-    concurrency:
-      group: "gh-pages-deployment"
-      cancel-in-progress: false
     permissions:
       pages: write
       id-token: write
