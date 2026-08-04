@@ -1,0 +1,21 @@
+name: GitHub Pages Check
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: read
+
+jobs:
+  build:
+    name: Build and verify site
+
+    uses: ./.github/workflows/_gh-pages-build.yml
+    with:
+      upload-artifact: false

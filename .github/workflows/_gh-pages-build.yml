@@ -1,0 +1,104 @@
+name: Reusable GitHub Pages Build
+
+on:
+  workflow_call:
+    inputs:
+      upload-artifact:
+        description: Upload the generated GitHub Pages artifact
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  pages: read
+
+jobs:
+  build:
+    name: Build and verify site
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95 # v5.6.0
+        with:
+          java-version: '25'
+          distribution: temurin
+          cache: maven
+
+      - name: Build modules and generate Javadocs
+        run: >
+          ./mvnw
+          --batch-mode
+          --errors
+          --show-version
+          --no-transfer-progress
+          -Dmaven.test.skip=true
+          package
+
+      - name: Verify generated Javadocs
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          test -f core/target/reports/apidocs/index.html
+          test -f sdk/target/reports/apidocs/index.html
+          test -f sdk-spring/target/reports/apidocs/index.html
+
+      - name: Setup Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@44a6e6beabd48582f863aeeb6cb2151cc1716697 # v1.0.13
+        with:
+          source: ./docs
+          destination: ./_site
+
+      - name: Integrate Javadocs
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          sudo chown -R "$(id -u):$(id -g)" _site
+
+          rm -rf \
+            _site/api-core \
+            _site/api-sdk \
+            _site/api-sdk-spring
+
+          mkdir -p \
+            _site/api-core \
+            _site/api-sdk \
+            _site/api-sdk-spring
+
+          cp -a core/target/reports/apidocs/. \
+            _site/api-core/
+
+          cp -a sdk/target/reports/apidocs/. \
+            _site/api-sdk/
+
+          cp -a sdk-spring/target/reports/apidocs/. \
+            _site/api-sdk-spring/
+
+      - name: Verify generated site
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          test -f _site/index.html
+          test -f _site/api-core/index.html
+          test -f _site/api-sdk/index.html
+          test -f _site/api-sdk-spring/index.html
+
+      - name: Upload artifact
+        if: inputs.upload-artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: ./_site
