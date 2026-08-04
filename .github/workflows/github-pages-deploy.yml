@@ -9,7 +9,7 @@ concurrency:
 
 jobs:
   build:
-    name: Prepare GitHub Pages
+    name: Prepare site
 
     permissions:
       contents: read
@@ -20,7 +20,7 @@ jobs:
       upload-artifact: true
 
   deploy:
-    name: Deploy GitHub Pages
+    name: Deploy site
     needs: build
 
     permissions:

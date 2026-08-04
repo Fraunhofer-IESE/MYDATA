@@ -50,7 +50,7 @@ jobs:
           build-mode: ${{ matrix.build-mode }}
           queries: security-and-quality
 
-      - name: Run manual build steps
+      - name: Run manual build steps (java)
         if: matrix.language == 'java' && matrix.build-mode == 'manual'
         run: >
           ./mvnw

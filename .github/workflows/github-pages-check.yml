@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   build:
-    name: Check GitHub Pages
+    name: Check site
 
     uses: ./.github/workflows/_github-pages-build.yml
     with:
