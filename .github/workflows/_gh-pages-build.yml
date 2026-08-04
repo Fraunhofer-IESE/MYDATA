@@ -48,9 +48,22 @@ jobs:
         run: |
           set -euo pipefail
 
-          test -f core/target/reports/apidocs/index.html
-          test -f sdk/target/reports/apidocs/index.html
-          test -f sdk-spring/target/reports/apidocs/index.html
+          missing=0
+
+          for file in \
+            core/target/reports/apidocs/index.html \
+            sdk/target/reports/apidocs/index.html \
+            sdk-spring/target/reports/apidocs/index.html
+          do
+            if [[ -f "$file" ]]; then
+              printf 'Found: %s\n' "$file"
+            else
+              printf "::error title=Missing generated file::Expected file '%s' was not generated.\n" "$file"
+              missing=1
+            fi
+          done
+
+          exit "$missing"
 
       - name: Setup Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
@@ -92,10 +105,23 @@ jobs:
         run: |
           set -euo pipefail
 
-          test -f _site/index.html
-          test -f _site/api-core/index.html
-          test -f _site/api-sdk/index.html
-          test -f _site/api-sdk-spring/index.html
+          missing=0
+
+          for file in \
+            _site/index.html \
+            _site/api-core/index.html \
+            _site/api-sdk/index.html \
+            _site/api-sdk-spring/index.html
+          do
+            if [[ -f "$file" ]]; then
+              printf 'Found: %s\n' "$file"
+            else
+              printf "::error title=Incomplete generated site::Expected file '%s' is missing.\n" "$file"
+              missing=1
+            fi
+          done
+
+          exit "$missing"
 
       - name: Upload artifact
         if: inputs.upload-artifact
