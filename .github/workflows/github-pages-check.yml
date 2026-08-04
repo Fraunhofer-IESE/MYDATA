@@ -16,6 +16,6 @@ jobs:
   build:
     name: Check GitHub Pages
 
-    uses: ./.github/workflows/_gh-pages-build.yml
+    uses: ./.github/workflows/_github-pages-build.yml
     with:
       upload-artifact: false

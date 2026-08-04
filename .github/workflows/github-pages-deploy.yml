@@ -1,10 +1,10 @@
-name: GitHub Pages
+name: GitHub Pages Deploy
 on:
   push:
     branches: [ main ]
 
 concurrency:
-  group: gh-pages-deployment
+  group: github-pages-deployment
   cancel-in-progress: false
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
       contents: read
       pages: read
 
-    uses: ./.github/workflows/_gh-pages-build.yml
+    uses: ./.github/workflows/_github-pages-build.yml
     with:
       upload-artifact: true
 
