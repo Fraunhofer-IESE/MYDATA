@@ -46,22 +46,23 @@ jobs:
               -DforceStdout
           )"
 
-          echo "Maven version: $version"
-          echo "Release tag:  $RELEASE_TAG"
+          printf 'Maven version: %s\n' "$version"
+          printf 'Release tag: %s\n' "$RELEASE_TAG"
 
           stable_semver='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$'
 
           if [[ ! "$version" =~ $stable_semver ]]; then
-            echo "::error title=Invalid Maven version::Version '$version' is not a stable SemVer version."
-            echo "::error::Expected MAJOR.MINOR.PATCH, for example 5.0.0."
+            printf "::error title=Invalid Maven version::Version '%s' is not a stable SemVer version.\n" "$version"
+            printf '%s\n' '::error::Expected MAJOR.MINOR.PATCH, for example 5.0.0.'
             exit 1
           fi
 
           expected_tag="v${version}"
 
           if [[ "$RELEASE_TAG" != "$expected_tag" ]]; then
-            echo "::error title=Release tag mismatch::Tag '$RELEASE_TAG' does not match Maven version '$version'."
-            echo "::error::Expected release tag '$expected_tag'."
+            printf "::error title=Release tag mismatch::Tag '%s' does not match Maven version '%s'.\n" \
+              "$RELEASE_TAG" "$version"
+            printf "::error::Expected release tag '%s'.\n" "$expected_tag"
             exit 1
           fi
 
