@@ -15,6 +15,10 @@
   <name>${project.groupId}:${project.artifactId}</name>
   <description>MYDATA :: Base project containing all projects</description>
 
+  <properties>
+    <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
+  </properties>
+
   <modules>
     <module>mydata-parent</module>
     <module>core</module>
@@ -23,5 +27,28 @@
     <module>sdk</module>
     <module>sdk-spring</module>
   </modules>
+
+  <profiles>
+    <profile>
+      <id>publish</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>${central-publishing-maven-plugin.version}</version>
+            <extensions>true</extensions>
+            <configuration>
+              <autoPublish>true</autoPublish>
+              <deploymentName>MYDATA - ${project.version}</deploymentName>
+              <excludeArtifacts>base</excludeArtifacts>
+              <publishingServerId>maven-central</publishingServerId>
+              <waitUntil>published</waitUntil>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
