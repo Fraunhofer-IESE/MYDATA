@@ -1,7 +1,7 @@
 name: GitHub Pages
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
 
 concurrency:
   group: gh-pages-deployment
