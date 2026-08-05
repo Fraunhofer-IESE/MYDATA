@@ -1,4 +1,4 @@
-name: Maven Central Publish
+name: Maven Central Release
 
 on:
   release:
@@ -82,7 +82,7 @@ jobs:
           -Ppublish
           validate
 
-      - name: Verify release commit
+      - name: Verify release build
         run: >
           ./mvnw
           --batch-mode
