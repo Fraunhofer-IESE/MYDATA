@@ -39,4 +39,5 @@ jobs:
           --errors
           --show-version
           --no-transfer-progress
+          -Pcoverage
           verify

@@ -13,6 +13,7 @@
   <packaging>jar</packaging>
 
   <name>${project.groupId}:${project.artifactId}</name>
+  <description>MYDATA :: Core</description>
 
   <dependencies>
     <dependency>
@@ -88,6 +89,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <description>MYDATA :: Core</description>
 </project>

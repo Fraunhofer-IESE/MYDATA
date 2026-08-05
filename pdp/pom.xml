@@ -16,7 +16,6 @@
 
   <properties>
     <resource.delimiter>@</resource.delimiter>
-    <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
   </properties>
 
   <dependencies>

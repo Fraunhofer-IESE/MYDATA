@@ -19,6 +19,21 @@
     </license>
   </licenses>
 
+  <developers>
+    <developer>
+      <name>MYDATA Control Technologies Team</name>
+      <email>info@mydata-control.de</email>
+      <organization>Fraunhofer IESE</organization>
+      <organizationUrl>https://www.iese.fraunhofer.de</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:https://github.com/Fraunhofer-IESE/MYDATA.git</connection>
+    <developerConnection>scm:git:https://github.com/Fraunhofer-IESE/MYDATA.git</developerConnection>
+    <url>https://github.com/Fraunhofer-IESE/MYDATA</url>
+  </scm>
+
   <properties>
     <maven.compiler.release>25</maven.compiler.release>
 
@@ -68,6 +83,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -291,22 +307,14 @@
           </executions>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>${maven-gpg-plugin.version}</version>
+        </plugin>
+        <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>${jacoco.version}</version>
-          <executions>
-            <execution>
-              <goals>
-                <goal>prepare-agent</goal>
-              </goals>
-            </execution>
-            <execution>
-              <id>report</id>
-              <goals>
-                <goal>report</goal>
-              </goals>
-            </execution>
-          </executions>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -453,10 +461,6 @@
 
     <plugins>
       <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
       </plugin>
@@ -481,69 +485,71 @@
 
   <profiles>
     <profile>
+      <id>coverage</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>prepare-agent</id>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>report</id>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
       <id>publish</id>
       <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-enforcer-plugin</artifactId>
-              <executions>
-                <execution>
-                  <id>enforce-release</id>
-                  <goals>
-                    <goal>enforce</goal>
-                  </goals>
-                  <configuration>
-                    <rules>
-                      <requireReleaseVersion />
-                      <requireReleaseDeps />
-                    </rules>
-                  </configuration>
-                </execution>
-              </executions>
-            </plugin>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-gpg-plugin</artifactId>
-              <version>${maven-gpg-plugin.version}</version>
-              <configuration>
-                <bestPractices>true</bestPractices>
-              </configuration>
-              <executions>
-                <execution>
-                  <id>sign-artifacts</id>
-                  <phase>verify</phase>
-                  <goals>
-                    <goal>sign</goal>
-                  </goals>
-                </execution>
-              </executions>
-            </plugin>
-          </plugins>
-        </pluginManagement>
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>enforce-release</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requireReleaseVersion />
+                    <requireReleaseDeps />
+                  </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
+            <configuration>
+              <bestPractices>true</bestPractices>
+            </configuration>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
           </plugin>
         </plugins>
       </build>
     </profile>
   </profiles>
 
-  <developers>
-    <developer>
-      <name>MYDATA Control Technologies Team</name>
-      <email>info@mydata-control.de</email>
-      <organization>Fraunhofer IESE</organization>
-      <organizationUrl>https://www.iese.fraunhofer.de</organizationUrl>
-    </developer>
-  </developers>
-
-  <scm>
-    <connection>scm:git:https://github.com/Fraunhofer-IESE/MYDATA.git</connection>
-    <developerConnection>scm:git:https://github.com/Fraunhofer-IESE/MYDATA.git</developerConnection>
-    <url>https://github.com/Fraunhofer-IESE/MYDATA</url>
-  </scm>
 </project>
