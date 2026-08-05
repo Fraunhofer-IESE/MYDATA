@@ -14,10 +14,6 @@
   <name>${project.groupId}:${project.artifactId}</name>
   <description>MYDATA :: PDP</description>
 
-  <properties>
-    <resource.delimiter>@</resource.delimiter>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>de.fraunhofer.iese.mydata</groupId>
@@ -85,15 +81,6 @@
   </dependencies>
 
   <build>
-    <finalName>pdp.mydata.java-${project.version}</finalName>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <excludes>
-          <exclude>**/logback-spring.xml</exclude>
-        </excludes>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
