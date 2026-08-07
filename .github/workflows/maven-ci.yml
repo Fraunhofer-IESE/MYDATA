@@ -44,11 +44,6 @@ jobs:
   measure-coverage:
     name: Measure Coverage
 
-    # GitHub Code Quality cannot accept coverage from fork PRs.
-    if: >
-      github.event_name != 'pull_request' ||
-      github.event.pull_request.head.repo.full_name == github.repository
-
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -81,6 +76,14 @@ jobs:
           -Pcoverage
           verify
 
+      - name: Upload JaCoCo report
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: jacoco-report
+          path: target/site/jacoco-aggregate/
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Convert JaCoCo to Cobertura
         run: |
           python3 .github/scripts/jacoco2cobertura/cover2cover.py \
@@ -97,12 +100,17 @@ jobs:
         with:
           name: cobertura-report
           path: cobertura.xml
-          if-no-files-found: 'error'
+          if-no-files-found: error
           retention-days: 1
 
   upload-coverage:
     name: Upload Coverage
     needs: measure-coverage
+
+    # GitHub Code Quality cannot accept coverage from fork PRs.
+    if: >
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
 
     runs-on: ubuntu-latest
     timeout-minutes: 10
