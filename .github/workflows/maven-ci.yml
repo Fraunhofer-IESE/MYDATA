@@ -107,10 +107,12 @@ jobs:
     name: Upload Coverage
     needs: measure-coverage
 
-    # GitHub Code Quality cannot accept coverage from fork PRs.
-    if: >
-      github.event_name != 'pull_request' ||
-      github.event.pull_request.head.repo.full_name == github.repository
+    # TODO Change once we have code quality enabled
+    if: false
+#    # GitHub Code Quality cannot accept coverage from fork PRs.
+#    if: >
+#      github.event_name != 'pull_request' ||
+#      github.event.pull_request.head.repo.full_name == github.repository
 
     runs-on: ubuntu-latest
     timeout-minutes: 10
