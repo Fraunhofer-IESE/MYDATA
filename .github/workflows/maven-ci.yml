@@ -9,15 +9,15 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions:
-  contents: read
-
 jobs:
   verify:
     name: Verify
 
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout
@@ -40,3 +40,86 @@ jobs:
           --show-version
           --no-transfer-progress
           verify
+
+  measure-coverage:
+    name: Measure Coverage
+
+    # GitHub Code Quality cannot accept coverage from fork PRs.
+    if: >
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    permissions:
+      contents: read
+
+    steps:
+      # GitHub recommends using the PR head rather than the synthetic
+      # merge commit for coverage, so line numbers match the PR diff.
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95 # v5.6.0
+        with:
+          java-version: '25'
+          distribution: temurin
+          cache: maven
+
+      - name: Build and generate coverage
+        run: >
+          ./mvnw
+          --batch-mode
+          --errors
+          --show-version
+          --no-transfer-progress
+          -Pcoverage
+          verify
+
+      - name: Convert JaCoCo to Cobertura
+        run: |
+          python3 .github/scripts/jacoco2cobertura/cover2cover.py \
+            target/site/jacoco-aggregate/jacoco.xml \
+            core/src/main/java \
+            connectors-rest/src/main/java \
+            pdp/src/main/java \
+            sdk/src/main/java \
+            sdk-spring/src/main/java \
+            > cobertura.xml
+
+      - name: Upload Cobertura report
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: cobertura-report
+          path: cobertura.xml
+          if-no-files-found: 'error'
+          retention-days: 1
+
+  upload-coverage:
+    name: Upload Coverage
+    needs: measure-coverage
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      contents: read
+      code-quality: write
+
+    steps:
+      - name: Download Cobertura report
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: cobertura-report
+
+      - name: Upload coverage
+        uses: actions/upload-code-coverage@d8e329117199404bba6fc81efe8093dc7c015e34 # v1.4.2
+        with:
+          file: cobertura.xml
+          language: Java
+          label: code-coverage/jacoco
