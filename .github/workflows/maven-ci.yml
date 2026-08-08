@@ -84,24 +84,31 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: Convert JaCoCo to Cobertura
-        run: |
-          python3 .github/scripts/jacoco2cobertura/cover2cover.py \
-            target/site/jacoco-aggregate/jacoco.xml \
-            core/src/main/java \
-            connectors-rest/src/main/java \
-            pdp/src/main/java \
-            sdk/src/main/java \
-            sdk-spring/src/main/java \
-            > cobertura.xml
+      - name: Setup .NET Core # Required to execute ReportGenerator
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.x'
+          dotnet-quality: 'ga'
+
+      - name: ReportGenerator
+        uses: danielpalme/ReportGenerator-GitHub-Action@d3ebf1f760f7d8ab92cc44d9bcfee7ad73722a31 # v5.5.11
+        with:
+          reports: target/site/jacoco-aggregate/jacoco.xml
+          targetdir: coveragereport
+          reporttypes: Cobertura;MarkdownSummaryGithub
+          sourcedirs: core/src/main/java;connectors-rest/src/main/java;pdp/src/main/java;sdk/src/main/java;sdk-spring/src/main/java
 
       - name: Upload Cobertura report
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: cobertura-report
-          path: cobertura.xml
+          path: coveragereport/Cobertura.xml
           if-no-files-found: error
           retention-days: 1
+
+      - name: Publish coverage in build summary
+        run: cat coveragereport/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
+        shell: bash
 
   upload-coverage:
     name: Upload Coverage
@@ -130,6 +137,6 @@ jobs:
       - name: Upload coverage
         uses: actions/upload-code-coverage@d8e329117199404bba6fc81efe8093dc7c015e34 # v1.4.2
         with:
-          file: cobertura.xml
+          file: Cobertura.xml
           language: Java
           label: code-coverage/jacoco
