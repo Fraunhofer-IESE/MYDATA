@@ -89,6 +89,8 @@ jobs:
           --errors
           --show-version
           --no-transfer-progress
+          -Ppublish
+          -Dgpg.skip=true
           verify
 
   publish:
