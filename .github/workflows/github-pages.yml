@@ -1,17 +1,14 @@
-name: GitHub Pages Build
+name: GitHub Pages
 
 on:
-  workflow_call:
-    inputs:
-      upload-artifact:
-        description: Upload the generated GitHub Pages artifact
-        required: false
-        type: boolean
-        default: false
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
 
-permissions:
-  contents: read
-  pages: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -19,6 +16,10 @@ jobs:
 
     runs-on: ubuntu-latest
     timeout-minutes: 30
+
+    permissions:
+      contents: read
+      pages: read
 
     steps:
       - name: Checkout
@@ -33,7 +34,7 @@ jobs:
           distribution: temurin
           cache: maven
 
-      - name: Build modules and generate Javadocs
+      - name: Build project and generate Javadocs
         run: >
           ./mvnw
           --batch-mode
@@ -74,7 +75,7 @@ jobs:
           source: ./docs
           destination: ./_site
 
-      - name: Integrate Javadocs
+      - name: Add Javadocs to site
         shell: bash
         run: |
           set -euo pipefail
@@ -123,8 +124,29 @@ jobs:
 
           exit "$missing"
 
-      - name: Upload artifact
-        if: inputs.upload-artifact
+      - name: Upload Pages artifact (main only)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: ./_site
+
+  deploy:
+    name: Deploy site (main only)
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
