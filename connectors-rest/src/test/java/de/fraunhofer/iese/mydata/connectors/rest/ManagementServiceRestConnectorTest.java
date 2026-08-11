@@ -49,7 +49,6 @@ import de.fraunhofer.iese.mydata.user.MyDataRole;
 import de.fraunhofer.iese.mydata.user.User;
 import de.fraunhofer.iese.mydata.user.dto.UpdatePasswordDTO;
 
-import com.google.common.collect.Sets;
 import org.apache.commons.lang3.ArrayUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -282,7 +281,7 @@ public class ManagementServiceRestConnectorTest extends CommonTestSetup {
     final Set<SolutionId> result = this.connector.listSolutions(AFFILIATION_ID, true);
 
     Mockito.verify(this.mockRestTemplate).getForObject(URI.create(url), SolutionId[].class);
-    Assertions.assertEquals(Sets.newHashSet(solutionIdsArray), result);
+    Assertions.assertEquals(Set.of(solutionIdsArray), result);
   }
 
   @Test
@@ -321,7 +320,7 @@ public class ManagementServiceRestConnectorTest extends CommonTestSetup {
     final Set<SolutionId> result = this.connector.listSolutions(userId, true);
 
     Mockito.verify(this.mockRestTemplate).getForObject(URI.create(url), SolutionId[].class);
-    Assertions.assertEquals(Sets.newHashSet(solutionIdsArray), result);
+    Assertions.assertEquals(Set.of(solutionIdsArray), result);
   }
 
   @Test
@@ -360,7 +359,7 @@ public class ManagementServiceRestConnectorTest extends CommonTestSetup {
     final Set<Solution> result = this.connector.getSolutions(AFFILIATION_ID, true);
 
     Mockito.verify(this.mockRestTemplate).getForObject(uri, Solution[].class);
-    Assertions.assertEquals(Sets.newHashSet(solutions), result);
+    Assertions.assertEquals(Set.of(solutions), result);
   }
 
   @Test
@@ -397,7 +396,7 @@ public class ManagementServiceRestConnectorTest extends CommonTestSetup {
     final Set<Solution> result = this.connector.getSolutions(userId, true);
 
     Mockito.verify(this.mockRestTemplate).getForObject(uri, Solution[].class);
-    Assertions.assertEquals(Sets.newHashSet(solutions), result);
+    Assertions.assertEquals(Set.of(solutions), result);
   }
 
   @Test
@@ -716,7 +715,7 @@ public class ManagementServiceRestConnectorTest extends CommonTestSetup {
 
     final Set<String> result = this.connector.listUsers(AFFILIATION_ID, true);
     Mockito.verify(this.mockRestTemplate).getForObject(uri, String[].class);
-    Assertions.assertEquals(Sets.newHashSet(userIds), result);
+    Assertions.assertEquals(Set.of(userIds), result);
   }
 
   @Test
@@ -753,7 +752,7 @@ public class ManagementServiceRestConnectorTest extends CommonTestSetup {
 
     final Set<String> result = this.connector.listUsers(SOLUTION_ID, true);
     Mockito.verify(this.mockRestTemplate).getForObject(uri, String[].class);
-    Assertions.assertEquals(Sets.newHashSet(userIds), result);
+    Assertions.assertEquals(Set.of(userIds), result);
   }
 
   @Test
@@ -791,7 +790,7 @@ public class ManagementServiceRestConnectorTest extends CommonTestSetup {
 
     final Set<User> result = this.connector.getUsers(AFFILIATION_ID, true);
     Mockito.verify(this.mockRestTemplate).getForObject(uri, User[].class);
-    Assertions.assertEquals(Sets.newHashSet(users), result);
+    Assertions.assertEquals(Set.of(users), result);
   }
 
   @Test
@@ -829,7 +828,7 @@ public class ManagementServiceRestConnectorTest extends CommonTestSetup {
 
     final Set<User> result = this.connector.getUsers(SOLUTION_ID, true);
     Mockito.verify(this.mockRestTemplate).getForObject(uri, User[].class);
-    Assertions.assertEquals(Sets.newHashSet(users), result);
+    Assertions.assertEquals(Set.of(users), result);
   }
 
   @Test
@@ -1116,7 +1115,7 @@ public class ManagementServiceRestConnectorTest extends CommonTestSetup {
     when(this.mockRestTemplate.getForObject(uri, AffiliationId[].class)).thenReturn(affiliationIds);
     final Set<AffiliationId> result = this.connector.listAffiliations(true);
     Mockito.verify(this.mockRestTemplate).getForObject(uri, AffiliationId[].class);
-    Assertions.assertEquals(Sets.newHashSet(affiliationIds), result);
+    Assertions.assertEquals(Set.of(affiliationIds), result);
   }
 
   @Test
@@ -1141,7 +1140,7 @@ public class ManagementServiceRestConnectorTest extends CommonTestSetup {
     when(this.mockRestTemplate.getForObject(uri, Affiliation[].class)).thenReturn(affiliations);
     final Set<Affiliation> result = this.connector.getAffiliations(true);
     Mockito.verify(this.mockRestTemplate).getForObject(uri, Affiliation[].class);
-    Assertions.assertEquals(Sets.newHashSet(affiliations), result);
+    Assertions.assertEquals(Set.of(affiliations), result);
   }
 
   @Test
@@ -1680,7 +1679,7 @@ public class ManagementServiceRestConnectorTest extends CommonTestSetup {
 
     final Set<LibraryClient> result = this.connector.getLibraryClients(solutionId);
 
-    Assertions.assertEquals(Sets.newHashSet(libraryClients), result);
+    Assertions.assertEquals(Set.of(libraryClients), result);
   }
 
   @Test

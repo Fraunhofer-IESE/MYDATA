@@ -26,9 +26,9 @@ import java.time.Instant;
 import java.util.function.Supplier;
 
 public class Clock {
-  private Supplier<Instant> instantSupplier;
+  private final Supplier<Instant> instantSupplier;
 
-  Clock(Supplier<Instant> instantSupplier) {
+  Clock(final Supplier<Instant> instantSupplier) {
     this.instantSupplier = instantSupplier;
   }
 

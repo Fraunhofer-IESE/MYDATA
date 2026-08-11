@@ -44,7 +44,6 @@ import de.fraunhofer.iese.mydata.timer.Timer;
 import de.fraunhofer.iese.mydata.timer.TimerDeployableGroup;
 import de.fraunhofer.iese.mydata.timer.TimerId;
 
-import com.google.common.annotations.VisibleForTesting;
 import jakarta.validation.groups.Default;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -224,7 +223,7 @@ public class FileSynchronizer implements ISyncService {
     }
   }
 
-  @VisibleForTesting
+  /* VisibleForTesting */
   void processChanges(WatchKey key) throws InvalidEntityException, ResourceUpdateException,
       ConflictingResourceException, IOException, NoSuchEntityException {
     // TODO handle renaming?

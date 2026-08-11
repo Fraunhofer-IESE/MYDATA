@@ -53,7 +53,6 @@ import de.fraunhofer.iese.mydata.solution.SolutionId;
 import de.fraunhofer.iese.mydata.timer.Timer;
 import de.fraunhofer.iese.mydata.timer.TimerId;
 
-import com.google.common.collect.Sets;
 import org.apache.hc.client5.http.ClientProtocolException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -114,7 +113,7 @@ public class PmpRestConnectorTest extends CommonTestSetup {
   /**
    * The deployed policies list.
    */
-  private final Set<PolicyId> deployedPoliciesList = Sets.newHashSet(POLICY_ID);
+  private final Set<PolicyId> deployedPoliciesList = Set.of(POLICY_ID);
 
   private final PolicyId[] POLICY_IDS = new PolicyId[]{
       POLICY_ID
@@ -144,7 +143,7 @@ public class PmpRestConnectorTest extends CommonTestSetup {
   /**
    * The policy list.
    */
-  private Set<Policy> policyList;// = Sets.newHashSet(POLICY);
+  private Set<Policy> policyList;
 
   private Timer timer;
 
@@ -217,13 +216,13 @@ public class PmpRestConnectorTest extends CommonTestSetup {
 
     this.PXP_COMPONENT = new PxpComponentInformation(PXP_COMPONENT_ID);
 
-    this.PEP_COMPONENT_LIST = Sets.newHashSet(this.PEP_COMPONENT);
+    this.PEP_COMPONENT_LIST = Set.of(this.PEP_COMPONENT);
 
     this.PEP_COMPONENTS = this.PEP_COMPONENT_LIST.toArray(new PepComponentInformation[1]);
 
-    this.PXP_COMPONENT_LIST = Sets.newHashSet(this.PXP_COMPONENT);
+    this.PXP_COMPONENT_LIST = Set.of(this.PXP_COMPONENT);
 
-    this.PIP_COMPONENT_LIST = Sets.newHashSet(this.PIP_COMPONENT);
+    this.PIP_COMPONENT_LIST = Set.of(this.PIP_COMPONENT);
 
     this.PDP_COMPONENTS = new PdpComponentInformation[]{
         this.PDP_COMPONENT
@@ -241,14 +240,14 @@ public class PmpRestConnectorTest extends CommonTestSetup {
 
     this.POLICY.setPolicyId(POLICY_ID);
 
-    this.policyList = Sets.newHashSet(this.POLICY);
+    this.policyList = Set.of(this.POLICY);
 
     this.timer = new Timer(
         "<timer xmlns=\"http://www.mydata-control.de/4.0/mydataLanguage\" id='urn:timer:test:timer'  cron=\"0/55 * * * * *\"></timer>");
     this.timers = new Timer[]{
         this.timer
     };
-    this.timerList = Sets.newHashSet(this.timer);
+    this.timerList = Set.of(this.timer);
 
     this.connector = new PmpRestConnector(Constants.BASE_URL);
     setInternalState(this.connector, "httpClient", this.mockRestTemplate);
@@ -1069,7 +1068,7 @@ public class PmpRestConnectorTest extends CommonTestSetup {
     when(this.mockRestTemplate.getForObject(uri, Timer[].class)).thenReturn(this.timers);
 
     final Set<Timer> deployedTimers = this.connector.getTimers(new SolutionId("urn:solution:demo"));
-    Assertions.assertEquals(deployedTimers.iterator().next(), this.timerList.iterator().next());
+    Assertions.assertEquals(this.timerList.iterator().next(), deployedTimers.iterator().next());
     Mockito.verify(this.mockRestTemplate).getForObject(uri, Timer[].class);
   }
 
@@ -1102,7 +1101,7 @@ public class PmpRestConnectorTest extends CommonTestSetup {
 
     final Set<Timer> deployedTimers = this.connector
         .getDeployedTimers(new SolutionId("urn:solution:demo"));
-    Assertions.assertEquals(deployedTimers.iterator().next(), this.timerList.iterator().next());
+    Assertions.assertEquals(this.timerList.iterator().next(), deployedTimers.iterator().next());
     Mockito.verify(this.mockRestTemplate).getForObject(uri, Timer[].class);
   }
 
@@ -1207,7 +1206,7 @@ public class PmpRestConnectorTest extends CommonTestSetup {
     final Set<Policy> revokedPolicies = this.connector
         .getRevokedPolicies(new SolutionId("urn:solution:" + "demo"));
     Mockito.verify(this.mockRestTemplate).getForObject(url, Policy[].class);
-    Assertions.assertEquals(Sets.newHashSet(this.POLICIES), revokedPolicies);
+    Assertions.assertEquals(Set.of(this.POLICIES), revokedPolicies);
   }
 
   @Test
@@ -1245,7 +1244,7 @@ public class PmpRestConnectorTest extends CommonTestSetup {
 
     final Set<Timer> revokedTimers = this.connector
         .getRevokedTimers(new SolutionId("urn:solution:demo"));
-    Assertions.assertEquals(revokedTimers.iterator().next(), this.timerList.iterator().next());
+    Assertions.assertEquals(this.timerList.iterator().next(), revokedTimers.iterator().next());
     Mockito.verify(this.mockRestTemplate).getForObject(uri, Timer[].class);
   }
 
@@ -1389,7 +1388,7 @@ public class PmpRestConnectorTest extends CommonTestSetup {
     when(this.mockRestTemplate.getForObject(url, TimerId[].class)).thenReturn(timerIds);
     final Set<TimerId> result = this.connector.listTimers(solutionId);
     Mockito.verify(this.mockRestTemplate).getForObject(url, TimerId[].class);
-    Assertions.assertEquals(Sets.newHashSet(timerIds), result);
+    Assertions.assertEquals(Set.of(timerIds), result);
   }
 
   @Test
@@ -1421,7 +1420,7 @@ public class PmpRestConnectorTest extends CommonTestSetup {
     when(this.mockRestTemplate.getForObject(url, TimerId[].class)).thenReturn(timerIds);
     final Set<TimerId> result = this.connector.listDeployedTimers(solutionId);
     Mockito.verify(this.mockRestTemplate).getForObject(url, TimerId[].class);
-    Assertions.assertEquals(Sets.newHashSet(timerIds), result);
+    Assertions.assertEquals(Set.of(timerIds), result);
   }
 
   @Test
@@ -1456,7 +1455,7 @@ public class PmpRestConnectorTest extends CommonTestSetup {
     when(this.mockRestTemplate.getForObject(url, TimerId[].class)).thenReturn(timerIds);
     final Set<TimerId> result = this.connector.listRevokedTimers(solutionId);
     Mockito.verify(this.mockRestTemplate).getForObject(url, TimerId[].class);
-    Assertions.assertEquals(Sets.newHashSet(timerIds), result);
+    Assertions.assertEquals(Set.of(timerIds), result);
   }
 
   @Test

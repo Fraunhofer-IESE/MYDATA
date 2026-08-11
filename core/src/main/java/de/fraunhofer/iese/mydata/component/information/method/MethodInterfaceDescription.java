@@ -28,7 +28,6 @@ import de.fraunhofer.iese.mydata.component.information.PepComponentInformation;
 import de.fraunhofer.iese.mydata.component.information.PipComponentInformation;
 import de.fraunhofer.iese.mydata.component.information.PxpComponentInformation;
 
-import com.google.common.base.Objects;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,12 +39,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
 import jakarta.persistence.OrderColumn;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
@@ -57,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Describes an interface of a method. Contains of a name, a list of parameters and a return type.
@@ -187,16 +185,16 @@ public class MethodInterfaceDescription extends MyDataEntity {
   @Override
   public boolean equals(Object obj) {
     if (obj instanceof MethodInterfaceDescription mid) {
-      if (!Objects.equal(this.getReturnType(), mid.getReturnType())) {
+      if (!Objects.equals(this.getReturnType(), mid.getReturnType())) {
         return false;
       }
-      if (!Objects.equal(this.getMethodName(), mid.getMethodName())) {
+      if (!Objects.equals(this.getMethodName(), mid.getMethodName())) {
         return false;
       }
-      if (!Objects.equal(this.getDescription(), mid.getDescription())) {
+      if (!Objects.equals(this.getDescription(), mid.getDescription())) {
         return false;
       }
-      return Objects.equal(this.parameters, mid.getParameters());
+      return Objects.equals(this.parameters, mid.getParameters());
     }
     return false;
   }
