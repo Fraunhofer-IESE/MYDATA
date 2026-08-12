@@ -1,0 +1,496 @@
+name: Finalize Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      pull_request_number:
+        description: Number of the merged release pull request
+        required: true
+        type: number
+
+concurrency:
+  group: release-process
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  validate:
+    name: Validate merged release
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    permissions:
+      contents: read
+      pull-requests: read
+
+    outputs:
+      base_branch: ${{ steps.metadata.outputs.base_branch }}
+      release_version: ${{ steps.metadata.outputs.release_version }}
+      next_version: ${{ steps.metadata.outputs.next_version }}
+      release_sha: ${{ steps.metadata.outputs.release_sha }}
+      next_sha: ${{ steps.metadata.outputs.next_sha }}
+      release_tag: ${{ steps.metadata.outputs.release_tag }}
+
+    steps:
+      - name: Validate dispatch ref
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
+            printf "::error title=Invalid workflow ref::Run this workflow from 'main', not '%s'.\n" "$GITHUB_REF"
+            exit 1
+          fi
+
+      - name: Checkout repository history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate pull request and release history
+        id: metadata
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ inputs.pull_request_number }}
+        run: |
+          set -euo pipefail
+
+          pr_json="$(
+            gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}"
+          )"
+
+          state="$(jq -r '.state' <<< "$pr_json")"
+          merged_at="$(jq -r '.merged_at // empty' <<< "$pr_json")"
+          base_ref="$(jq -r '.base.ref' <<< "$pr_json")"
+          head_ref="$(jq -r '.head.ref' <<< "$pr_json")"
+          head_sha="$(jq -r '.head.sha' <<< "$pr_json")"
+          head_repo="$(jq -r '.head.repo.full_name // empty' <<< "$pr_json")"
+          merge_sha="$(jq -r '.merge_commit_sha // empty' <<< "$pr_json")"
+
+          if [[ "$state" != "closed" || -z "$merged_at" ]]; then
+            printf "::error title=Pull request not merged::Pull request #%s is not merged.\n" "$PR_NUMBER"
+            exit 1
+          fi
+
+          if [[ "$head_repo" != "$GITHUB_REPOSITORY" ]]; then
+            printf "::error title=Invalid source repository::Release pull request came from '%s'.\n" "$head_repo"
+            exit 1
+          fi
+
+          release_branch_regex='^release-candidate/((0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*))$'
+
+          if [[ ! "$head_ref" =~ $release_branch_regex ]]; then
+            printf "::error title=Invalid release candidate branch::Pull request source branch '%s' does not match release-candidate/MAJOR.MINOR.PATCH.\n" \
+              "$head_ref"
+            exit 1
+          fi
+
+          release_version="${BASH_REMATCH[1]}"
+          major="${BASH_REMATCH[2]}"
+          minor="${BASH_REMATCH[3]}"
+          patch="${BASH_REMATCH[4]}"
+          release_tag="v${release_version}"
+
+          if (( patch == 0 )); then
+            if [[ "$base_ref" != "main" ]]; then
+              printf "::error title=Invalid base branch::Release '%s' must have been merged into 'main', not '%s'.\n" \
+                "$release_version" "$base_ref"
+              exit 1
+            fi
+          else
+            expected_base_ref="release/${major}.${minor}"
+
+            if [[ "$base_ref" != "$expected_base_ref" ]]; then
+              printf "::error title=Invalid patch base branch::Patch release '%s' must have been merged into '%s', not '%s'.\n" \
+                "$release_version" "$expected_base_ref" "$base_ref"
+              exit 1
+            fi
+          fi
+
+          git fetch --no-tags origin \
+            "+refs/heads/${base_ref}:refs/remotes/origin/${base_ref}"
+
+          commits_json="$(
+            gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/commits?per_page=100"
+          )"
+
+          commit_count="$(jq 'length' <<< "$commits_json")"
+
+          if [[ "$commit_count" -ne 2 ]]; then
+            printf "::error title=Unexpected release commit count::Expected exactly 2 commits, but pull request #%s contains %s.\n" \
+              "$PR_NUMBER" "$commit_count"
+            exit 1
+          fi
+
+          release_sha="$(jq -r '.[0].sha' <<< "$commits_json")"
+          next_sha="$(jq -r '.[1].sha' <<< "$commits_json")"
+
+          release_subject="$(
+            jq -r '.[0].commit.message | split("\n")[0]' <<< "$commits_json"
+          )"
+          next_subject="$(
+            jq -r '.[1].commit.message | split("\n")[0]' <<< "$commits_json"
+          )"
+
+          expected_release_subject="Prepare release ${release_version}"
+          next_subject_prefix="Prepare next development version "
+
+          if [[ "$release_subject" != "$expected_release_subject" ]]; then
+            printf "::error title=Unexpected release commit::Expected subject '%s', but found '%s'.\n" \
+              "$expected_release_subject" "$release_subject"
+            exit 1
+          fi
+
+          if [[ "$next_subject" != "${next_subject_prefix}"* ]]; then
+            printf "::error title=Unexpected development commit::Unexpected subject '%s'.\n" "$next_subject"
+            exit 1
+          fi
+
+          next_version="${next_subject#"$next_subject_prefix"}"
+          snapshot_semver='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)-SNAPSHOT$'
+
+          if [[ ! "$next_version" =~ $snapshot_semver ]]; then
+            printf "::error title=Invalid next version::'%s' is not a MAJOR.MINOR.PATCH-SNAPSHOT version.\n" "$next_version"
+            exit 1
+          fi
+
+          next_major="${BASH_REMATCH[1]}"
+          next_minor="${BASH_REMATCH[2]}"
+          next_patch="${BASH_REMATCH[3]}"
+
+          if (( patch == 0 )); then
+            if (( next_major < major ||
+                  (next_major == major && next_minor < minor) ||
+                  (next_major == major && next_minor == minor && next_patch <= patch) )); then
+              printf "::error title=Invalid next version::Next development version '%s' must be greater than release version '%s'.\n" \
+                "$next_version" "$release_version"
+              exit 1
+            fi
+          else
+            expected_next_version="${major}.${minor}.$((patch + 1))-SNAPSHOT"
+
+            if [[ "$next_version" != "$expected_next_version" ]]; then
+              printf "::error title=Invalid next patch version::Expected '%s' after patch release '%s', but found '%s'.\n" \
+                "$expected_next_version" "$release_version" "$next_version"
+              exit 1
+            fi
+          fi
+
+          if [[ "$head_sha" != "$next_sha" ]]; then
+            printf "::error title=Unexpected pull request head::PR head '%s' does not match expected next-version commit '%s'.\n" \
+              "$head_sha" "$next_sha"
+            exit 1
+          fi
+
+          if [[ -z "$merge_sha" ]] ||
+             ! git cat-file -e "${release_sha}^{commit}" 2>/dev/null ||
+             ! git cat-file -e "${next_sha}^{commit}" 2>/dev/null ||
+             ! git cat-file -e "${merge_sha}^{commit}" 2>/dev/null
+          then
+            printf '%s\n' \
+              '::error title=Release commits not preserved::Expected release commits are not present in the target branch history. Was the PR squashed or rebased?'
+            exit 1
+          fi
+
+          base_remote_ref="refs/remotes/origin/${base_ref}"
+
+          if ! git merge-base --is-ancestor "$release_sha" "$base_remote_ref" ||
+             ! git merge-base --is-ancestor "$next_sha" "$base_remote_ref" ||
+             ! git merge-base --is-ancestor "$merge_sha" "$base_remote_ref"
+          then
+            printf "::error title=Release not on base branch::Release commits and merge commit must all be part of '%s'.\n" "$base_ref"
+            exit 1
+          fi
+
+          read -r -a merge_parents <<< "$(git show -s --format=%P "$merge_sha")"
+
+          if [[ "${#merge_parents[@]}" -ne 2 || "${merge_parents[1]}" != "$next_sha" ]]; then
+            printf '%s\n' \
+              '::error title=Invalid merge method::Release pull request must be merged using Create a merge commit.'
+            exit 1
+          fi
+
+          read -r -a release_parents <<< "$(git show -s --format=%P "$release_sha")"
+          read -r -a next_parents <<< "$(git show -s --format=%P "$next_sha")"
+
+          if [[ "${#release_parents[@]}" -ne 1 ||
+                "${#next_parents[@]}" -ne 1 ||
+                "${next_parents[0]}" != "$release_sha" ]]
+          then
+            printf '%s\n' \
+              '::error title=Invalid release history::Next development commit must directly follow the release commit.'
+            exit 1
+          fi
+
+          if [[ "${merge_parents[0]}" != "${release_parents[0]}" ]]; then
+            printf "::error title=Base branch changed before merge::Release was prepared from '%s', but '%s' was at '%s' when the PR was merged. Prepare the release again from the current base branch HEAD.\n" \
+              "${release_parents[0]}" "$base_ref" "${merge_parents[0]}"
+            exit 1
+          fi
+
+          unexpected_release_changes="$(
+            git diff --name-only "${release_sha}^" "$release_sha" |
+              grep -Ev '(^|/)pom\.xml$' || true
+          )"
+
+          unexpected_next_changes="$(
+            git diff --name-only "$release_sha" "$next_sha" |
+              grep -Ev '(^|/)pom\.xml$' || true
+          )"
+
+          if [[ -n "$unexpected_release_changes" || -n "$unexpected_next_changes" ]]; then
+            printf '%s\n' \
+              '::error title=Unexpected release changes::The two release commits may only modify pom.xml files.'
+            printf '%s\n' "$unexpected_release_changes"
+            printf '%s\n' "$unexpected_next_changes"
+            exit 1
+          fi
+
+          if git ls-remote --exit-code origin "refs/tags/${release_tag}" >/dev/null 2>&1; then
+            printf "::error title=Release tag exists::Tag '%s' already exists on origin.\n" "$release_tag"
+            exit 1
+          fi
+
+          printf 'base_branch=%s\n' "$base_ref" >> "$GITHUB_OUTPUT"
+          printf 'release_version=%s\n' "$release_version" >> "$GITHUB_OUTPUT"
+          printf 'next_version=%s\n' "$next_version" >> "$GITHUB_OUTPUT"
+          printf 'release_sha=%s\n' "$release_sha" >> "$GITHUB_OUTPUT"
+          printf 'next_sha=%s\n' "$next_sha" >> "$GITHUB_OUTPUT"
+          printf 'release_tag=%s\n' "$release_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95 # v5.6.0
+        with:
+          java-version: '25'
+          distribution: temurin
+          cache: maven
+
+      - name: Validate release version
+        shell: bash
+        env:
+          RELEASE_VERSION: ${{ steps.metadata.outputs.release_version }}
+          RELEASE_SHA: ${{ steps.metadata.outputs.release_sha }}
+        run: |
+          set -euo pipefail
+
+          git switch --detach "$RELEASE_SHA"
+
+          version="$(
+            ./mvnw \
+              --quiet \
+              --batch-mode \
+              --non-recursive \
+              --no-transfer-progress \
+              org.apache.maven.plugins:maven-help-plugin:evaluate \
+              -Dexpression=project.version \
+              -DforceStdout
+          )"
+
+          if [[ "$version" != "$RELEASE_VERSION" ]]; then
+            printf "::error title=Release version mismatch::Expected '%s', but release commit contains '%s'.\n" \
+              "$RELEASE_VERSION" "$version"
+            exit 1
+          fi
+
+      - name: Validate release reactor
+        run: >
+          ./mvnw
+          --batch-mode
+          --errors
+          --show-version
+          --no-transfer-progress
+          -Prelease
+          validate
+
+      - name: Validate next development version
+        shell: bash
+        env:
+          NEXT_VERSION: ${{ steps.metadata.outputs.next_version }}
+          NEXT_SHA: ${{ steps.metadata.outputs.next_sha }}
+        run: |
+          set -euo pipefail
+
+          git switch --detach "$NEXT_SHA"
+
+          version="$(
+            ./mvnw \
+              --quiet \
+              --batch-mode \
+              --non-recursive \
+              --no-transfer-progress \
+              org.apache.maven.plugins:maven-help-plugin:evaluate \
+              -Dexpression=project.version \
+              -DforceStdout
+          )"
+
+          if [[ "$version" != "$NEXT_VERSION" ]]; then
+            printf "::error title=Next version mismatch::Expected '%s', but next development commit contains '%s'.\n" \
+              "$NEXT_VERSION" "$version"
+            exit 1
+          fi
+
+          {
+            printf '## Finalize release validation\n\n'
+            printf -- '- Pull request: `#%s`\n' "${{ inputs.pull_request_number }}"
+            printf -- '- Base branch: `%s`\n' "${{ steps.metadata.outputs.base_branch }}"
+            printf -- '- Release version: `%s`\n' "${{ steps.metadata.outputs.release_version }}"
+            printf -- '- Release commit: `%s`\n' "${{ steps.metadata.outputs.release_sha }}"
+            printf -- '- Next development version: `%s`\n' "$NEXT_VERSION"
+            printf -- '- Next development commit: `%s`\n' "$NEXT_SHA"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  tag:
+    name: Create release tag
+    needs: validate
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout release commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.validate.outputs.release_sha }}
+          persist-credentials: true
+
+      - name: Create and push release tag
+        shell: bash
+        env:
+          RELEASE_VERSION: ${{ needs.validate.outputs.release_version }}
+          RELEASE_SHA: ${{ needs.validate.outputs.release_sha }}
+          RELEASE_TAG: ${{ needs.validate.outputs.release_tag }}
+        run: |
+          set -euo pipefail
+
+          if git ls-remote --exit-code origin "refs/tags/${RELEASE_TAG}" >/dev/null 2>&1; then
+            printf "::error title=Release tag exists::Tag '%s' already exists on origin.\n" "$RELEASE_TAG"
+            exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git tag \
+            --annotate "$RELEASE_TAG" \
+            "$RELEASE_SHA" \
+            --message "MYDATA ${RELEASE_VERSION}"
+
+          git push origin "refs/tags/${RELEASE_TAG}"
+
+  publish:
+    name: Publish to Maven Central
+    needs:
+      - validate
+      - tag
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    permissions:
+      contents: read
+
+    environment: maven-central
+
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.validate.outputs.release_tag }}
+          persist-credentials: false
+
+      - name: Verify release tag target
+        shell: bash
+        env:
+          RELEASE_SHA: ${{ needs.validate.outputs.release_sha }}
+        run: |
+          set -euo pipefail
+
+          actual_sha="$(git rev-parse HEAD)"
+
+          if [[ "$actual_sha" != "$RELEASE_SHA" ]]; then
+            printf "::error title=Release tag mismatch::Expected '%s', but tag resolves to '%s'.\n" \
+              "$RELEASE_SHA" "$actual_sha"
+            exit 1
+          fi
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95 # v5.6.0
+        with:
+          java-version: '25'
+          distribution: temurin
+          cache: maven
+          server-id: maven-central
+          server-username: MAVEN_CENTRAL_USERNAME
+          server-password: MAVEN_CENTRAL_TOKEN
+
+      - name: Publish to Maven Central
+        run: >
+          ./mvnw
+          --batch-mode
+          --errors
+          --show-version
+          --no-transfer-progress
+          -Prelease
+          -Dgpg.signer=bc
+          -DskipTests
+          deploy
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_TOKEN: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
+          MAVEN_GPG_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+  release:
+    name: Create GitHub release draft
+    needs:
+      - validate
+      - publish
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Create GitHub release draft
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ needs.validate.outputs.release_version }}
+          RELEASE_TAG: ${{ needs.validate.outputs.release_tag }}
+        run: |
+          set -euo pipefail
+
+          existing_release="$(
+            gh api "repos/${GITHUB_REPOSITORY}/releases?per_page=100" |
+              jq -r --arg tag "$RELEASE_TAG" \
+                '.[] | select(.tag_name == $tag) | [.id, .draft] | @tsv' |
+              head -n 1
+          )"
+
+          if [[ -n "$existing_release" ]]; then
+            printf "::error title=GitHub release exists::A GitHub release for tag '%s' already exists.\n" "$RELEASE_TAG"
+            exit 1
+          fi
+
+          gh release create "$RELEASE_TAG" \
+            --verify-tag \
+            --draft \
+            --title "MYDATA ${RELEASE_VERSION}" \
+            --generate-notes
+
+          {
+            printf '## Release finalized\n\n'
+            printf -- '- Release: `%s`\n' "$RELEASE_VERSION"
+            printf -- '- Tag: `%s`\n' "$RELEASE_TAG"
+            printf -- '- Maven Central publication completed.\n'
+            printf -- '- GitHub release created as a draft. Review the release notes and publish it manually.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
