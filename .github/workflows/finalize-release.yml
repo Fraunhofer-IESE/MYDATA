@@ -7,6 +7,10 @@ on:
         description: Number of the merged release pull request
         required: true
         type: number
+      release_version:
+        description: Release version to finalize, for example 5.0.0
+        required: true
+        type: string
 
 concurrency:
   group: release-process
@@ -49,6 +53,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ inputs.pull_request_number }}
+          EXPECTED_RELEASE_VERSION: ${{ inputs.release_version }}
         run: |
           set -euo pipefail
 
@@ -87,6 +92,20 @@ jobs:
           minor="${BASH_REMATCH[3]}"
           patch="${BASH_REMATCH[4]}"
           release_tag="v${release_version}"
+
+          release_semver='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$'
+
+          if [[ ! "$EXPECTED_RELEASE_VERSION" =~ $release_semver ]]; then
+            printf "::error title=Invalid release version::Expected MAJOR.MINOR.PATCH, got '%s'.\n" \
+              "$EXPECTED_RELEASE_VERSION"
+            exit 1
+          fi
+
+          if [[ "$release_version" != "$EXPECTED_RELEASE_VERSION" ]]; then
+            printf "::error title=Release confirmation mismatch::Pull request #%s is for release '%s', but workflow was started for release '%s'.\n" \
+              "$PR_NUMBER" "$release_version" "$EXPECTED_RELEASE_VERSION"
+            exit 1
+          fi
 
           if (( patch == 0 )); then
             if [[ "$base_ref" != "main" ]]; then
@@ -156,10 +175,8 @@ jobs:
             if (( next_patch != 0 ||
                 next_major < major ||
                 (next_major == major && next_minor <= minor) )); then
-              printf "::error title=Invalid next version::Next development version '%s' after release '%s' must be a greater non-patch SNAPSHOT version.\n" \
+              printf "::error title=Invalid next version::Next development version '%s' must be a higher non-patch snapshot after release '%s'.\n" \
                 "$next_version" "$release_version"
-              printf '%s\n' \
-                '::error::Expected a version such as the next minor or major version, for example 5.1.0-SNAPSHOT or 6.0.0-SNAPSHOT after 5.0.0.'
               exit 1
             fi
           else
@@ -326,6 +343,10 @@ jobs:
       - name: Validate next development version
         shell: bash
         env:
+          PR_NUMBER: ${{ inputs.pull_request_number }}
+          BASE_BRANCH: ${{ steps.metadata.outputs.base_branch }}
+          RELEASE_VERSION: ${{ steps.metadata.outputs.release_version }}
+          RELEASE_SHA: ${{ steps.metadata.outputs.release_sha }}
           NEXT_VERSION: ${{ steps.metadata.outputs.next_version }}
           NEXT_SHA: ${{ steps.metadata.outputs.next_sha }}
         run: |
@@ -352,10 +373,10 @@ jobs:
 
           {
             printf '## Finalize release validation\n\n'
-            printf -- '- Pull request: `#%s`\n' "${{ inputs.pull_request_number }}"
-            printf -- '- Base branch: `%s`\n' "${{ steps.metadata.outputs.base_branch }}"
-            printf -- '- Release version: `%s`\n' "${{ steps.metadata.outputs.release_version }}"
-            printf -- '- Release commit: `%s`\n' "${{ steps.metadata.outputs.release_sha }}"
+            printf -- '- Pull request: `#%s`\n' "$PR_NUMBER"
+            printf -- '- Base branch: `%s`\n' "$BASE_BRANCH"
+            printf -- '- Release version: `%s`\n' "$RELEASE_VERSION"
+            printf -- '- Release commit: `%s`\n' "$RELEASE_SHA"
             printf -- '- Next development version: `%s`\n' "$NEXT_VERSION"
             printf -- '- Next development commit: `%s`\n' "$NEXT_SHA"
           } >> "$GITHUB_STEP_SUMMARY"
