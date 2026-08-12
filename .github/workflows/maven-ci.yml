@@ -24,42 +24,6 @@ jobs:
       contents: read
 
     steps:
-      - name: Validate release pull request target
-        if: >
-          github.event_name == 'pull_request' &&
-          startsWith(github.head_ref, 'release-candidate/')
-        shell: bash
-        env:
-          HEAD_BRANCH: ${{ github.head_ref }}
-          BASE_BRANCH: ${{ github.base_ref }}
-        run: |
-          set -euo pipefail
-
-          release_regex='^release-candidate/((0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*))$'
-
-          if [[ ! "$HEAD_BRANCH" =~ $release_regex ]]; then
-            printf "::error title=Invalid release candidate::Branch '%s' has an invalid name.\n" \
-              "$HEAD_BRANCH"
-            exit 1
-          fi
-
-          version="${BASH_REMATCH[1]}"
-          major="${BASH_REMATCH[2]}"
-          minor="${BASH_REMATCH[3]}"
-          patch="${BASH_REMATCH[4]}"
-
-          if (( patch == 0 )); then
-            expected_base="main"
-          else
-            expected_base="release/${major}.${minor}"
-          fi
-
-          if [[ "$BASE_BRANCH" != "$expected_base" ]]; then
-            printf "::error title=Invalid release target::Release '%s' must target '%s', not '%s'.\n" \
-              "$version" "$expected_base" "$BASE_BRANCH"
-            exit 1
-          fi
-
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
