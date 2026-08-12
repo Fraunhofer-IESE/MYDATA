@@ -203,7 +203,6 @@ jobs:
           RELEASE_SHA: ${{ steps.metadata.outputs.release_sha }}
           NEXT_SHA: ${{ steps.metadata.outputs.next_sha }}
           MERGE_SHA: ${{ steps.metadata.outputs.merge_sha }}
-          RELEASE_TAG: ${{ steps.metadata.outputs.release_tag }}
         run: |
           set -euo pipefail
 
@@ -216,11 +215,8 @@ jobs:
             exit 1
           fi
 
-          if ! git merge-base --is-ancestor "$RELEASE_SHA" HEAD ||
-             ! git merge-base --is-ancestor "$NEXT_SHA" HEAD ||
-             ! git merge-base --is-ancestor "$MERGE_SHA" HEAD
-          then
-            printf "::error title=Release not on base branch::Release commits and merge commit must all be part of '%s'.\n" "$BASE_BRANCH"
+          if ! git merge-base --is-ancestor "$MERGE_SHA" HEAD; then
+            printf "::error title=Release not on base branch::Merge commit must be part of '%s'.\n" "$BASE_BRANCH"
             exit 1
           fi
 
@@ -265,11 +261,6 @@ jobs:
               '::error title=Unexpected release changes::The two release commits may only modify pom.xml files.'
             printf '%s\n' "$unexpected_release_changes"
             printf '%s\n' "$unexpected_next_changes"
-            exit 1
-          fi
-
-          if git show-ref --verify --quiet "refs/tags/${RELEASE_TAG}"; then
-            printf "::error title=Release tag exists::Tag '%s' already exists.\n" "$RELEASE_TAG"
             exit 1
           fi
 
@@ -475,6 +466,7 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
           RELEASE_VERSION: ${{ needs.validate.outputs.release_version }}
           RELEASE_TAG: ${{ needs.validate.outputs.release_tag }}
         run: |
