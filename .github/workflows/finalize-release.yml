@@ -153,11 +153,13 @@ jobs:
           next_patch="${BASH_REMATCH[3]}"
 
           if (( patch == 0 )); then
-            if (( next_major < major ||
-                  (next_major == major && next_minor < minor) ||
-                  (next_major == major && next_minor == minor && next_patch <= patch) )); then
-              printf "::error title=Invalid next version::Next development version '%s' must be greater than release version '%s'.\n" \
+            if (( next_patch != 0 ||
+                next_major < major ||
+                (next_major == major && next_minor <= minor) )); then
+              printf "::error title=Invalid next version::Next development version '%s' after release '%s' must be a greater non-patch SNAPSHOT version.\n" \
                 "$next_version" "$release_version"
+              printf '%s\n' \
+                '::error::Expected a version such as the next minor or major version, for example 5.1.0-SNAPSHOT or 6.0.0-SNAPSHOT after 5.0.0.'
               exit 1
             fi
           else
