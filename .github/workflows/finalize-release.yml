@@ -43,14 +43,7 @@ jobs:
             exit 1
           fi
 
-      - name: Checkout repository history
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: main
-          fetch-depth: 0
-          persist-credentials: false
-
-      - name: Validate pull request and release history
+      - name: Read and validate pull request metadata
         id: metadata
         shell: bash
         env:
@@ -110,9 +103,6 @@ jobs:
               exit 1
             fi
           fi
-
-          git fetch --no-tags origin \
-            "+refs/heads/${base_ref}:refs/remotes/origin/${base_ref}"
 
           commits_json="$(
             gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/commits?per_page=100"
@@ -186,40 +176,68 @@ jobs:
             exit 1
           fi
 
-          if [[ -z "$merge_sha" ]] ||
-             ! git cat-file -e "${release_sha}^{commit}" 2>/dev/null ||
-             ! git cat-file -e "${next_sha}^{commit}" 2>/dev/null ||
-             ! git cat-file -e "${merge_sha}^{commit}" 2>/dev/null
+          if [[ -z "$merge_sha" ]]; then
+            printf "::error title=Missing merge commit::Pull request #%s has no merge commit SHA.\n" "$PR_NUMBER"
+            exit 1
+          fi
+
+          printf 'base_branch=%s\n' "$base_ref" >> "$GITHUB_OUTPUT"
+          printf 'release_version=%s\n' "$release_version" >> "$GITHUB_OUTPUT"
+          printf 'next_version=%s\n' "$next_version" >> "$GITHUB_OUTPUT"
+          printf 'release_sha=%s\n' "$release_sha" >> "$GITHUB_OUTPUT"
+          printf 'next_sha=%s\n' "$next_sha" >> "$GITHUB_OUTPUT"
+          printf 'merge_sha=%s\n' "$merge_sha" >> "$GITHUB_OUTPUT"
+          printf 'release_tag=%s\n' "$release_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout release base history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ steps.metadata.outputs.base_branch }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate release history
+        shell: bash
+        env:
+          BASE_BRANCH: ${{ steps.metadata.outputs.base_branch }}
+          RELEASE_SHA: ${{ steps.metadata.outputs.release_sha }}
+          NEXT_SHA: ${{ steps.metadata.outputs.next_sha }}
+          MERGE_SHA: ${{ steps.metadata.outputs.merge_sha }}
+          RELEASE_TAG: ${{ steps.metadata.outputs.release_tag }}
+        run: |
+          set -euo pipefail
+
+          if ! git cat-file -e "${RELEASE_SHA}^{commit}" 2>/dev/null ||
+             ! git cat-file -e "${NEXT_SHA}^{commit}" 2>/dev/null ||
+             ! git cat-file -e "${MERGE_SHA}^{commit}" 2>/dev/null
           then
             printf '%s\n' \
               '::error title=Release commits not preserved::Expected release commits are not present in the target branch history. Was the PR squashed or rebased?'
             exit 1
           fi
 
-          base_remote_ref="refs/remotes/origin/${base_ref}"
-
-          if ! git merge-base --is-ancestor "$release_sha" "$base_remote_ref" ||
-             ! git merge-base --is-ancestor "$next_sha" "$base_remote_ref" ||
-             ! git merge-base --is-ancestor "$merge_sha" "$base_remote_ref"
+          if ! git merge-base --is-ancestor "$RELEASE_SHA" HEAD ||
+             ! git merge-base --is-ancestor "$NEXT_SHA" HEAD ||
+             ! git merge-base --is-ancestor "$MERGE_SHA" HEAD
           then
-            printf "::error title=Release not on base branch::Release commits and merge commit must all be part of '%s'.\n" "$base_ref"
+            printf "::error title=Release not on base branch::Release commits and merge commit must all be part of '%s'.\n" "$BASE_BRANCH"
             exit 1
           fi
 
-          read -r -a merge_parents <<< "$(git show -s --format=%P "$merge_sha")"
+          read -r -a merge_parents <<< "$(git show -s --format=%P "$MERGE_SHA")"
 
-          if [[ "${#merge_parents[@]}" -ne 2 || "${merge_parents[1]}" != "$next_sha" ]]; then
+          if [[ "${#merge_parents[@]}" -ne 2 || "${merge_parents[1]}" != "$NEXT_SHA" ]]; then
             printf '%s\n' \
               '::error title=Invalid merge method::Release pull request must be merged using Create a merge commit.'
             exit 1
           fi
 
-          read -r -a release_parents <<< "$(git show -s --format=%P "$release_sha")"
-          read -r -a next_parents <<< "$(git show -s --format=%P "$next_sha")"
+          read -r -a release_parents <<< "$(git show -s --format=%P "$RELEASE_SHA")"
+          read -r -a next_parents <<< "$(git show -s --format=%P "$NEXT_SHA")"
 
           if [[ "${#release_parents[@]}" -ne 1 ||
                 "${#next_parents[@]}" -ne 1 ||
-                "${next_parents[0]}" != "$release_sha" ]]
+                "${next_parents[0]}" != "$RELEASE_SHA" ]]
           then
             printf '%s\n' \
               '::error title=Invalid release history::Next development commit must directly follow the release commit.'
@@ -228,17 +246,17 @@ jobs:
 
           if [[ "${merge_parents[0]}" != "${release_parents[0]}" ]]; then
             printf "::error title=Base branch changed before merge::Release was prepared from '%s', but '%s' was at '%s' when the PR was merged. Prepare the release again from the current base branch HEAD.\n" \
-              "${release_parents[0]}" "$base_ref" "${merge_parents[0]}"
+              "${release_parents[0]}" "$BASE_BRANCH" "${merge_parents[0]}"
             exit 1
           fi
 
           unexpected_release_changes="$(
-            git diff --name-only "${release_sha}^" "$release_sha" |
+            git diff --name-only "${RELEASE_SHA}^" "$RELEASE_SHA" |
               grep -Ev '(^|/)pom\.xml$' || true
           )"
 
           unexpected_next_changes="$(
-            git diff --name-only "$release_sha" "$next_sha" |
+            git diff --name-only "$RELEASE_SHA" "$NEXT_SHA" |
               grep -Ev '(^|/)pom\.xml$' || true
           )"
 
@@ -250,17 +268,10 @@ jobs:
             exit 1
           fi
 
-          if git ls-remote --exit-code origin "refs/tags/${release_tag}" >/dev/null 2>&1; then
-            printf "::error title=Release tag exists::Tag '%s' already exists on origin.\n" "$release_tag"
+          if git show-ref --verify --quiet "refs/tags/${RELEASE_TAG}"; then
+            printf "::error title=Release tag exists::Tag '%s' already exists.\n" "$RELEASE_TAG"
             exit 1
           fi
-
-          printf 'base_branch=%s\n' "$base_ref" >> "$GITHUB_OUTPUT"
-          printf 'release_version=%s\n' "$release_version" >> "$GITHUB_OUTPUT"
-          printf 'next_version=%s\n' "$next_version" >> "$GITHUB_OUTPUT"
-          printf 'release_sha=%s\n' "$release_sha" >> "$GITHUB_OUTPUT"
-          printf 'next_sha=%s\n' "$next_sha" >> "$GITHUB_OUTPUT"
-          printf 'release_tag=%s\n' "$release_tag" >> "$GITHUB_OUTPUT"
 
       - name: Set up JDK 25
         uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95 # v5.6.0

@@ -217,7 +217,7 @@ jobs:
             --no-transfer-progress \
             versions:set \
             -DnewVersion="$RELEASE_VERSION" \
-            -DprocessAllModules=true
+            -DprocessAllModules=true \
             -DgenerateBackupPoms=false
 
           unexpected="$(
@@ -279,7 +279,7 @@ jobs:
             --no-transfer-progress \
             versions:set \
             -DnewVersion="$NEXT_VERSION" \
-            -DprocessAllModules=true
+            -DprocessAllModules=true \
             -DgenerateBackupPoms=false
 
           unexpected="$(
