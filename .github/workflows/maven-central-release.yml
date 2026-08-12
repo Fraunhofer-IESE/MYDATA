@@ -79,7 +79,7 @@ jobs:
           --errors
           --show-version
           --no-transfer-progress
-          -Ppublish
+          -Prelease
           validate
 
       - name: Verify release build
@@ -89,7 +89,7 @@ jobs:
           --errors
           --show-version
           --no-transfer-progress
-          -Ppublish
+          -Prelease
           -Dgpg.skip=true
           verify
 
@@ -128,7 +128,7 @@ jobs:
           --errors
           --show-version
           --no-transfer-progress
-          -Ppublish
+          -Prelease
           -Dgpg.signer=bc
           -DskipTests
           deploy
