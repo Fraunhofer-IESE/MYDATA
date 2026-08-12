@@ -139,6 +139,7 @@ jobs:
       - name: Validate release base
         shell: bash
         env:
+          GH_TOKEN: ${{ github.token }}
           BASE_BRANCH: ${{ inputs.base_branch }}
           EXPECTED_SHA: ${{ inputs.expected_sha }}
           RELEASE_VERSION: ${{ inputs.release_version }}
@@ -162,6 +163,18 @@ jobs:
 
           if git ls-remote --exit-code origin "refs/tags/${RELEASE_TAG}" >/dev/null 2>&1; then
             printf "::error title=Release tag exists::Tag '%s' already exists on origin.\n" "$RELEASE_TAG"
+            exit 1
+          fi
+
+          existing_release_ids="$(
+            gh api --paginate \
+              "repos/${GITHUB_REPOSITORY}/releases?per_page=100" \
+              --jq ".[] | select(.tag_name == \"${RELEASE_TAG}\") | .id"
+          )"
+
+          if [[ -n "$existing_release_ids" ]]; then
+            printf "::error title=GitHub release exists::A GitHub release for tag '%s' already exists.\n" \
+              "$RELEASE_TAG"
             exit 1
           fi
 

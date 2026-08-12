@@ -1,0 +1,273 @@
+name: Release PR Validation
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate release PR
+    if: >-
+      startsWith(github.head_ref, 'release-candidate/') &&
+      (
+        github.event.action != 'edited' ||
+        github.event.changes.base != null
+      )
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      contents: read
+      pull-requests: read
+
+    steps:
+      - name: Validate release pull request
+        id: release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_BRANCH: ${{ github.head_ref }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_BRANCH: ${{ github.base_ref }}
+        run: |
+          set -euo pipefail
+
+          release_regex='^release-candidate/((0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*))$'
+
+          if [[ ! "$HEAD_BRANCH" =~ $release_regex ]]; then
+            printf "::error title=Invalid release candidate::Branch '%s' does not match release-candidate/MAJOR.MINOR.PATCH.\n" \
+              "$HEAD_BRANCH"
+            exit 1
+          fi
+
+          release_version="${BASH_REMATCH[1]}"
+          major="${BASH_REMATCH[2]}"
+          minor="${BASH_REMATCH[3]}"
+          patch="${BASH_REMATCH[4]}"
+          release_tag="v${release_version}"
+
+          if [[ "$HEAD_REPO" != "$GITHUB_REPOSITORY" ]]; then
+            printf "::error title=Invalid source repository::Release pull request came from '%s', expected '%s'.\n" \
+              "$HEAD_REPO" "$GITHUB_REPOSITORY"
+            exit 1
+          fi
+
+          if (( patch == 0 )); then
+            expected_base="main"
+          else
+            expected_base="release/${major}.${minor}"
+          fi
+
+          if [[ "$BASE_BRANCH" != "$expected_base" ]]; then
+            printf "::error title=Invalid release target::Release '%s' must target '%s', not '%s'.\n" \
+              "$release_version" "$expected_base" "$BASE_BRANCH"
+            exit 1
+          fi
+
+          if gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${release_tag}" >/dev/null 2>&1; then
+            printf "::error title=Release tag exists::Tag '%s' already exists.\n" "$release_tag"
+            exit 1
+          fi
+
+          if gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${release_tag}" >/dev/null 2>&1; then
+            printf "::error title=GitHub release exists::A published GitHub release for tag '%s' already exists.\n" \
+              "$release_tag"
+            exit 1
+          fi
+
+          printf 'release_version=%s\n' "$release_version" >> "$GITHUB_OUTPUT"
+          printf 'major=%s\n' "$major" >> "$GITHUB_OUTPUT"
+          printf 'minor=%s\n' "$minor" >> "$GITHUB_OUTPUT"
+          printf 'patch=%s\n' "$patch" >> "$GITHUB_OUTPUT"
+          printf 'release_tag=%s\n' "$release_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Validate release commits
+        id: commits
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_BRANCH: ${{ github.base_ref }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          RELEASE_VERSION: ${{ steps.release.outputs.release_version }}
+          MAJOR: ${{ steps.release.outputs.major }}
+          MINOR: ${{ steps.release.outputs.minor }}
+          PATCH: ${{ steps.release.outputs.patch }}
+        run: |
+          set -euo pipefail
+
+          commits_json="$(
+            gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/commits?per_page=3"
+          )"
+
+          commit_count="$(jq 'length' <<< "$commits_json")"
+
+          if [[ "$commit_count" -ne 2 ]]; then
+            printf "::error title=Unexpected release commit count::Expected exactly 2 commits, but pull request #%s contains %s or more.\n" \
+              "$PR_NUMBER" "$commit_count"
+            exit 1
+          fi
+
+          release_sha="$(jq -r '.[0].sha' <<< "$commits_json")"
+          next_sha="$(jq -r '.[1].sha' <<< "$commits_json")"
+
+          release_subject="$(
+            jq -r '.[0].commit.message | split("\n")[0]' <<< "$commits_json"
+          )"
+          next_subject="$(
+            jq -r '.[1].commit.message | split("\n")[0]' <<< "$commits_json"
+          )"
+
+          expected_release_subject="Prepare release ${RELEASE_VERSION}"
+          next_subject_prefix='Prepare next development version '
+
+          if [[ "$release_subject" != "$expected_release_subject" ]]; then
+            printf "::error title=Unexpected release commit::Expected subject '%s', but found '%s'.\n" \
+              "$expected_release_subject" "$release_subject"
+            exit 1
+          fi
+
+          if [[ "$next_subject" != "${next_subject_prefix}"* ]]; then
+            printf "::error title=Unexpected development commit::Unexpected subject '%s'.\n" \
+              "$next_subject"
+            exit 1
+          fi
+
+          next_version="${next_subject#"$next_subject_prefix"}"
+          snapshot_semver='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)-SNAPSHOT$'
+
+          if [[ ! "$next_version" =~ $snapshot_semver ]]; then
+            printf "::error title=Invalid next version::'%s' is not a MAJOR.MINOR.PATCH-SNAPSHOT version.\n" \
+              "$next_version"
+            exit 1
+          fi
+
+          next_major="${BASH_REMATCH[1]}"
+          next_minor="${BASH_REMATCH[2]}"
+          next_patch="${BASH_REMATCH[3]}"
+
+          if (( PATCH == 0 )); then
+            if (( next_patch != 0 ||
+                  next_major < MAJOR ||
+                  (next_major == MAJOR && next_minor <= MINOR) )); then
+              printf "::error title=Invalid next version::Next development version '%s' must be a higher non-patch snapshot after release '%s'.\n" \
+                "$next_version" "$RELEASE_VERSION"
+              exit 1
+            fi
+          else
+            expected_next_version="${MAJOR}.${MINOR}.$((PATCH + 1))-SNAPSHOT"
+
+            if [[ "$next_version" != "$expected_next_version" ]]; then
+              printf "::error title=Invalid next patch version::Expected '%s' after patch release '%s', but found '%s'.\n" \
+                "$expected_next_version" "$RELEASE_VERSION" "$next_version"
+              exit 1
+            fi
+          fi
+
+          if [[ "$HEAD_SHA" != "$next_sha" ]]; then
+            printf "::error title=Unexpected pull request head::PR head '%s' does not match expected next-version commit '%s'.\n" \
+              "$HEAD_SHA" "$next_sha"
+            exit 1
+          fi
+
+          release_parent_count="$(jq '.[0].parents | length' <<< "$commits_json")"
+          next_parent_count="$(jq '.[1].parents | length' <<< "$commits_json")"
+          release_parent_sha="$(jq -r '.[0].parents[0].sha // empty' <<< "$commits_json")"
+          next_parent_sha="$(jq -r '.[1].parents[0].sha // empty' <<< "$commits_json")"
+
+          if [[ "$release_parent_count" -ne 1 ||
+                "$next_parent_count" -ne 1 ||
+                "$next_parent_sha" != "$release_sha" ]]
+          then
+            printf '%s\n' \
+              '::error title=Invalid release history::Next development commit must directly follow the release commit.'
+            exit 1
+          fi
+
+          if [[ "$release_parent_sha" != "$BASE_SHA" ]]; then
+            printf "::error title=Release candidate is outdated::Release '%s' was prepared from '%s', but current '%s' is '%s'. Prepare the release again from the current base branch HEAD.\n" \
+              "$RELEASE_VERSION" "$release_parent_sha" "$BASE_BRANCH" "$BASE_SHA"
+            exit 1
+          fi
+
+          printf 'release_sha=%s\n' "$release_sha" >> "$GITHUB_OUTPUT"
+          printf 'next_version=%s\n' "$next_version" >> "$GITHUB_OUTPUT"
+          printf 'next_sha=%s\n' "$next_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Validate release commit changes
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ steps.commits.outputs.release_sha }}
+          NEXT_SHA: ${{ steps.commits.outputs.next_sha }}
+        run: |
+          set -euo pipefail
+
+          validate_pom_only_commit() {
+            local label="$1"
+            local sha="$2"
+            local changed_files
+            local unexpected
+
+            changed_files="$(
+              gh api --paginate \
+                "repos/${GITHUB_REPOSITORY}/commits/${sha}?per_page=100" \
+                --jq '.files[].filename'
+            )"
+
+            if [[ -z "$changed_files" ]]; then
+              printf "::error title=Empty %s commit::Commit '%s' does not change any files.\n" \
+                "$label" "$sha"
+              exit 1
+            fi
+
+            unexpected="$(
+              gh api --paginate \
+                "repos/${GITHUB_REPOSITORY}/commits/${sha}?per_page=100" \
+                --jq '.files[] | select((.filename | test("(^|/)pom\\.xml$") | not) or .status != "modified") | "\(.status)\t\(.filename)"'
+            )"
+
+            if [[ -n "$unexpected" ]]; then
+              printf "::error title=Unexpected %s changes::Commit '%s' may only modify existing pom.xml files.\n" \
+                "$label" "$sha"
+              printf '%s\n' "$unexpected"
+              exit 1
+            fi
+          }
+
+          validate_pom_only_commit 'release' "$RELEASE_SHA"
+          validate_pom_only_commit 'next development' "$NEXT_SHA"
+
+      - name: Write validation summary
+        shell: bash
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_BRANCH: ${{ github.base_ref }}
+          RELEASE_VERSION: ${{ steps.release.outputs.release_version }}
+          RELEASE_TAG: ${{ steps.release.outputs.release_tag }}
+          RELEASE_SHA: ${{ steps.commits.outputs.release_sha }}
+          NEXT_VERSION: ${{ steps.commits.outputs.next_version }}
+          NEXT_SHA: ${{ steps.commits.outputs.next_sha }}
+        run: |
+          set -euo pipefail
+
+          {
+            printf '## Release pull request validation\n\n'
+            printf -- '- Pull request: `#%s`\n' "$PR_NUMBER"
+            printf -- '- Base branch: `%s`\n' "$BASE_BRANCH"
+            printf -- '- Release version: `%s`\n' "$RELEASE_VERSION"
+            printf -- '- Release commit: `%s`\n' "$RELEASE_SHA"
+            printf -- '- Release tag: `%s`\n' "$RELEASE_TAG"
+            printf -- '- Next development version: `%s`\n' "$NEXT_VERSION"
+            printf -- '- Next development commit: `%s`\n' "$NEXT_SHA"
+          } >> "$GITHUB_STEP_SUMMARY"

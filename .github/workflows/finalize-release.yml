@@ -29,11 +29,8 @@ jobs:
       pull-requests: read
 
     outputs:
-      base_branch: ${{ steps.metadata.outputs.base_branch }}
       release_version: ${{ steps.metadata.outputs.release_version }}
-      next_version: ${{ steps.metadata.outputs.next_version }}
       release_sha: ${{ steps.metadata.outputs.release_sha }}
-      next_sha: ${{ steps.metadata.outputs.next_sha }}
       release_tag: ${{ steps.metadata.outputs.release_tag }}
 
     steps:
@@ -124,13 +121,13 @@ jobs:
           fi
 
           commits_json="$(
-            gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/commits?per_page=100"
+            gh api "repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}/commits?per_page=3"
           )"
 
           commit_count="$(jq 'length' <<< "$commits_json")"
 
           if [[ "$commit_count" -ne 2 ]]; then
-            printf "::error title=Unexpected release commit count::Expected exactly 2 commits, but pull request #%s contains %s.\n" \
+            printf "::error title=Unexpected release commit count::Expected exactly 2 commits, but pull request #%s contains %s or more.\n" \
               "$PR_NUMBER" "$commit_count"
             exit 1
           fi
@@ -413,14 +410,28 @@ jobs:
       - name: Create and push release tag
         shell: bash
         env:
+          GH_TOKEN: ${{ github.token }}
           RELEASE_VERSION: ${{ needs.validate.outputs.release_version }}
           RELEASE_SHA: ${{ needs.validate.outputs.release_sha }}
           RELEASE_TAG: ${{ needs.validate.outputs.release_tag }}
         run: |
           set -euo pipefail
 
+          existing_release_ids="$(
+            gh api --paginate \
+              "repos/${GITHUB_REPOSITORY}/releases?per_page=100" \
+              --jq ".[] | select(.tag_name == \"${RELEASE_TAG}\") | .id"
+          )"
+          
+          if [[ -n "$existing_release_ids" ]]; then
+            printf "::error title=GitHub release exists::A GitHub release for tag '%s' already exists.\n" \
+              "$RELEASE_TAG"
+            exit 1
+          fi
+          
           if git ls-remote --exit-code origin "refs/tags/${RELEASE_TAG}" >/dev/null 2>&1; then
-            printf "::error title=Release tag exists::Tag '%s' already exists on origin.\n" "$RELEASE_TAG"
+            printf "::error title=Release tag exists::Tag '%s' already exists on origin.\n" \
+              "$RELEASE_TAG"
             exit 1
           fi
 
@@ -520,15 +531,15 @@ jobs:
         run: |
           set -euo pipefail
 
-          existing_release="$(
-            gh api "repos/${GITHUB_REPOSITORY}/releases?per_page=100" |
-              jq -r --arg tag "$RELEASE_TAG" \
-                '.[] | select(.tag_name == $tag) | [.id, .draft] | @tsv' |
-              head -n 1
+          existing_release_ids="$(
+            gh api --paginate \
+              "repos/${GITHUB_REPOSITORY}/releases?per_page=100" \
+              --jq ".[] | select(.tag_name == \"${RELEASE_TAG}\") | .id"
           )"
 
-          if [[ -n "$existing_release" ]]; then
-            printf "::error title=GitHub release exists::A GitHub release for tag '%s' already exists.\n" "$RELEASE_TAG"
+          if [[ -n "$existing_release_ids" ]]; then
+            printf "::error title=GitHub release exists::A GitHub release for tag '%s' already exists.\n" \
+              "$RELEASE_TAG"
             exit 1
           fi
 
