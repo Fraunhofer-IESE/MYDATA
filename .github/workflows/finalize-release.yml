@@ -343,10 +343,6 @@ jobs:
       - name: Validate next development version
         shell: bash
         env:
-          PR_NUMBER: ${{ inputs.pull_request_number }}
-          BASE_BRANCH: ${{ steps.metadata.outputs.base_branch }}
-          RELEASE_VERSION: ${{ steps.metadata.outputs.release_version }}
-          RELEASE_SHA: ${{ steps.metadata.outputs.release_sha }}
           NEXT_VERSION: ${{ steps.metadata.outputs.next_version }}
           NEXT_SHA: ${{ steps.metadata.outputs.next_sha }}
         run: |
@@ -371,12 +367,28 @@ jobs:
             exit 1
           fi
 
+      - name: Write validation summary
+        shell: bash
+        env:
+          PR_NUMBER: ${{ inputs.pull_request_number }}
+          BASE_BRANCH: ${{ steps.metadata.outputs.base_branch }}
+          RELEASE_VERSION: ${{ steps.metadata.outputs.release_version }}
+          RELEASE_SHA: ${{ steps.metadata.outputs.release_sha }}
+          NEXT_VERSION: ${{ steps.metadata.outputs.next_version }}
+          NEXT_SHA: ${{ steps.metadata.outputs.next_sha }}
+          RELEASE_TAG: ${{ steps.metadata.outputs.release_tag }}
+          MERGE_SHA: ${{ steps.metadata.outputs.merge_sha }}
+        run: |
+          set -euo pipefail
+
           {
             printf '## Finalize release validation\n\n'
             printf -- '- Pull request: `#%s`\n' "$PR_NUMBER"
             printf -- '- Base branch: `%s`\n' "$BASE_BRANCH"
+            printf -- '- Merge commit: `%s`\n' "$MERGE_SHA"
             printf -- '- Release version: `%s`\n' "$RELEASE_VERSION"
             printf -- '- Release commit: `%s`\n' "$RELEASE_SHA"
+            printf -- '- Release tag: `%s`\n' "$RELEASE_TAG"
             printf -- '- Next development version: `%s`\n' "$NEXT_VERSION"
             printf -- '- Next development commit: `%s`\n' "$NEXT_SHA"
           } >> "$GITHUB_STEP_SUMMARY"
