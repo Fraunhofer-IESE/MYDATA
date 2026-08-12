@@ -191,10 +191,10 @@ jobs:
           printf 'merge_sha=%s\n' "$merge_sha" >> "$GITHUB_OUTPUT"
           printf 'release_tag=%s\n' "$release_tag" >> "$GITHUB_OUTPUT"
 
-      - name: Checkout release base history
+      - name: Checkout repository history
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ steps.metadata.outputs.base_branch }}
+          ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
 
@@ -208,23 +208,34 @@ jobs:
         run: |
           set -euo pipefail
 
+          base_ref="refs/remotes/origin/${BASE_BRANCH}"
+
+          if ! git show-ref --verify --quiet "$base_ref"; then
+            printf "::error title=Base branch not found::Branch '%s' is not available in the fetched repository history.\n" \
+              "$BASE_BRANCH"
+            exit 1
+          fi
+
           if ! git cat-file -e "${RELEASE_SHA}^{commit}" 2>/dev/null ||
              ! git cat-file -e "${NEXT_SHA}^{commit}" 2>/dev/null ||
              ! git cat-file -e "${MERGE_SHA}^{commit}" 2>/dev/null
           then
             printf '%s\n' \
-              '::error title=Release commits not preserved::Expected release commits are not present in the target branch history. Was the PR squashed or rebased?'
+              '::error title=Release commits not preserved::Expected release commits are not present in the repository history. Was the PR squashed or rebased?'
             exit 1
           fi
 
-          if ! git merge-base --is-ancestor "$MERGE_SHA" HEAD; then
-            printf "::error title=Release not on base branch::Merge commit must be part of '%s'.\n" "$BASE_BRANCH"
+          if ! git merge-base --is-ancestor "$MERGE_SHA" "$base_ref"; then
+            printf "::error title=Release not on base branch::Merge commit must be part of '%s'.\n" \
+              "$BASE_BRANCH"
             exit 1
           fi
 
           read -r -a merge_parents <<< "$(git show -s --format=%P "$MERGE_SHA")"
 
-          if [[ "${#merge_parents[@]}" -ne 2 || "${merge_parents[1]}" != "$NEXT_SHA" ]]; then
+          if [[ "${#merge_parents[@]}" -ne 2 ||
+                "${merge_parents[1]}" != "$NEXT_SHA" ]]
+          then
             printf '%s\n' \
               '::error title=Invalid merge method::Release pull request must be merged using Create a merge commit.'
             exit 1
@@ -258,7 +269,9 @@ jobs:
               grep -Ev '(^|/)pom\.xml$' || true
           )"
 
-          if [[ -n "$unexpected_release_changes" || -n "$unexpected_next_changes" ]]; then
+          if [[ -n "$unexpected_release_changes" ||
+                -n "$unexpected_next_changes" ]]
+          then
             printf '%s\n' \
               '::error title=Unexpected release changes::The two release commits may only modify pom.xml files.'
             printf '%s\n' "$unexpected_release_changes"
