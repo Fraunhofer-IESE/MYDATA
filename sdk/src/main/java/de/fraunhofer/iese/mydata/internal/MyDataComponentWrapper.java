@@ -38,7 +38,7 @@ import de.fraunhofer.iese.mydata.policy.parameter.ParameterList;
 import de.fraunhofer.iese.mydata.registry.InterfaceDescriptionDiscovery;
 import de.fraunhofer.iese.mydata.solution.SolutionId;
 
-import com.google.common.primitives.Primitives;
+import org.apache.commons.lang3.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -246,7 +246,7 @@ class MyDataComponentWrapper<T extends IMyDataComponent> implements IMyDataCompo
   private Object handleNumericParameter(Object value, Class<?> methodParameterType) {
     Class<?> typeOfParameter = methodParameterType;
     if (methodParameterType.isPrimitive()) {
-      typeOfParameter = Primitives.wrap(methodParameterType);
+      typeOfParameter = ClassUtils.primitiveToWrapper(methodParameterType);
     }
     if (Number.class.isAssignableFrom(typeOfParameter) && value instanceof Number
         && !value.getClass().isAssignableFrom(methodParameterType)) {

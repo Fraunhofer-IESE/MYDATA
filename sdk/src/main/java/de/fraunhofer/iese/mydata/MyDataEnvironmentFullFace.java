@@ -67,8 +67,8 @@ import de.fraunhofer.iese.mydata.solution.SolutionId;
 import de.fraunhofer.iese.mydata.util.DependencyCheck;
 import de.fraunhofer.iese.mydata.util.ModifierMethodDiscoveryUtil;
 
-import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.lang3.StringUtils;
+import org.jspecify.annotations.Nullable;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
@@ -90,8 +90,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-
-import org.jspecify.annotations.Nullable;
 
 final class MyDataEnvironmentFullFace implements IMyDataEnvironmentFullFace {
   private static final String FAILED_TO_PUBLISH_COMPONENT_INFORMATION_LOG_MESSAGE = "Failed to publish componentInformation of {} via SyncService";
@@ -143,6 +141,7 @@ final class MyDataEnvironmentFullFace implements IMyDataEnvironmentFullFace {
         null, Objects.requireNonNull(connectorFactory), null, null, null, null, null);
   }
 
+  /* VisibleForTesting */
   /**
    * This constructor is for internal use only. It can also be used to unit test parts of the
    * MyDataEnvironmentFullFace implementation. When testing other parts of the software, mock the
@@ -164,7 +163,6 @@ final class MyDataEnvironmentFullFace implements IMyDataEnvironmentFullFace {
    * @param  localTimezone          the local timezone
    * @hidden
    */
-  @VisibleForTesting
   MyDataEnvironmentFullFace(String environmentId, boolean initializing, boolean active,
       IComponentInstanceStore componentInstanceStore, ISyncService syncService,
       OperationalMode operationalMode, ConnectorFactory connectorFactory, SolutionId solutionId,

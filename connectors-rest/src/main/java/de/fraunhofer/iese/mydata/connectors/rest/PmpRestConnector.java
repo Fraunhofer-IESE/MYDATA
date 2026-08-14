@@ -44,7 +44,6 @@ import de.fraunhofer.iese.mydata.solution.SolutionId;
 import de.fraunhofer.iese.mydata.timer.Timer;
 import de.fraunhofer.iese.mydata.timer.TimerId;
 
-import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -54,8 +53,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.rmi.RemoteException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -478,7 +478,9 @@ public class PmpRestConnector extends AbstractRestConnector implements IBasicMan
       }
       final Timer[] timers = this.httpClient.getForObject(URI.create(builder.toUriString()),
           Timer[].class);
-      return timers != null ? Sets.newHashSet(timers) : new HashSet<>();
+      return timers == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(timers));
     } catch (final RestClientException httpException) {
       this.handleAndRethrowInvalidEntityException(httpException);
       this.handleAndRethrowNoSuchEntityException(httpException);
@@ -518,7 +520,9 @@ public class PmpRestConnector extends AbstractRestConnector implements IBasicMan
 
       final Policy[] policies = this.httpClient.getForObject(URI.create(builder.toUriString()),
           Policy[].class);
-      return policies != null ? Sets.newHashSet(policies) : new HashSet<>();
+      return policies == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(policies));
     } catch (final RestClientException httpException) {
       this.handleAndRethrowInvalidEntityException(httpException);
       this.handleAndRethrowNoSuchEntityException(httpException);
@@ -637,7 +641,9 @@ public class PmpRestConnector extends AbstractRestConnector implements IBasicMan
       }
       final PolicyId[] policies = this.httpClient.getForObject(URI.create(builder.toUriString()),
           PolicyId[].class);
-      return policies != null ? Sets.newHashSet(policies) : new HashSet<>();
+      return policies == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(policies));
     } catch (final RestClientException httpException) {
       this.handleAndRethrowInvalidEntityException(httpException);
       this.handleAndRethrowNoSuchEntityException(httpException);
@@ -656,7 +662,9 @@ public class PmpRestConnector extends AbstractRestConnector implements IBasicMan
       }
       final PepComponentInformation[] components = this.httpClient
           .getForObject(URI.create(builder.toUriString()), PepComponentInformation[].class);
-      return components != null ? Sets.newHashSet(components) : new HashSet<>();
+      return components == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(components));
     } catch (final RestClientException httpException) {
       this.handleAndRethrowInvalidEntityException(httpException);
       this.handleAndRethrowNoSuchEntityException(httpException);
@@ -679,7 +687,9 @@ public class PmpRestConnector extends AbstractRestConnector implements IBasicMan
       }
       final PipComponentInformation[] components = this.httpClient
           .getForObject(URI.create(builder.toUriString()), PipComponentInformation[].class);
-      return components != null ? Sets.newHashSet(components) : new HashSet<>();
+      return components == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(components));
     } catch (final RestClientException httpException) {
       this.handleAndRethrowInvalidEntityException(httpException);
       this.handleAndRethrowNoSuchEntityException(httpException);
@@ -702,7 +712,9 @@ public class PmpRestConnector extends AbstractRestConnector implements IBasicMan
       }
       final PxpComponentInformation[] components = this.httpClient
           .getForObject(URI.create(builder.toUriString()), PxpComponentInformation[].class);
-      return components != null ? Sets.newHashSet(components) : new HashSet<>();
+      return components == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(components));
     } catch (final RestClientException httpException) {
       this.handleAndRethrowInvalidEntityException(httpException);
       this.handleAndRethrowNoSuchEntityException(httpException);
@@ -854,7 +866,9 @@ public class PmpRestConnector extends AbstractRestConnector implements IBasicMan
       final TimerId[] policies = this.httpClient.getForObject(
           URI.create(addQueryParameters(this.getBaseUrl() + TIMER_IDS_PREFIX, queryParams)),
           TimerId[].class);
-      return policies != null ? Sets.newHashSet(policies) : new HashSet<>();
+      return policies == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(policies));
     } catch (final RestClientException httpException) {
       this.handleAndRethrowInvalidEntityException(httpException);
       this.handleAndRethrowNoSuchEntityException(httpException);

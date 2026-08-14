@@ -30,7 +30,6 @@ import de.fraunhofer.iese.mydata.policy.event.history.HistoricEventTrackItem;
 import de.fraunhofer.iese.mydata.policy.event.history.IEventRepository;
 import de.fraunhofer.iese.mydata.util.SecureXmlUtils;
 
-import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,8 +91,8 @@ public abstract class AbstractEventRepository implements IEventRepository {
         .getOrDefault(actionId, Collections.emptyMap()).keySet());
   }
 
+  /* VisibleForTesting */
   @Override
-  @VisibleForTesting
   public Map<ActionId, Set<PolicyId>> getEventsToBeStored() {
     // do not touch my internal state!
     final Lock lock = this.eventHistoryTrackingLock;
@@ -108,8 +107,8 @@ public abstract class AbstractEventRepository implements IEventRepository {
 
   }
 
+  /* VisibleForTesting */
   @Override
-  @VisibleForTesting
   public Map<ActionId, Set<HistoricEventTrackItem>> getHistoricEventTrackItemsPerActionId() {
     // do not touch my internal state!
     return Collections.unmodifiableMap(

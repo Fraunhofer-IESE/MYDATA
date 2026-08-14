@@ -60,6 +60,7 @@ public interface IEventRepository {
 
   List<HistoricEvent> findByOccurredAtMsBetweenAndActionId(long start, long end, ActionId actionId);
 
+  /* VisibleForTesting */
   /**
    * Returns {@code Map<ActionId, List<String>>}, The parameters to save for that event
    *
@@ -67,6 +68,7 @@ public interface IEventRepository {
    */
   Map<ActionId, Set<HistoricEventTrackItem>> getHistoricEventTrackItemsPerActionId();
 
+  /* VisibleForTesting */
   /**
    * Returns {@code Map<ActionId, List<String>>}, Events with ActionId are to be stored.
    *

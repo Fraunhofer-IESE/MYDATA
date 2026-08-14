@@ -22,13 +22,11 @@
 
 package de.fraunhofer.iese.mydata.util;
 
-import com.google.common.annotations.VisibleForTesting;
-
 import java.time.Instant;
 
 public class ClockProvider {
 
-  private static Clock clock = buildDefaultClock();
+  private static final Clock clock = buildDefaultClock();
 
   private ClockProvider() {
     // private constructor as suggested for utility classes
@@ -36,16 +34,6 @@ public class ClockProvider {
 
   public static Clock getClock() {
     return ClockProvider.clock;
-  }
-
-  @VisibleForTesting
-  public static void setClock(Clock clock) {
-    ClockProvider.clock = clock;
-  }
-
-  @VisibleForTesting
-  public static void resetClock() {
-    ClockProvider.clock = buildDefaultClock();
   }
 
   private static Clock buildDefaultClock() {

@@ -52,7 +52,6 @@ import de.fraunhofer.iese.mydata.user.MyDataRole;
 import de.fraunhofer.iese.mydata.user.User;
 import de.fraunhofer.iese.mydata.user.dto.UpdatePasswordDTO;
 
-import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -70,7 +69,6 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -284,7 +282,9 @@ public class ManagementServiceRestConnector extends PmpRestConnector implements 
       final SolutionId[] solutionIds = this.httpClient.getForObject(
           URI.create(addQueryParameters(this.getBaseUrl() + SOLUTION_IDS_PREFIX, queryParams)),
           SolutionId[].class);
-      return solutionIds != null ? Sets.newHashSet(solutionIds) : new HashSet<>();
+      return solutionIds == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(solutionIds));
     } catch (final RestClientException httpException) {
       this.handleAndRethrowInvalidEntityException(httpException);
       this.handleAndRethrowNoSuchEntityException(httpException);
@@ -304,7 +304,9 @@ public class ManagementServiceRestConnector extends PmpRestConnector implements 
       final Solution[] solutions = this.httpClient.getForObject(
           URI.create(addQueryParameters(this.getBaseUrl() + SOLUTION_PREFIX, queryParams)),
           Solution[].class);
-      return solutions != null ? Sets.newHashSet(solutions) : new HashSet<>();
+      return solutions == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(solutions));
     } catch (final RestClientException httpException) {
       this.handleAndRethrowInvalidEntityException(httpException);
       this.handleAndRethrowNoSuchEntityException(httpException);
@@ -324,7 +326,9 @@ public class ManagementServiceRestConnector extends PmpRestConnector implements 
       final SolutionId[] solutionIds = this.httpClient.getForObject(
           URI.create(addQueryParameters(this.getBaseUrl() + SOLUTION_IDS_PREFIX, queryParams)),
           SolutionId[].class);
-      return solutionIds != null ? Sets.newHashSet(solutionIds) : new HashSet<>();
+      return solutionIds == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(solutionIds));
     } catch (final RestClientException httpException) {
       this.handleAndRethrowNoSuchEntityException(httpException);
       throw new IOException(httpException);
@@ -343,7 +347,9 @@ public class ManagementServiceRestConnector extends PmpRestConnector implements 
       final Solution[] solutions = this.httpClient.getForObject(
           URI.create(addQueryParameters(this.getBaseUrl() + SOLUTION_PREFIX, queryParams)),
           Solution[].class);
-      return solutions != null ? Sets.newHashSet(solutions) : new HashSet<>();
+      return solutions == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(solutions));
     } catch (final RestClientException httpException) {
       this.handleAndRethrowNoSuchEntityException(httpException);
       throw new IOException(httpException);
@@ -495,7 +501,9 @@ public class ManagementServiceRestConnector extends PmpRestConnector implements 
       final String[] userIds = this.httpClient.getForObject(
           URI.create(addQueryParameters(this.getBaseUrl() + USER_IDS_PREFIX, queryParams)),
           String[].class);
-      return userIds != null ? Sets.newHashSet(userIds) : new HashSet<>();
+      return userIds == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(userIds));
     } catch (final RestClientException httpException) {
       throw new IOException(httpException);
     }
@@ -527,7 +535,9 @@ public class ManagementServiceRestConnector extends PmpRestConnector implements 
       final String[] userIds = this.httpClient.getForObject(
           URI.create(addQueryParameters(this.getBaseUrl() + USER_IDS_PREFIX, queryParams)),
           String[].class);
-      return userIds != null ? Sets.newHashSet(userIds) : new HashSet<>();
+      return userIds == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(userIds));
     } catch (final RestClientException httpException) {
       this.handleAndRethrowInvalidEntityException(httpException);
       this.handleAndRethrowNoSuchEntityException(httpException);
@@ -543,7 +553,9 @@ public class ManagementServiceRestConnector extends PmpRestConnector implements 
       final User[] users = this.httpClient.getForObject(
           URI.create(addQueryParameters(this.getBaseUrl() + USERS_PREFIX, queryParams)),
           User[].class);
-      return users != null ? Sets.newHashSet(users) : new HashSet<>();
+      return users == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(users));
     } catch (final RestClientException httpException) {
       throw new IOException(httpException);
     }
@@ -575,7 +587,9 @@ public class ManagementServiceRestConnector extends PmpRestConnector implements 
       final User[] users = this.httpClient.getForObject(
           URI.create(addQueryParameters(this.getBaseUrl() + USERS_PREFIX, queryParams)),
           User[].class);
-      return users != null ? Sets.newHashSet(users) : new HashSet<>();
+      return users == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(users));
     } catch (final RestClientException httpException) {
       this.handleAndRethrowInvalidEntityException(httpException);
       this.handleAndRethrowNoSuchEntityException(httpException);
@@ -733,7 +747,9 @@ public class ManagementServiceRestConnector extends PmpRestConnector implements 
       final AffiliationId[] affiliationIds = this.httpClient.getForObject(
           URI.create(addQueryParameters(this.getBaseUrl() + AFFILIATION_IDS_PREFIX, queryParams)),
           AffiliationId[].class);
-      return affiliationIds != null ? Sets.newHashSet(affiliationIds) : new HashSet<>();
+      return affiliationIds == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(affiliationIds));
     } catch (final RestClientException httpException) {
       throw new IOException(httpException);
     }
@@ -747,7 +763,9 @@ public class ManagementServiceRestConnector extends PmpRestConnector implements 
       final Affiliation[] affiliations = this.httpClient.getForObject(
           URI.create(addQueryParameters(this.getBaseUrl() + AFFILIATION_PREFIX, queryParams)),
           Affiliation[].class);
-      return affiliations != null ? Sets.newHashSet(affiliations) : new HashSet<>();
+      return affiliations == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(affiliations));
     } catch (final RestClientException httpException) {
       throw new IOException(httpException);
     }
@@ -1063,7 +1081,9 @@ public class ManagementServiceRestConnector extends PmpRestConnector implements 
       final LibraryClient[] libraryClients = this.httpClient.getForObject(
           URI.create(addQueryParameters(this.getBaseUrl() + LIBRARY_CLIENTS_PREFIX, queryParams)),
           LibraryClient[].class);
-      return libraryClients != null ? Sets.newHashSet(libraryClients) : new HashSet<>();
+      return libraryClients == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(libraryClients));
     } catch (final RestClientException httpException) {
       this.handleAndRethrowInvalidEntityException(httpException);
       this.handleAndRethrowNoSuchEntityException(httpException);
@@ -1232,7 +1252,9 @@ public class ManagementServiceRestConnector extends PmpRestConnector implements 
       final OAuthClientDetailsDTO[] clients = this.httpClient.getForObject(
           URI.create(addQueryParameters(this.getBaseUrl() + OAUTH_CLIENTS_PREFIX, queryParams)),
           OAuthClientDetailsDTO[].class);
-      return clients != null ? Sets.newHashSet(clients) : new HashSet<>();
+      return clients == null
+          ? Collections.emptySet()
+          : Set.copyOf(Arrays.asList(clients));
     } catch (final RestClientException httpException) {
       this.handleAndRethrowNoSuchEntityException(httpException);
       throw new IOException(httpException);

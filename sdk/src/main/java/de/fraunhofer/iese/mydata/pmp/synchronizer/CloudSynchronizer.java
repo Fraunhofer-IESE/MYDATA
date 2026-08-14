@@ -44,7 +44,6 @@ import de.fraunhofer.iese.mydata.timer.ITimerService;
 import de.fraunhofer.iese.mydata.timer.Timer;
 import de.fraunhofer.iese.mydata.timer.TimerId;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.gson.reflect.TypeToken;
 import org.jspecify.annotations.Nullable;
 import org.quartz.CronExpression;
@@ -200,10 +199,10 @@ public class CloudSynchronizer implements ISyncService {
     }
   }
 
-  /**
-   * Contract: this method does not throw any exceptions
-   */
-  @VisibleForTesting
+  /*
+  * Contract: this method does not throw any exceptions!
+  * VisibleForTesting
+  */
   void sync() {
     try {
       if (!this.semaphore.tryAcquire()) {
