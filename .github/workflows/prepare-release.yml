@@ -364,7 +364,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          compare_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/compare/${BASE_BRANCH}...${RELEASE_BRANCH}?expand=1"
+          compare_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/compare/${BASE_BRANCH}...${RELEASE_BRANCH}?quick_pull=1"
 
           {
             printf '## Release prepared\n\n'
@@ -376,6 +376,6 @@ jobs:
             printf -- '- Release commit: `%s`\n' "$RELEASE_SHA"
             printf -- '- Next development commit: `%s`\n' "$NEXT_SHA"
             printf -- '- Future release tag: `%s`\n\n' "$RELEASE_TAG"
-            printf 'Create a pull request manually: [Open compare view](%s)\n\n' "$compare_url"
+            printf 'Create a pull request manually: [Open pull request form](%s)\n\n' "$compare_url"
             printf '**Important:** Merge the release pull request using **Create a merge commit**.\n'
           } >> "$GITHUB_STEP_SUMMARY"
