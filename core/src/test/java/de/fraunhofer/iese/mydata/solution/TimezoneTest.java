@@ -22,19 +22,20 @@
 
 package de.fraunhofer.iese.mydata.solution;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 class TimezoneTest {
 
+  private static final String EUROPE_BERLIN_ZONE_ID = "Europe/Berlin";
+
   @Test
   void constructors() {
     final Timezone tz = new Timezone();
-    tz.setZoneid("Europe/Berlin");
-    assert tz.getZoneid().equals("Europe/Berlin");
-    final LocalDateTime servertimer = tz.getServerDateTime();
-    assert servertimer.atZone(ZoneId.of("Europe/Berlin")).isEqual(servertimer.atZone(ZoneId.of(tz.getZoneid())));
+    tz.setZoneid(EUROPE_BERLIN_ZONE_ID);
+    Assertions.assertEquals(EUROPE_BERLIN_ZONE_ID, tz.getZoneid());
+    Assertions.assertEquals(ZoneId.of(EUROPE_BERLIN_ZONE_ID), ZoneId.of(tz.getZoneid()));
   }
 }

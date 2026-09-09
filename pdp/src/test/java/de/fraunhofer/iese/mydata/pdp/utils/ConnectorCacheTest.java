@@ -47,7 +47,6 @@ import de.fraunhofer.iese.mydata.pdp.PolicyDecisionPoint;
 import de.fraunhofer.iese.mydata.pdp.interfaces.IConnectorCache;
 import de.fraunhofer.iese.mydata.solution.SolutionId;
 
-import com.google.common.collect.Sets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -65,10 +64,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -129,11 +129,11 @@ public class ConnectorCacheTest {
     setInternalState(this.connectorCache, "pmpCache", this.pmpMock);
     setInternalState(this.connectorCache, "oAuthCredentials", ConnectorCacheTest.oAuthCredentials);
 
-    when(this.pmpMock.lookupPip(any(SolutionId.class), eq(this.query))).thenReturn(Sets.newHashSet(this.pipComponent));
-    when(this.pmpMock.lookupPxp(any(SolutionId.class), eq(this.query))).thenReturn(Sets.newHashSet(this.pxpComponent));
+    when(this.pmpMock.lookupPip(any(SolutionId.class), eq(this.query))).thenReturn(Set.of(this.pipComponent));
+    when(this.pmpMock.lookupPxp(any(SolutionId.class), eq(this.query))).thenReturn(Set.of(this.pxpComponent));
 
-    when(this.pipComponent.getUrls()).thenReturn(Arrays.asList(new URI("http://localhost/pipComponent")));
-    when(this.pxpComponent.getUrls()).thenReturn(Arrays.asList(new URI("http://localhost/pxpComponent")));
+    when(this.pipComponent.getUrls()).thenReturn(List.of(new URI("http://localhost/pipComponent")));
+    when(this.pxpComponent.getUrls()).thenReturn(List.of(new URI("http://localhost/pxpComponent")));
 
     Mockito.when(connectorFactory.getPip(any(URI.class))).thenReturn(this.pipMock);
     Mockito.when(connectorFactory.getPxp(any(URI.class))).thenReturn(this.pxpMock);
@@ -325,8 +325,8 @@ public class ConnectorCacheTest {
     final Map<MethodInterfaceDescription, IMyDataComponent> pipCache = (Map<MethodInterfaceDescription, IMyDataComponent>) getInternalState(this.connectorCache, "pipCache");
     pipCache.clear();
 
-    when(this.pmpMock.lookupPip(any(SolutionId.class), eq(this.query))).thenReturn(Sets.newHashSet());
-    when(this.pmpMock.lookupPxp(any(SolutionId.class), eq(this.query))).thenReturn(Sets.newHashSet());
+    when(this.pmpMock.lookupPip(any(SolutionId.class), eq(this.query))).thenReturn(Collections.emptySet());
+    when(this.pmpMock.lookupPxp(any(SolutionId.class), eq(this.query))).thenReturn(Collections.emptySet());
 
     final Method lookupMethod = this.getMethodToTest();
     lookupMethod.setAccessible(true);
@@ -366,8 +366,8 @@ public class ConnectorCacheTest {
     final Map<MethodInterfaceDescription, IMyDataComponent> pipCache = (Map<MethodInterfaceDescription, IMyDataComponent>) getInternalState(this.connectorCache, "pipCache");
     pipCache.clear();
 
-    when(this.pmpMock.lookupPip(any(SolutionId.class), eq(this.query))).thenReturn(Sets.newHashSet(this.pipComponent));
-    when(this.pmpMock.lookupPxp(any(SolutionId.class), eq(this.query))).thenReturn(Sets.newHashSet(this.pxpComponent));
+    when(this.pmpMock.lookupPip(any(SolutionId.class), eq(this.query))).thenReturn(Set.of(this.pipComponent));
+    when(this.pmpMock.lookupPxp(any(SolutionId.class), eq(this.query))).thenReturn(Set.of(this.pxpComponent));
 
     when(this.pipComponent.getUrls()).thenReturn(null);
     when(this.pxpComponent.getUrls()).thenReturn(null);
@@ -398,11 +398,11 @@ public class ConnectorCacheTest {
     final Map<MethodInterfaceDescription, IMyDataComponent> pipCache = (Map<MethodInterfaceDescription, IMyDataComponent>) getInternalState(this.connectorCache, "pipCache");
     pipCache.clear();
 
-    when(this.pmpMock.lookupPip(any(SolutionId.class), eq(this.query))).thenReturn(Sets.newHashSet(this.pipComponent));
-    when(this.pmpMock.lookupPxp(any(SolutionId.class), eq(this.query))).thenReturn(Sets.newHashSet(this.pxpComponent));
+    when(this.pmpMock.lookupPip(any(SolutionId.class), eq(this.query))).thenReturn(Set.of(this.pipComponent));
+    when(this.pmpMock.lookupPxp(any(SolutionId.class), eq(this.query))).thenReturn(Set.of(this.pxpComponent));
 
-    when(this.pipComponent.getUrls()).thenReturn(new ArrayList<URI>());
-    when(this.pxpComponent.getUrls()).thenReturn(new ArrayList<URI>());
+    when(this.pipComponent.getUrls()).thenReturn(Collections.emptyList());
+    when(this.pxpComponent.getUrls()).thenReturn(Collections.emptyList());
 
     final Method lookupMethod = this.getMethodToTest();
     lookupMethod.setAccessible(true);

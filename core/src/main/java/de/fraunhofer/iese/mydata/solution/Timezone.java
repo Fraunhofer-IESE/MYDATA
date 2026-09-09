@@ -25,7 +25,6 @@ package de.fraunhofer.iese.mydata.solution;
 import de.fraunhofer.iese.mydata.common.Hide;
 import de.fraunhofer.iese.mydata.common.MyDataEntity;
 
-import com.google.common.annotations.VisibleForTesting;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -39,8 +38,6 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,11 +57,6 @@ public class Timezone extends MyDataEntity {
   @Hide
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "timezone")
   private List<Solution> solutions;
-
-  @VisibleForTesting
-  LocalDateTime getServerDateTime() {
-    return LocalDateTime.now(ZoneId.of(this.zoneid));
-  }
 
   @Override
   public boolean equals(Object o) {
