@@ -15,6 +15,10 @@
   <name>${project.groupId}:${project.artifactId}</name>
   <description>MYDATA :: Base project containing all projects</description>
 
+  <properties>
+    <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
+  </properties>
+
   <modules>
     <module>mydata-parent</module>
     <module>core</module>
@@ -23,5 +27,85 @@
     <module>sdk</module>
     <module>sdk-spring</module>
   </modules>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.sonatype.central</groupId>
+          <artifactId>central-publishing-maven-plugin</artifactId>
+          <version>${central-publishing-maven-plugin.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>coverage</id>
+      <dependencies>
+        <dependency>
+          <groupId>de.fraunhofer.iese.mydata</groupId>
+          <artifactId>core</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>de.fraunhofer.iese.mydata</groupId>
+          <artifactId>connectors.rest</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>de.fraunhofer.iese.mydata</groupId>
+          <artifactId>pdp</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>de.fraunhofer.iese.mydata</groupId>
+          <artifactId>sdk</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>de.fraunhofer.iese.mydata</groupId>
+          <artifactId>sdk.spring</artifactId>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>verify</phase>
+                <goals>
+                  <goal>report-aggregate</goal>
+                </goals>
+                <configuration>
+                  <dataFileIncludes>
+                    <dataFileInclude>target/jacoco.exec</dataFileInclude>
+                  </dataFileIncludes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <extensions>true</extensions>
+            <configuration>
+              <autoPublish>true</autoPublish>
+              <deploymentName>MYDATA - ${project.version}</deploymentName>
+              <excludeArtifacts>base</excludeArtifacts>
+              <publishingServerId>maven-central</publishingServerId>
+              <waitUntil>published</waitUntil>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
