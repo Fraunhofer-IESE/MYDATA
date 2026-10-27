@@ -44,7 +44,6 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.validator.constraints.URL;
 
 import java.net.URI;
 import java.util.ArrayList;

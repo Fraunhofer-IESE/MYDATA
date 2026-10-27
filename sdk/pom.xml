@@ -1,19 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>de.fraunhofer.iese.mydata</groupId>
     <artifactId>parent</artifactId>
     <version>5.0.0-SNAPSHOT</version>
     <relativePath>../mydata-parent/pom.xml</relativePath>
   </parent>
+
   <artifactId>sdk</artifactId>
   <name>${project.groupId}:${project.artifactId}</name>
   <description>MYDATA :: SDK with central classes for solution development</description>
   <packaging>jar</packaging>
-  <properties>
-    <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
-  </properties>
+
   <dependencies>
     <dependency>
       <groupId>de.fraunhofer.iese.mydata</groupId>

@@ -284,22 +284,6 @@ public class PolicyDecisionPoint implements IPolicyDecisionPoint {
 
   /*
    * (non-Javadoc)
-   * @see java.lang.Object#finalize()
-   */
-  @Override
-  protected void finalize() throws Throwable {
-    try {
-      if (this.threadpool != null) {
-        LOG.debug("Shutting down thread pool in finalize!");
-        this.threadpool.shutdownNow();
-      }
-    } finally {
-      super.finalize();
-    }
-  }
-
-  /*
-   * (non-Javadoc)
    * @see de.fraunhofer.iese.mydata.api.component.interfaces.IComponent#getId()
    */
   @Override
