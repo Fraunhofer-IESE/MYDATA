@@ -64,7 +64,7 @@
     <reflections.version>0.10.2</reflections.version>
     <spring.boot.version>4.1.2</spring.boot.version>
     <versions.maven.plugin.version>2.23.0</versions.maven.plugin.version>
-    <spotless.maven.plugin.version>3.10.4</spotless.maven.plugin.version>
+    <spotless.maven.plugin.version>3.11.0</spotless.maven.plugin.version>
     <xercesImpl.version>2.12.2</xercesImpl.version>
 
     <!--additional properties-->
