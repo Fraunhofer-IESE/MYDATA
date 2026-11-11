@@ -1,0 +1,113 @@
+name: Prepare MYDATA Release
+run-name: Prepare MYDATA release from ${{ github.ref_name }}
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write # Push release-candidate branch; PR is opened by a maintainer.
+
+concurrency:
+  group: mydata-prepare-release
+  cancel-in-progress: false
+
+jobs:
+  prepare_mydata_release_candidate:
+    name: MYDATA Release / Prepare Candidate
+    if: github.ref == 'refs/heads/main'
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Create release commit A
+        shell: bash
+        run: |
+          set -euo pipefail
+          current="$(./mvnw -q -ntp -f mydata-parent/pom.xml help:evaluate -Dexpression=project.version -DforceStdout)"
+          [[ "$current" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)-SNAPSHOT$ ]] || {
+            echo "::error::Expected X.Y.Z-SNAPSHOT in mydata-parent/pom.xml, got: $current"
+            exit 1
+          }
+          version="${current%-SNAPSHOT}"
+          branch="release-candidate/${version}"
+
+          if git ls-remote --exit-code --heads origin "refs/heads/${branch}" >/dev/null 2>&1; then
+            echo "::error::Branch already exists: $branch"; exit 1
+          fi
+          if git ls-remote --exit-code --tags --refs origin "refs/tags/v${version}" >/dev/null 2>&1; then
+            echo "::error::Tag already exists: v${version}"; exit 1
+          fi
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "$branch"
+
+          # The effective project version is inherited from mydata-parent.
+          ./mvnw -B -ntp -f mydata-parent/pom.xml versions:set \
+            -DremoveSnapshot=true -DgenerateBackupPoms=false
+          git add -u -- ':(glob)**/pom.xml'
+          git diff --cached --check
+          if git diff --cached --quiet || ! git diff --quiet; then
+            echo '::error::Expected only staged POM changes'; exit 1
+          fi
+          git commit -m "chore(release): prepare v${version}"
+
+          echo "RELEASE_VERSION=$version" >> "$GITHUB_ENV"
+          echo "RELEASE_BRANCH=$branch" >> "$GITHUB_ENV"
+          echo "RELEASE_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Verify release commit A
+        run: ./mvnw -B -ntp -Prelease -Dgpg.skip=true clean verify
+
+      - name: Create next minor SNAPSHOT commit B
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ -z "$(git status --porcelain)" ]] || {
+            echo '::error::Release build left changes'; exit 1
+          }
+
+          ./mvnw -B -ntp -f mydata-parent/pom.xml versions:set \
+            -DnextSnapshot=true -DnextSnapshotIndexToIncrement=2 \
+            -DgenerateBackupPoms=false
+          next_version="$(./mvnw -q -ntp -f mydata-parent/pom.xml help:evaluate -Dexpression=project.version -DforceStdout)"
+          git add -u -- ':(glob)**/pom.xml'
+          git diff --cached --check
+          if git diff --cached --quiet || ! git diff --quiet; then
+            echo '::error::Expected only staged POM changes'; exit 1
+          fi
+          git commit -m "chore(release): start ${next_version}"
+
+      - name: Validate next development version
+        run: ./mvnw -B -ntp validate
+
+      - name: Push release candidate and show PR link
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ -z "$(git status --porcelain)" ]] || {
+            echo '::error::Working tree is not clean'; exit 1
+          }
+          git push origin "HEAD:refs/heads/${RELEASE_BRANCH}"
+
+          pr_url="https://github.com/${GITHUB_REPOSITORY}/compare/main...${RELEASE_BRANCH}?quick_pull=1&template=release.md"
+          {
+            echo "## MYDATA v${RELEASE_VERSION} prepared"
+            echo "- **Release commit A:** \`${RELEASE_SHA}\`"
+            echo "- **Next-SNAPSHOT commit B:** \`$(git rev-parse HEAD)\`"
+            echo "- [Open release pull request](${pr_url})"
+            echo ''
+            echo '**Review and use Create a merge commit (not squash/rebase).**'
+            echo '**Keep the main PR merge freeze until the release PR is merged.**'
+          } >> "$GITHUB_STEP_SUMMARY"
