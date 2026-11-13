@@ -39,7 +39,7 @@
 
     <!--versions-->
     <commons.io.version>2.22.0</commons.io.version>
-    <exec.maven.plugin.version>3.6.4</exec.maven.plugin.version>
+    <exec.maven.plugin.version>3.7.0</exec.maven.plugin.version>
     <expressly.version>6.0.0</expressly.version>
     <hamcrest-junit.version>2.0.0.0</hamcrest-junit.version>
     <jacoco.version>0.8.16</jacoco.version>
@@ -67,7 +67,7 @@
     <modelmapper.version>3.2.8</modelmapper.version>
     <reflections.version>0.10.2</reflections.version>
     <spring.boot.version>4.1.2</spring.boot.version>
-    <versions.maven.plugin.version>2.23.0</versions.maven.plugin.version>
+    <versions.maven.plugin.version>2.25.1</versions.maven.plugin.version>
     <spotless.maven.plugin.version>3.11.0</spotless.maven.plugin.version>
     <xercesImpl.version>2.12.2</xercesImpl.version>
 
