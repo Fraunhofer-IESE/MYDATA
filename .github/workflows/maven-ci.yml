@@ -33,6 +33,7 @@ jobs:
           java-version: '25'
           distribution: temurin
           cache: maven
+          problem-matcher: true
 
       - name: Build and verify
         run: >
