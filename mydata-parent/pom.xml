@@ -55,7 +55,7 @@
     <maven.enforcer.plugin.version>3.7.0</maven.enforcer.plugin.version>
     <maven-dependency-plugin.version>3.11.0</maven-dependency-plugin.version>
     <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
-    <maven-help-plugin.version>3.5.2</maven-help-plugin.version>
+    <maven-help-plugin.version>3.6.0</maven-help-plugin.version>
     <maven-install-plugin.version>3.2.0</maven-install-plugin.version>
     <maven-jar-plugin.version>3.5.1</maven-jar-plugin.version>
     <maven.javadoc.plugin.version>3.12.0</maven.javadoc.plugin.version>
@@ -66,9 +66,9 @@
     <maven.war.plugin.version>3.5.1</maven.war.plugin.version>
     <modelmapper.version>3.2.8</modelmapper.version>
     <reflections.version>0.10.2</reflections.version>
-    <spring.boot.version>4.1.2</spring.boot.version>
-    <versions.maven.plugin.version>2.25.1</versions.maven.plugin.version>
-    <spotless.maven.plugin.version>3.11.0</spotless.maven.plugin.version>
+    <spring.boot.version>4.2.0</spring.boot.version>
+    <versions.maven.plugin.version>2.25.3</versions.maven.plugin.version>
+    <spotless.maven.plugin.version>3.12.0</spotless.maven.plugin.version>
     <xercesImpl.version>2.12.2</xercesImpl.version>
 
     <!--additional properties-->
